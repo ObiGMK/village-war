@@ -2341,7 +2341,7 @@ function renderBattleLog() {
         const cls = isAttack ? (entry.victory ? 'victory' : 'defeat') : (entry.victory ? 'defense victory' : 'defense defeat');
         const time = new Date(entry.time);
         const timeStr = time.toLocaleTimeString();
-        const stars = entry.stars != null ? ` <span class="log-stars">${''.repeat(entry.stars)}${''.repeat(3 - entry.stars)}</span>` : '';
+        const stars = entry.stars != null ? ` <span class="log-stars">${svgIcon('star').repeat(entry.stars)}${svgIcon('starOutline').repeat(3 - entry.stars)}</span>` : '';
         const destr = entry.destruction != null ? ` <span style="color:var(--text2);font-size:0.78rem">${entry.destruction}%</span>` : '';
 
         return `

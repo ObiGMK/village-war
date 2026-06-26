@@ -187,7 +187,7 @@ function openWheel() {
         <h3 class="exp-title">${svgIcon('wheel')} Lucky Wheel</h3>
         <p class="exp-hint">${free ? 'You have a FREE spin today!' : 'Free spin used — spin again for 20.'}</p>
         <div class="wheel-wrap">
-            <div class="wheel-pointer">▼</div>
+            <div class="wheel-pointer"></div>
             <div id="wheel" class="wheel" style="background:conic-gradient(${WHEEL_PRIZES.map((p, i) => `${p.color} ${i * seg}deg ${(i + 1) * seg}deg`).join(',')})">
                 ${WHEEL_PRIZES.map((p, i) => `<span class="wheel-lbl" style="transform:rotate(${i * seg + seg / 2}deg)"><b style="transform:rotate(90deg)">${p.label}</b></span>`).join('')}
             </div>

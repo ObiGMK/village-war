@@ -258,7 +258,7 @@ const BUILDING_RENDERERS = {
         ${FLAG(x, y - 78)}
         <!-- gold crest on facade -->
         <circle cx="${x}" cy="${y - 32}" r="5" fill="#f0c050" stroke="#7a5410" stroke-width="0.6"/>
-        <text x="${x}" y="${y - 29}" text-anchor="middle" font-size="6" font-weight="900" fill="#7a5410" font-family="Inter">${svgIcon('star')}</text>
+        <path d="M ${x} ${y - 35} l 1.2 2.5 2.8 0.4 -2 2 0.5 2.8 -2.5 -1.3 -2.5 1.3 0.5 -2.8 -2 -2 2.8 -0.4 Z" fill="#7a5410"/>
         ${lvl >= 3 ? `<g>${FLAG(x - 36, y - 22, '#3b82f6')}${FLAG(x + 36, y - 22, '#3b82f6')}</g>` : ''}
         ${lvl >= 5 ? `<rect x="${x - 4}" y="${y - 12}" width="8" height="3" fill="#7a1818" stroke="#3a0808" stroke-width="0.3"/><polygon points="${x-4},${y-12} ${x+4},${y-12} ${x},${y-15}" fill="#dc2626"/>` : ''}
     `,
@@ -895,9 +895,10 @@ function renderIsoWorld() {
                 const remain = Math.max(0, Math.ceil((job - Date.now()) / 1000));
                 const gems = (typeof finishCostGems === 'function') ? finishCostGems(job) : 1;
                 entSVG += `<g class="build-timer" data-pos="${e.pos}" style="cursor:pointer" transform="translate(${bx},${by - 56})">
-                    <rect x="-30" y="-11" width="60" height="22" rx="10" fill="#0e1726" stroke="#fbbf24" stroke-width="1.4"/>
-                    <text x="-12" y="4" text-anchor="middle" font-size="10" fill="#fde68a" font-weight="800">⏳${remain}s</text>
-                    <text x="16" y="4" text-anchor="middle" font-size="9" fill="#7dd3fc" font-weight="800">${svgIcon('gem')}${gems}</text>
+                    <rect x="-34" y="-11" width="68" height="22" rx="10" fill="#0e1726" stroke="#fbbf24" stroke-width="1.4"/>
+                    <text x="-12" y="4" text-anchor="middle" font-size="10" fill="#fde68a" font-weight="800">${remain}s</text>
+                    <path d="M14 -4 L18 0 L14 4 L10 0 Z" fill="#7dd3fc"/>
+                    <text x="26" y="4" text-anchor="middle" font-size="9" fill="#7dd3fc" font-weight="800">${gems}</text>
                 </g>`;
             }
         }

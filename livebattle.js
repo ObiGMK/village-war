@@ -178,7 +178,7 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
             <div class="lb-top">
                 <span class="lb-title">${svgIcon('swords')}️ ${spec.name}</span>
                 <span class="lb-destruction" id="lb-destr">0%</span>
-                <span class="lb-starbar" id="lb-stars">${svgIcon('starOutline')}</span>
+                <span class="lb-starbar" id="lb-stars">${svgIcon('starOutline').repeat(3)}</span>
                 <span class="lb-timer" id="lb-timer">60</span>
                 <button class="bv-skip" id="lb-end">End Battle</button>
             </div>
@@ -309,7 +309,7 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
         const destr = Math.min(1, destroyedHP / totalHP);
         document.getElementById('lb-destr').textContent = Math.round(destr * 100) + '%';
         const stars = calcStars(destr);
-        document.getElementById('lb-stars').textContent = ''.repeat(stars) + ''.repeat(3 - stars);
+        document.getElementById('lb-stars').innerHTML = svgIcon('star').repeat(stars) + svgIcon('starOutline').repeat(3 - stars);
     }
     function calcStars(destr) {
         let s = 0;

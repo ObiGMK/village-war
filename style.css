@@ -3628,3 +3628,8 @@ h2 .nav-ic .vw-ic, .exp-title .vw-ic, .codex-h .vw-ic { width: 1.05em; height: 1
 #music-btn .nav-ic .vw-ic, #mute-btn .nav-ic .vw-ic, #music-prev .vw-ic, #music-next .vw-ic { width: 16px; height: 16px; }
 #restart-tutorial-btn .nav-ic .vw-ic { width: 15px; height: 15px; vertical-align: -2px; }
 .exp-title .vw-ic { color: inherit; }
+
+/* wheel pointer as a CSS triangle (no glyph) */
+.wheel-pointer { width: 0 !important; height: 0; color: transparent;
+    border-left: 11px solid transparent; border-right: 11px solid transparent;
+    border-top: 16px solid var(--gold); }

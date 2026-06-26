@@ -433,7 +433,7 @@ function renderWorldView() {
         return `<div class="mission-node ${unlocked ? '' : 'locked'} ${stars > 0 ? 'done' : ''}" onclick="${unlocked ? `startCampaignMission(${i})` : ''}">
             <div class="mission-num">${i + 1}</div>
             <div class="mission-name">${m.name}</div>
-            <div class="mission-stars">${''.repeat(stars)}${''.repeat(3 - stars)}</div>
+            <div class="mission-stars">${svgIcon('star').repeat(stars)}${svgIcon('starOutline').repeat(3 - stars)}</div>
             <div class="mission-lv">Lv${m.level}</div>
             ${unlocked ? '' : '<div class="mission-lock"></div>'}
         </div>`;
