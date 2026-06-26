@@ -53,9 +53,9 @@ function generateEnemyBase(camp) {
 
 // ---- Spells ----
 const LB_SPELLS = [
-    { id: 'rage',  icon: '💢', name: 'Rage',      desc: '+60% attack, 8s, area' },
-    { id: 'heal',  icon: '💚', name: 'Heal',      desc: 'Restore 50% HP, area' },
-    { id: 'bolt',  icon: '⚡', name: 'Lightning', desc: '300 damage, area' }
+    { id: 'rage',  icon: svgIcon('rage'), name: 'Rage',      desc: '+60% attack, 8s, area' },
+    { id: 'heal',  icon: svgIcon('heal'), name: 'Heal',      desc: 'Restore 50% HP, area' },
+    { id: 'bolt',  icon: svgIcon('bolt'), name: 'Lightning', desc: '300 damage, area' }
 ];
 
 // ---- Main entry ----
@@ -93,7 +93,7 @@ function applyRaidOutcome(spec, r) {
                 state.campaign.stars[spec.missionIndex] = r.stars;
                 const gemGain = (r.stars - prev) * 5;
                 addGems(gemGain);
-                toast(`Mission ${spec.missionIndex + 1}: ${r.stars}★ — +${gemGain} gems!`, 'success');
+                toast(`Mission ${spec.missionIndex + 1}: ${r.stars}${svgIcon('star')} — +${gemGain} gems!`, 'success');
             }
         }
         if (spec.kind === 'cpu' || spec.kind === 'revenge') {
@@ -117,8 +117,8 @@ function applyRaidOutcome(spec, r) {
     el.classList.remove('hidden');
     el.innerHTML = `
         <div class="result-inner ${victory ? 'victory' : 'defeat'}">
-            <h2>${victory ? '⚔️ VICTORY!' : '💀 DEFEAT!'}</h2>
-            <div class="result-stars">${[1,2,3].map(s => `<span class="rstar ${r.stars >= s ? 'lit' : ''}">★</span>`).join('')}</div>
+            <h2>${victory ? '️ VICTORY!' : ' DEFEAT!'}</h2>
+            <div class="result-stars">${[1,2,3].map(s => `<span class="rstar ${r.stars >= s ? 'lit' : ''}">${svgIcon('star')}</span>`).join('')}</div>
             <p style="color:var(--text2)">${spec.name} — ${Math.round(r.destruction * 100)}% destroyed</p>
             ${victory ? `<div class="loot-gained">${Object.entries(lootGained).filter(([,v]) => v > 0).map(([res, v]) => `<div class="loot-item">${RES_ICONS[res] || res} +${formatNum(v)}</div>`).join('')}</div>` : '<p style="color:var(--danger)">Destroy at least 50% to win loot.</p>'}
             <div class="losses">Fallen soldiers: ${r.killedIds.length ? Object.entries(r.lossCounts).map(([t, v]) => `${v} ${TROOP_DEFS[t]?.name || t}`).join(', ') : 'None'} ${r.killedIds.length ? '(gone forever)' : ''}</div>
@@ -176,9 +176,9 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
                 <div class="lb-fx" id="lb-fx"></div>
             </div>
             <div class="lb-top">
-                <span class="lb-title">⚔️ ${spec.name}</span>
+                <span class="lb-title">${svgIcon('swords')}️ ${spec.name}</span>
                 <span class="lb-destruction" id="lb-destr">0%</span>
-                <span class="lb-starbar" id="lb-stars">☆☆☆</span>
+                <span class="lb-starbar" id="lb-stars">${svgIcon('starOutline')}</span>
                 <span class="lb-timer" id="lb-timer">60</span>
                 <button class="bv-skip" id="lb-end">End Battle</button>
             </div>
@@ -309,7 +309,7 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
         const destr = Math.min(1, destroyedHP / totalHP);
         document.getElementById('lb-destr').textContent = Math.round(destr * 100) + '%';
         const stars = calcStars(destr);
-        document.getElementById('lb-stars').textContent = '★'.repeat(stars) + '☆'.repeat(3 - stars);
+        document.getElementById('lb-stars').textContent = ''.repeat(stars) + ''.repeat(3 - stars);
     }
     function calcStars(destr) {
         let s = 0;
@@ -431,7 +431,7 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
         // big star reveal
         const reveal = document.createElement('div');
         reveal.className = 'lb-reveal';
-        reveal.innerHTML = `<div class="lb-reveal-stars">${[1,2,3].map(s => `<span class="rstar big ${stars >= s ? 'lit' : ''}" style="animation-delay:${s * 0.25}s">★</span>`).join('')}</div>
+        reveal.innerHTML = `<div class="lb-reveal-stars">${[1,2,3].map(s => `<span class="rstar big ${stars >= s ? 'lit' : ''}" style="animation-delay:${s * 0.25}s">${svgIcon('star')}</span>`).join('')}</div>
             <div class="lb-reveal-pct">${Math.round(destr * 100)}% destroyed</div>`;
         overlay.appendChild(reveal);
         setTimeout(() => {

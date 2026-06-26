@@ -10,7 +10,7 @@
 <body>
     <div id="app">
         <header id="resource-bar">
-            <div class="game-title">⚔️ Village War</div>
+            <div class="game-title"><span class="nav-ic" data-ic="swords"></span> Village War</div>
             <div class="resources">
                 <div class="resource" title="Coins"><span class="res-icon" id="ico-coins"></span><span id="res-coins">500</span></div>
                 <div class="resource" title="Gold"><span class="res-icon" id="ico-gold"></span><span id="res-gold">100</span></div>
@@ -23,13 +23,13 @@
                 <span id="player-level">Level 1</span>
                 <span id="player-xp-bar"><span id="player-xp-fill"></span></span>
                 <div id="music-player" class="hidden">
-                    <button id="music-prev" title="Previous track">⏮</button>
+                    <button id="music-prev" title="Previous track"><span class="nav-ic" data-ic="prev"></span></button>
                     <span id="music-title">—</span>
-                    <button id="music-next" title="Next track">⏭</button>
+                    <button id="music-next" title="Next track"><span class="nav-ic" data-ic="next"></span></button>
                 </div>
                 <button id="account-chip" title="Online account — cloud saves, leaderboard & clans" onclick="openOnline()" style="display:none"></button>
-                <button id="music-btn" title="Toggle music (off by default — real medieval tracks stream from archive.org)">🎵<span class="audio-state">off</span></button>
-                <button id="mute-btn" title="Sound effects toggle">🔊</button>
+                <button id="music-btn" title="Toggle music (off by default — real medieval tracks stream from archive.org)"><span class="nav-ic" data-ic="music"></span><span class="audio-state">off</span></button>
+                <button id="mute-btn" title="Sound effects toggle"><span class="nav-ic" data-ic="sound"></span></button>
             </div>
         </header>
 
@@ -52,7 +52,7 @@
             <div id="view-village" class="view active">
                 <div id="village-grid"></div>
                 <div id="building-info-panel" class="hidden">
-                    <button id="close-info" class="close-btn">✕</button>
+                    <button id="close-info" class="close-btn"><span class="nav-ic" data-ic="close"></span></button>
                     <h3 id="info-name"></h3>
                     <p id="info-level"></p>
                     <p id="info-desc"></p>
@@ -63,7 +63,7 @@
 
             <!-- Build View -->
             <div id="view-build" class="view">
-                <h2>🏗️ Construction</h2>
+                <h2><span class="nav-ic" data-ic="hammer"></span> Construction</h2>
                 <div class="build-categories">
                     <button class="cat-btn active" data-cat="resource">Resource</button>
                     <button class="cat-btn" data-cat="military">Military</button>
@@ -80,7 +80,7 @@
 
             <!-- Heroes View -->
             <div id="view-heroes" class="view">
-                <h2>👑 Heroes</h2>
+                <h2><span class="nav-ic" data-ic="crown"></span> Heroes</h2>
                 <div id="equipped-heroes-section">
                     <h3 class="hero-section-title">Equipped Heroes (max 3)</h3>
                     <div id="equipped-heroes"></div>
@@ -91,7 +91,7 @@
 
             <!-- Raid View -->
             <div id="view-raid" class="view">
-                <h2>🗡️ Raid</h2>
+                <h2><span class="nav-ic" data-ic="dagger"></span> Raid</h2>
                 <div class="raid-tabs">
                     <button class="raid-tab active" data-raid="cpu">CPU Camps</button>
                     <button class="raid-tab" data-raid="player">Player Villages</button>
@@ -102,7 +102,7 @@
 
             <!-- Club View -->
             <div id="view-club" class="view">
-                <h2>🛡️ Clubs</h2>
+                <h2><span class="nav-ic" data-ic="shield"></span> Clubs</h2>
                 <div id="club-content"></div>
             </div>
 
@@ -117,7 +117,7 @@
 
             <!-- Log View -->
             <div id="view-log" class="view">
-                <h2>📜 Battle Log</h2>
+                <h2><span class="nav-ic" data-ic="book"></span> Battle Log</h2>
                 <div id="battle-log"></div>
             </div>
         </main>
@@ -126,7 +126,7 @@
     <!-- Modal -->
     <div id="modal-overlay" class="hidden">
         <div id="modal">
-            <button id="modal-close" class="close-btn">✕</button>
+            <button id="modal-close" class="close-btn"><span class="nav-ic" data-ic="close"></span></button>
             <div id="modal-content"></div>
         </div>
     </div>
@@ -138,15 +138,15 @@
     <div id="tutorial-overlay" class="hidden">
         <div id="tutorial-spotlight"></div>
         <div id="tutorial-ring"></div>
-        <div id="tutorial-arrow">⬇️</div>
+        <div id="tutorial-arrow"></div>
         <div id="tutorial-tip"></div>
     </div>
-    <button id="restart-tutorial-btn" title="Restart tutorial">❓ Tutorial</button>
+    <button id="restart-tutorial-btn" title="Restart tutorial"><span class="nav-ic" data-ic="help"></span> Tutorial</button>
 
     <!-- Attack notification -->
     <div id="attack-alert" class="hidden">
         <div class="attack-alert-inner">
-            <h2>⚠️ YOUR VILLAGE IS UNDER ATTACK!</h2>
+            <h2><span class="nav-ic" data-ic="warn"></span> YOUR VILLAGE IS UNDER ATTACK!</h2>
             <p id="attack-alert-info"></p>
             <button id="attack-watch-btn">Watch Battle</button>
         </div>
@@ -170,7 +170,7 @@
                     <span class="splash-village">VILLAGE</span>
                     <span class="splash-war">WAR</span>
                 </div>
-                <div class="splash-sword-cross">⚔️</div>
+                <div class="splash-sword-cross"><span class="nav-ic" data-ic="swords"></span></div>
                 <div class="splash-tagline">Build · Train · Raid · Conquer</div>
             </div>
             <div class="splash-loading-area">
@@ -178,7 +178,7 @@
                 <div class="splash-loading-text">Loading kingdom…</div>
             </div>
             <button id="splash-play" class="splash-play-btn hidden">
-                <span class="splash-play-icon">▶</span>
+                <span class="splash-play-icon"></span>
                 <span class="splash-play-text">PLAY</span>
             </button>
             <div class="splash-credits">A real-time strategy adventure</div>

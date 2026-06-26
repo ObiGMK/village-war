@@ -5,7 +5,7 @@
 
 const ICON_BASE = 'https://img.icons8.com/3d-fluency/256';
 
-// Unmistakably GOLD coin (the 🪙 emoji renders silver/gray on many systems)
+// Unmistakably GOLD coin (the  emoji renders silver/gray on many systems)
 const COIN_ICON = '<svg class="ico-coin" viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.16em;margin-right:1px"><defs><radialGradient id="gcoin" cx="0.38" cy="0.32" r="0.75"><stop offset="0" stop-color="#fff3b0"/><stop offset="0.5" stop-color="#fbc536"/><stop offset="1" stop-color="#c8860d"/></radialGradient></defs><circle cx="12" cy="12" r="10.5" fill="url(#gcoin)" stroke="#8a5a06" stroke-width="1.6"/><circle cx="12" cy="12" r="7.4" fill="none" stroke="#a86d06" stroke-width="1"/><text x="12" y="16.2" text-anchor="middle" font-size="11" font-weight="900" fill="#8a5a06" font-family="Arial, sans-serif">$</text><ellipse cx="9" cy="8" rx="2.4" ry="1.5" fill="rgba(255,255,255,0.6)" transform="rotate(-30 9 8)"/></svg>';
 // Gold bar/ingot icon for the "gold" resource (distinct from coins)
 const GOLD_ICON = '<svg class="ico-gold" viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.16em;margin-right:1px"><polygon points="4,16 20,16 22,21 2,21" fill="#fcd34d" stroke="#a16207" stroke-width="1"/><polygon points="6,11 18,11 20,16 4,16" fill="#fde68a" stroke="#a16207" stroke-width="1"/><polygon points="6,11 18,11 18,12.5 6,12.5" fill="rgba(255,255,255,0.5)"/></svg>';

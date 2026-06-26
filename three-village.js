@@ -1,7 +1,7 @@
 // ============================================================
 // TRUE 3D VILLAGE (Three.js / WebGL)
 // Real 3D island, low-poly building models, dynamic lighting
-// & shadows, orbiting camera, animated water. Toggle with 🧊 3D.
+// & shadows, orbiting camera, animated water. Toggle with  3D.
 // ============================================================
 
 let T3 = { active: false, ready: false, scene: null, camera: null, renderer: null, raf: 0, pick: [], water: null, theta: 0.8, phi: 0.95, dist: 26 };

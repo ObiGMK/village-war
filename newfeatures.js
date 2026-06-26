@@ -20,7 +20,7 @@ function addGems(n) {
     ensureMeta();
     state.gems += n;
     updateGemDisplay();
-    try { popup(`💎 +${n}`, { color: '#7dd3fc' }); } catch(e) {}
+    try { popup(`${svgIcon('gem')} +${n}`, { color: '#7dd3fc' }); } catch(e) {}
 }
 
 function spendGems(n) {
@@ -126,7 +126,7 @@ function openShop() {
         return s + (e ? finishCostGems(e) : 0);
     }, 0);
     content.innerHTML = `
-        <h3 class="shop-title">💎 Gem Shop <span class="shop-gems">${formatNum(state.gems)} gems</span></h3>
+        <h3 class="shop-title">${svgIcon('gem')} Gem Shop <span class="shop-gems">${formatNum(state.gems)} gems</span></h3>
         <p class="shop-hint">Earn gems from achievements, quests, daily rewards, campaign stars & clearing obstacles.</p>
         <div class="shop-grid">
             ${SHOP_ITEMS.map(it => {
@@ -136,7 +136,7 @@ function openShop() {
                 return `<div class="shop-item">
                     <div class="shop-item-name">${it.name}</div>
                     <div class="shop-item-desc">${it.builder && state.builders.count >= 3 ? 'Already hired' : it.desc}</div>
-                    <button class="btn btn-unlock" ${dis} onclick="buyShopItem('${it.id}')">💎 ${g}</button>
+                    <button class="btn btn-unlock" ${dis} onclick="buyShopItem('${it.id}')">${svgIcon('gem')} ${g}</button>
                 </div>`;
             }).join('')}
         </div>`;
@@ -162,7 +162,7 @@ function buyShopItem(id) {
         if (state.builders.count >= 3) return;
         if (!spendGems(it.gems)) return;
         state.builders.count = 3;
-        toast('🔨 Third builder hired!', 'success');
+        toast(' Third builder hired!', 'success');
     } else {
         if (!spendGems(it.gems)) return;
         addResources(it.give);
@@ -176,10 +176,10 @@ function buyShopItem(id) {
 
 // ---------- EVENTS (weekly rotation) ----------
 const WEEKLY_EVENTS = [
-    { id: 'coinrush',  name: '💰 Coin Rush',      desc: '+50% coins from raids',  lootMult: { coins: 1.5 } },
-    { id: 'goldrush',  name: '🥇 Gold Rush',      desc: '+50% gold from raids',   lootMult: { gold: 1.5 } },
-    { id: 'warweek',   name: '⚔️ War Week',       desc: '+50% XP from battles',   xpMult: 1.5 },
-    { id: 'harvest',   name: '🌾 Harvest Fest',   desc: '+50% food & wood loot',  lootMult: { food: 1.5, wood: 1.5 } }
+    { id: 'coinrush',  name: ' Coin Rush',      desc: '+50% coins from raids',  lootMult: { coins: 1.5 } },
+    { id: 'goldrush',  name: ' Gold Rush',      desc: '+50% gold from raids',   lootMult: { gold: 1.5 } },
+    { id: 'warweek',   name: '️ War Week',       desc: '+50% XP from battles',   xpMult: 1.5 },
+    { id: 'harvest',   name: ' Harvest Fest',   desc: '+50% food & wood loot',  lootMult: { food: 1.5, wood: 1.5 } }
 ];
 function activeEvent() {
     const week = Math.floor(Date.now() / (7 * 24 * 3600 * 1000));
@@ -193,13 +193,13 @@ function eventXpMult() { return activeEvent().xpMult || 1; }
 
 // ---------- LEAGUES ----------
 const LEAGUES = [
-    { name: 'Bronze',   icon: '🥉', min: 0 },
-    { name: 'Silver',   icon: '🥈', min: 200 },
-    { name: 'Gold',     icon: '🥇', min: 500 },
-    { name: 'Crystal',  icon: '💠', min: 1000 },
-    { name: 'Master',   icon: '🔮', min: 2000 },
-    { name: 'Champion', icon: '🏆', min: 3500 },
-    { name: 'Legend',   icon: '🌟', min: 5500 }
+    { name: 'Bronze',   icon: svgIcon('medal'), min: 0 },
+    { name: 'Silver',   icon: svgIcon('medal'), min: 200 },
+    { name: 'Gold',     icon: svgIcon('medal'), min: 500 },
+    { name: 'Crystal',  icon: '', min: 1000 },
+    { name: 'Master',   icon: '', min: 2000 },
+    { name: 'Champion', icon: svgIcon('trophy'), min: 3500 },
+    { name: 'Legend',   icon: svgIcon('star'), min: 5500 }
 ];
 function currentLeague() {
     const t = state.trophies || 0;
@@ -254,7 +254,7 @@ function hasShield() { ensureMeta(); return Date.now() < state.shieldUntil; }
 function grantShield(mins) {
     ensureMeta();
     state.shieldUntil = Date.now() + mins * 60000;
-    toast(`🛡️ Shield active for ${mins} minutes — no attacks can reach you.`, 'info');
+    toast(`${svgIcon('shield')}️ Shield active for ${mins} minutes — no attacks can reach you.`, 'info');
 }
 function breakShield() { if (hasShield()) { state.shieldUntil = 0; toast('Your shield dropped (you attacked someone).', 'warning'); } }
 
@@ -281,17 +281,17 @@ function scoutCamp(index) {
     const base = generateEnemyBase(camp);
     const defs = base.defenses.length, blds = base.buildings.length, traps = base.traps.length;
     content.innerHTML = `
-        <h3 class="shop-title">🔍 Scouting: ${camp.name}</h3>
+        <h3 class="shop-title"> Scouting: ${camp.name}</h3>
         <div class="scout-map">
             ${base.buildings.map(b => `<div class="scout-dot scout-bld" style="left:${b.x}%;top:${b.y}%" title="${b.type}"></div>`).join('')}
             ${base.defenses.map(d => `<div class="scout-dot scout-def" style="left:${d.x}%;top:${d.y}%" title="defense"></div>`).join('')}
         </div>
         <div class="scout-info">
-            <span>🏠 ${blds} buildings</span><span>🏹 ${defs} defenses</span><span>💣 ~${traps} traps (hidden)</span>
+            <span>${svgIcon('home')} ${blds} buildings</span><span>${svgIcon('dagger')} ${defs} defenses</span><span> ~${traps} traps (hidden)</span>
         </div>
         <div class="scout-info">Garrison: ${Object.entries(camp.troops).map(([t, c]) => `${c} ${TROOP_DEFS[t]?.name || t}`).join(', ')}</div>
-        <p class="shop-hint">Defenses (red) will fire at your troops. Deploy from the bottom edge. Destroy 50% for 1★, the Town Hall for 2★, everything for 3★.</p>
-        <button class="btn btn-danger btn-glow" onclick="document.getElementById('modal-overlay').classList.add('hidden'); launchRaid('cpu', ${index})">⚔️ Attack Now</button>`;
+        <p class="shop-hint">Defenses (red) will fire at your troops. Deploy from the bottom edge. Destroy 50% for 1${svgIcon('star')}, the Town Hall for 2${svgIcon('star')}, everything for 3${svgIcon('star')}.</p>
+        <button class="btn btn-danger btn-glow" onclick="document.getElementById('modal-overlay').classList.add('hidden'); launchRaid('cpu', ${index})">${svgIcon('swords')}️ Attack Now</button>`;
     overlay.classList.remove('hidden');
 }
 
@@ -312,13 +312,13 @@ function checkDailyReward() {
     const overlay = document.getElementById('modal-overlay');
     const content = document.getElementById('modal-content');
     content.innerHTML = `
-        <h3 class="shop-title">📅 Daily Reward — Day ${day + 1}</h3>
+        <h3 class="shop-title"> Daily Reward — Day ${day + 1}</h3>
         <p class="shop-hint">Login streak: ${state.daily.streak} day${state.daily.streak > 1 ? 's' : ''}. Come back tomorrow for more!</p>
         <div class="daily-strip">
             ${DAILY_REWARDS.map((r, i) => `<div class="daily-cell ${i === day ? 'today' : i < day ? 'past' : ''}">D${i + 1}</div>`).join('')}
         </div>
         <div class="loot-gained" style="margin:12px 0">
-            ${Object.entries(reward).map(([k, v]) => `<div class="loot-item">${k === 'gems' ? '💎' : (RES_ICONS[k] || k)} +${formatNum(v)}</div>`).join('')}
+            ${Object.entries(reward).map(([k, v]) => `<div class="loot-item">${k === 'gems' ? '' : (RES_ICONS[k] || k)} +${formatNum(v)}</div>`).join('')}
         </div>
         <button class="btn btn-gold btn-glow" onclick="claimDaily()">Claim!</button>`;
     overlay.classList.remove('hidden');
@@ -336,20 +336,20 @@ function claimDaily() {
 
 // ---------- CLAN HALL (donations + chat) ----------
 const CLAN_BOT_LINES = [
-    'Anyone up for a war this weekend?', 'Just 3-starred a level 12 base 😤', 'Donating archers, who needs?',
+    'Anyone up for a war this weekend?', 'Just 3-starred a level 12 base ', 'Donating archers, who needs?',
     'gg everyone, nice season', 'Upgrading my fortress, 2 days left...', 'Welcome to the new members!',
     'Tip: put shieldbearers in your front row', 'Who attacked WolfPack42? nice one'
 ];
 function requestClanTroops() {
     if (!state.club) { toast('Join a club first!', 'error'); return; }
-    toast('📢 Troop request sent to your club...', 'info');
+    toast(' Troop request sent to your club...', 'info');
     setTimeout(() => {
         const types = ['warrior', 'archer', 'shieldbearer'];
         const t = types[Math.floor(Math.random() * types.length)];
         ensureSoldiers();
         addSoldier(t, 'reserve');
         const donor = state.club.members.find(m => !m.isPlayer);
-        toast(`🎁 ${donor ? donor.name : 'A clanmate'} donated a ${TROOP_DEFS[t].name}!`, 'success');
+        toast(`${svgIcon('gift')} ${donor ? donor.name : 'A clanmate'} donated a ${TROOP_DEFS[t].name}!`, 'success');
         clanChatPush(donor ? donor.name : 'Clanmate', `Sent you a ${TROOP_DEFS[t].name}!`);
         updateNotificationBadges();
         saveGame();
@@ -413,7 +413,7 @@ function toggleNotifications() {
     if (!('Notification' in window)) { toast('Browser does not support notifications.', 'error'); return; }
     Notification.requestPermission().then(p => {
         state.notifyOn = (p === 'granted');
-        toast(state.notifyOn ? '🔔 Notifications on!' : 'Permission denied.', state.notifyOn ? 'success' : 'error');
+        toast(state.notifyOn ? ' Notifications on!' : 'Permission denied.', state.notifyOn ? 'success' : 'error');
         renderWorldView(); saveGame();
     });
 }
@@ -433,14 +433,14 @@ function renderWorldView() {
         return `<div class="mission-node ${unlocked ? '' : 'locked'} ${stars > 0 ? 'done' : ''}" onclick="${unlocked ? `startCampaignMission(${i})` : ''}">
             <div class="mission-num">${i + 1}</div>
             <div class="mission-name">${m.name}</div>
-            <div class="mission-stars">${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}</div>
+            <div class="mission-stars">${''.repeat(stars)}${''.repeat(3 - stars)}</div>
             <div class="mission-lv">Lv${m.level}</div>
-            ${unlocked ? '' : '<div class="mission-lock">🔒</div>'}
+            ${unlocked ? '' : '<div class="mission-lock"></div>'}
         </div>`;
     }).join('');
 
     el.innerHTML = `
-        <h2>🌍 World</h2>
+        <h2>${svgIcon('globe')} World</h2>
 
         <div class="world-row">
             <div class="world-card event-card">
@@ -449,21 +449,21 @@ function renderWorldView() {
             </div>
             <div class="world-card league-card">
                 <h3>${lg.icon} ${lg.name} League</h3>
-                <p>🏆 ${state.trophies || 0} trophies${shieldLeft > 0 ? ` · 🛡️ shield ${Math.ceil(shieldLeft / 60000)}m` : ''}</p>
+                <p>${svgIcon('trophy')} ${state.trophies || 0} trophies${shieldLeft > 0 ? ` · ${svgIcon('shield')}️ shield ${Math.ceil(shieldLeft / 60000)}m` : ''}</p>
                 <div class="lb-rows">
-                    ${rows.slice(0, 6).map((r, i) => `<div class="lb-row ${r.you ? 'you' : ''}"><span>#${i + 1}</span><span>${r.name}</span><span>🏆${r.trophies}</span></div>`).join('')}
+                    ${rows.slice(0, 6).map((r, i) => `<div class="lb-row ${r.you ? 'you' : ''}"><span>#${i + 1}</span><span>${r.name}</span><span>${svgIcon('trophy')}${r.trophies}</span></div>`).join('')}
                 </div>
             </div>
         </div>
 
-        <h3 class="hero-section-title">⚔️ Campaign</h3>
+        <h3 class="hero-section-title">${svgIcon('swords')}️ Campaign</h3>
         <div class="mission-map">${missions}</div>
 
-        <h3 class="hero-section-title">🏰 Clan Hall</h3>
+        <h3 class="hero-section-title">${svgIcon('castle')} Clan Hall</h3>
         <div class="world-card">
             ${state.club ? `
                 <p><b>${state.club.name}</b> — ${state.club.members.length} members</p>
-                <button class="btn btn-success" onclick="requestClanTroops()">📢 Request Troops</button>
+                <button class="btn btn-success" onclick="requestClanTroops()"> Request Troops</button>
                 <div class="clan-chat">
                     ${(state.clanChat.slice(-8)).map(c => `<div class="chat-line"><b>${c.who}:</b> ${c.msg}</div>`).join('') || '<div class="chat-line" style="opacity:0.6">No messages yet…</div>'}
                 </div>
@@ -474,12 +474,12 @@ function renderWorldView() {
             ` : `<p>Join a club (Club tab) to unlock troop donations & clan chat.</p>`}
         </div>
 
-        <h3 class="hero-section-title">⚙️ Account</h3>
+        <h3 class="hero-section-title">${svgIcon('gear')}️ Account</h3>
         <div class="world-card account-row">
-            <button class="btn btn-primary" onclick="exportSave()">📤 Export Save Code</button>
-            <button class="btn btn-primary" onclick="importSave()">📥 Import Save Code</button>
-            <button class="btn ${state.notifyOn ? 'btn-success' : 'btn-primary'}" onclick="toggleNotifications()">${state.notifyOn ? '🔔 Notifications ON' : '🔕 Enable Notifications'}</button>
-            <button class="btn btn-gold" onclick="openShop()">💎 Gem Shop</button>
+            <button class="btn btn-primary" onclick="exportSave()">${svgIcon('upload')} Export Save Code</button>
+            <button class="btn btn-primary" onclick="importSave()">${svgIcon('download')} Import Save Code</button>
+            <button class="btn ${state.notifyOn ? 'btn-success' : 'btn-primary'}" onclick="toggleNotifications()">${state.notifyOn ? ' Notifications ON' : ' Enable Notifications'}</button>
+            <button class="btn btn-gold" onclick="openShop()">${svgIcon('gem')} Gem Shop</button>
         </div>
     `;
 }

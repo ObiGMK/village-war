@@ -4,7 +4,7 @@
 
 const BUILDING_DEFS = {
     townhall: {
-        name: 'Town Hall', icon: '🏛️', category: 'resource',
+        name: 'Town Hall', icon: svgIcon('castle'), category: 'resource',
         desc: 'Heart of your village. Upgrading unlocks new buildings.',
         maxLevel: 10, unique: true,
         baseCost: { coins: 200, wood: 100 },
@@ -14,7 +14,7 @@ const BUILDING_DEFS = {
         unlocks: { 2: ['barracks'], 3: ['archertower'], 4: ['cannon'], 5: ['stable'], 7: ['fortress'] }
     },
     goldmine: {
-        name: 'Gold Mine', icon: '⛏️', category: 'resource',
+        name: 'Gold Mine', icon: svgIcon('pickaxe'), category: 'resource',
         desc: 'Produces gold over time.',
         maxLevel: 10, unique: false,
         baseCost: { coins: 100, wood: 50 },
@@ -24,7 +24,7 @@ const BUILDING_DEFS = {
         prodMult: 1.5
     },
     ironmine: {
-        name: 'Iron Mine', icon: '🔨', category: 'resource',
+        name: 'Iron Mine', icon: svgIcon('hammer'), category: 'resource',
         desc: 'Produces iron over time.',
         maxLevel: 10, unique: false,
         baseCost: { coins: 100, wood: 50 },
@@ -34,7 +34,7 @@ const BUILDING_DEFS = {
         prodMult: 1.5
     },
     lumbermill: {
-        name: 'Lumber Mill', icon: '🪓', category: 'resource',
+        name: 'Lumber Mill', icon: svgIcon('pickaxe'), category: 'resource',
         desc: 'Produces wood over time.',
         maxLevel: 10, unique: false,
         baseCost: { coins: 80, gold: 20 },
@@ -44,7 +44,7 @@ const BUILDING_DEFS = {
         prodMult: 1.5
     },
     farm: {
-        name: 'Farm', icon: '🌾', category: 'resource',
+        name: 'Farm', icon: svgIcon('wheat'), category: 'resource',
         desc: 'Produces food to feed your army.',
         maxLevel: 10, unique: false,
         baseCost: { coins: 60, wood: 40 },
@@ -54,7 +54,7 @@ const BUILDING_DEFS = {
         prodMult: 1.5
     },
     coinmint: {
-        name: 'Coin Mint', icon: '🏦', category: 'resource',
+        name: 'Coin Mint', icon: svgIcon('bank'), category: 'resource',
         desc: 'Generates coins over time. Basic at first — upgrade it to mint far more.',
         maxLevel: 10, unique: false,
         baseCost: { gold: 80, iron: 40 },
@@ -65,7 +65,7 @@ const BUILDING_DEFS = {
         reqTH: 3
     },
     storage: {
-        name: 'Storage', icon: '🏪', category: 'resource',
+        name: 'Storage', icon: svgIcon('crate'), category: 'resource',
         desc: 'Increases maximum resource storage.',
         maxLevel: 10, unique: false,
         baseCost: { coins: 150, wood: 80 },
@@ -76,7 +76,7 @@ const BUILDING_DEFS = {
         reqTH: 2
     },
     barracks: {
-        name: 'Barracks', icon: '⚔️', category: 'military',
+        name: 'Barracks', icon: svgIcon('swords'), category: 'military',
         desc: 'Train warriors and archers. Build more to grow your army!',
         maxLevel: 10, unique: false,
         baseCost: { coins: 300, wood: 150, iron: 50 },
@@ -88,7 +88,7 @@ const BUILDING_DEFS = {
         capMult: 1.4
     },
     stable: {
-        name: 'Stable', icon: '🐴', category: 'military',
+        name: 'Stable', icon: '', category: 'military',
         desc: 'Train cavalry units. Each stable grows your army cap.',
         maxLevel: 8, unique: false,
         baseCost: { coins: 500, wood: 200, iron: 100 },
@@ -100,7 +100,7 @@ const BUILDING_DEFS = {
         capMult: 1.3
     },
     researchlab: {
-        name: 'Research Lab', icon: '🔬', category: 'military',
+        name: 'Research Lab', icon: svgIcon('research'), category: 'military',
         desc: 'Unlock research! Discover boosts, new troops, and territory expansions.',
         maxLevel: 5, unique: true,
         baseCost: { coins: 800, gold: 200, iron: 300, wood: 200 },
@@ -110,7 +110,7 @@ const BUILDING_DEFS = {
         reqTH: 2
     },
     fortress: {
-        name: 'Fortress', icon: '🏰', category: 'military',
+        name: 'Fortress', icon: svgIcon('castle'), category: 'military',
         desc: 'Train siege units. Boosts all defenses.',
         maxLevel: 5, unique: true,
         baseCost: { coins: 1000, gold: 500, iron: 300 },
@@ -121,7 +121,7 @@ const BUILDING_DEFS = {
         defenseBoost: 0.1
     },
     wall: {
-        name: 'Wall', icon: '🧱', category: 'defense',
+        name: 'Wall', icon: '', category: 'defense',
         desc: 'Absorbs damage from attackers.',
         maxLevel: 15, unique: false,
         baseCost: { coins: 50, iron: 30 },
@@ -132,7 +132,7 @@ const BUILDING_DEFS = {
         defMult: 1.5
     },
     archertower: {
-        name: 'Archer Tower', icon: '🏹', category: 'defense',
+        name: 'Archer Tower', icon: svgIcon('dagger'), category: 'defense',
         desc: 'Deals damage to attackers.',
         maxLevel: 10, unique: false,
         baseCost: { coins: 200, wood: 100, iron: 50 },
@@ -145,7 +145,7 @@ const BUILDING_DEFS = {
         attack: 15
     },
     cannon: {
-        name: 'Cannon', icon: '💣', category: 'defense',
+        name: 'Cannon', icon: '', category: 'defense',
         desc: 'High damage, slow attack.',
         maxLevel: 8, unique: false,
         baseCost: { coins: 400, iron: 200 },
@@ -161,35 +161,35 @@ const BUILDING_DEFS = {
 
 const TROOP_DEFS = {
     warrior: {
-        name: 'Warrior', icon: '🗡️', size: 1,
+        name: 'Warrior', icon: svgIcon('dagger'), size: 1,
         desc: 'Basic melee fighter.',
         cost: { coins: 20, food: 10 },
         hp: 100, attack: 15, defense: 10,
         building: 'barracks', reqLevel: 1
     },
     archer: {
-        name: 'Archer', icon: '🏹', size: 1,
+        name: 'Archer', icon: svgIcon('dagger'), size: 1,
         desc: 'Ranged fighter. Good vs defenses.',
         cost: { coins: 30, food: 10, wood: 5 },
         hp: 60, attack: 20, defense: 5,
         building: 'barracks', reqLevel: 3
     },
     shieldbearer: {
-        name: 'Shield Bearer', icon: '🛡️', size: 2,
+        name: 'Shield Bearer', icon: svgIcon('shield'), size: 2,
         desc: 'Tanky unit. Absorbs heavy damage.',
         cost: { coins: 50, food: 15, iron: 20 },
         hp: 250, attack: 8, defense: 30,
         building: 'barracks', reqLevel: 5
     },
     cavalry: {
-        name: 'Cavalry', icon: '🐎', size: 3,
+        name: 'Cavalry', icon: '', size: 3,
         desc: 'Fast and powerful.',
         cost: { coins: 80, food: 25, gold: 10 },
         hp: 180, attack: 35, defense: 15,
         building: 'stable', reqLevel: 1
     },
     siege: {
-        name: 'Siege Ram', icon: '🪵', size: 5,
+        name: 'Siege Ram', icon: svgIcon('tree'), size: 5,
         desc: 'Destroys buildings fast.',
         cost: { coins: 150, wood: 80, iron: 50 },
         hp: 300, attack: 50, defense: 5,
@@ -197,7 +197,7 @@ const TROOP_DEFS = {
     },
     // ===== Research-unlocked troops =====
     knight: {
-        name: 'Knight', icon: '🤺', size: 2,
+        name: 'Knight', icon: svgIcon('swords'), size: 2,
         desc: 'Heavy elite melee. Plate armor & longsword.',
         cost: { coins: 100, food: 30, iron: 40, gold: 10 },
         hp: 320, attack: 45, defense: 35,
@@ -205,7 +205,7 @@ const TROOP_DEFS = {
         requiresResearch: 'r_knight'
     },
     crossbowman: {
-        name: 'Crossbowman', icon: '🎯', size: 1,
+        name: 'Crossbowman', icon: svgIcon('dagger'), size: 1,
         desc: 'Ranged powerhouse. Punches through armor.',
         cost: { coins: 80, food: 20, wood: 30, iron: 25 },
         hp: 90, attack: 55, defense: 10,
@@ -213,7 +213,7 @@ const TROOP_DEFS = {
         requiresResearch: 'r_crossbow'
     },
     paladin: {
-        name: 'Paladin', icon: '⚜️', size: 3,
+        name: 'Paladin', icon: '', size: 3,
         desc: 'Holy knight. Balanced power and durability.',
         cost: { coins: 200, food: 50, iron: 60, gold: 30 },
         hp: 450, attack: 55, defense: 45,
@@ -221,7 +221,7 @@ const TROOP_DEFS = {
         requiresResearch: 'r_paladin'
     },
     catapult: {
-        name: 'Catapult', icon: '🪨', size: 6,
+        name: 'Catapult', icon: '', size: 6,
         desc: 'Long-range siege. Devastating splash damage.',
         cost: { coins: 250, wood: 150, iron: 100 },
         hp: 250, attack: 90, defense: 5,
@@ -229,7 +229,7 @@ const TROOP_DEFS = {
         requiresResearch: 'r_catapult'
     },
     pikeman: {
-        name: 'Pikeman', icon: '🔱', size: 1,
+        name: 'Pikeman', icon: '', size: 1,
         desc: 'Anti-cavalry specialist. Long reach.',
         cost: { coins: 35, food: 15, wood: 10, iron: 10 },
         hp: 130, attack: 25, defense: 18,
@@ -487,7 +487,7 @@ function buyLand(pos) {
         const el = grid && grid.querySelector(`.buy-tile[data-pos="${pos}"]`);
         if (el) { const r = el.getBoundingClientRect(); sparkleBurst(r.left + r.width/2, r.top + r.height/2, 14); }
     } catch(e) {}
-    toast('🚩 Land claimed!', 'success');
+    toast(' Land claimed!', 'success');
     renderGrid();
     updateResources();
     saveGame();
@@ -514,7 +514,7 @@ function clearDeco(key, type) {
         }
     } catch(e) {}
     if (typeof addGems === 'function' && Math.random() < 0.3) addGems(1 + Math.floor(Math.random() * 3));
-    toast(type === 'tree' ? '🪓 Tree cleared! +wood' : '⛏️ Rock cleared! +iron', 'success');
+    toast(type === 'tree' ? ' Tree cleared! +wood' : '️ Rock cleared! +iron', 'success');
     renderGrid();
     updateResources();
     saveGame();
@@ -770,17 +770,17 @@ function addXP(amount) {
         try {
             Audio.levelup();
             confetti(50, 2000);
-            popup(`⭐ LEVEL ${state.level}!`, { big: true, color: '#fbbf24' });
+            popup(`${svgIcon('star')} LEVEL ${state.level}!`, { big: true, color: '#fbbf24' });
             track('levelReached', 1);
             state.achievements && (state.achievements.metrics.levelReached = state.level);
         } catch(e) {}
     }
 }
 
-// Resource icons — coins & gold use crisp gold SVGs (emoji 🪙 renders silver)
+// Resource icons — coins & gold use crisp gold SVGs (emoji  renders silver)
 const RES_ICONS = {
-    coins: (typeof COIN_ICON !== 'undefined' ? COIN_ICON : '🪙'),
-    gold:  (typeof GOLD_ICON !== 'undefined' ? GOLD_ICON : '🥇'),
+    coins: (typeof COIN_ICON !== 'undefined' ? COIN_ICON : ''),
+    gold:  (typeof GOLD_ICON !== 'undefined' ? GOLD_ICON : ''),
     iron:  (typeof IRON_ICON !== 'undefined' ? IRON_ICON : 'iron'),
     wood:  (typeof WOOD_ICON !== 'undefined' ? WOOD_ICON : 'wood'),
     food:  (typeof FOOD_ICON !== 'undefined' ? FOOD_ICON : 'food')
@@ -1014,7 +1014,7 @@ function placeBuilding(type, pos) {
     for (const p of foot) {
         if (tileOccupiedBy(p)) { toast(FOOTPRINT_2X2[type] ? `${def.name} needs a 2×2 space!` : 'That spot is occupied!', 'error'); return; }
         if (typeof isTileOwned === 'function' && !isTileOwned(p)) {
-            toast(FOOTPRINT_2X2[type] ? `${def.name} needs a 2×2 of YOUR land!` : '🔒 Wild territory! Claim it first.', 'error');
+            toast(FOOTPRINT_2X2[type] ? `${def.name} needs a 2×2 of YOUR land!` : ' Wild territory! Claim it first.', 'error');
             return;
         }
     }
@@ -1036,7 +1036,7 @@ function placeBuilding(type, pos) {
     }
     // Need a free builder
     if (typeof freeBuilders === 'function' && freeBuilders() <= 0) {
-        toast(`All ${state.builders.count} builders are busy! Finish or speed up a job (💎).`, 'error');
+        toast(`All ${state.builders.count} builders are busy! Finish or speed up a job ().`, 'error');
         try { Audio.error(); } catch(e) {}
         return;
     }
@@ -1044,7 +1044,7 @@ function placeBuilding(type, pos) {
     const dur = (typeof buildDuration === 'function') ? buildDuration(type, 1) : 0;
     state.buildings.push({ type, level: 1, pos, hp: def.baseHP, justPlaced: Date.now(), constructing: dur > 0, endsAt: Date.now() + dur * 1000 });
     updateStorageCaps();
-    toast(dur > 0 ? `🔨 ${def.name} under construction (${dur}s)…` : `${def.name} built!`, 'success');
+    toast(dur > 0 ? ` ${def.name} under construction (${dur}s)…` : `${def.name} built!`, 'success');
     try { Audio.place(); } catch(e) {}
     renderGrid();
     // Apply drop animation to the newly placed building
@@ -1104,7 +1104,7 @@ function showBuildingInfo(building) {
                 <p style="font-size:0.8rem;margin-bottom:4px">Upgrade to Lv${nextLvl}:</p>
                 <div class="card-cost">${costHTML(cost)}</div>
                 ${levelLocked
-                    ? `<button class="btn btn-locked" style="margin-top:8px" disabled>🔒 Reach Level ${reqLevel}</button>`
+                    ? `<button class="btn btn-locked" style="margin-top:8px" disabled> Reach Level ${reqLevel}</button>`
                     : `<button class="btn btn-primary" style="margin-top:8px" ${!canAfford(cost) ? 'disabled' : ''} onclick="upgradeBuilding(${building.pos})">Upgrade</button>`}
                 <button class="btn btn-danger" style="margin-top:8px;margin-left:4px" onclick="demolishBuilding(${building.pos})">Demolish</button>
                 ${levelLocked ? `<p style="font-size:0.72rem;color:var(--danger);margin-top:6px">The Town Hall can only be upgraded once you reach player Level ${reqLevel}.</p>` : ''}
@@ -1145,7 +1145,7 @@ function upgradeBuilding(pos) {
     const dur = (typeof buildDuration === 'function') ? buildDuration(building.type, building.level + 1) : 0;
     if (dur > 0) {
         building.upgrading = { to: building.level + 1, endsAt: Date.now() + dur * 1000 };
-        toast(`🔨 Upgrading ${def.name} to Lv${building.level + 1} (${dur}s)…`, 'info');
+        toast(` Upgrading ${def.name} to Lv${building.level + 1} (${dur}s)…`, 'info');
     } else {
         building.level++;
         building.hp = Math.floor(def.baseHP * Math.pow(1.3, building.level - 1));
@@ -1221,15 +1221,15 @@ function renderBuildView() {
 
         // Lock message: distinguish "first build" gate vs "another copy" gate
         const lockMsg = count > 0
-            ? `🔒 Build another at Town Hall Lv${reqTH}`
-            : `🔒 Requires Town Hall Lv${reqTH}`;
+            ? ` Build another at Town Hall Lv${reqTH}`
+            : ` Requires Town Hall Lv${reqTH}`;
 
         card.innerHTML = `
             <div class="card-icon">${bIcon}</div>
             <h4>${def.name} ${count > 0 ? `<span style="color:var(--text2);font-size:0.8rem">(${count} built)</span>` : ''}</h4>
             <div class="card-desc">${def.desc}</div>
             ${isMaxed
-                ? `<div class="build-lock built-once">✓ Built (one only) — upgrade from village</div>`
+                ? `<div class="build-lock built-once"> Built (one only) — upgrade from village</div>`
                 : locked
                     ? `<div class="build-lock">${lockMsg}</div>`
                     : `<div class="card-cost">${costHTML(cost)}</div>`}
@@ -1264,26 +1264,26 @@ function renderArmyView() {
     const reserveN = getSoldiers('reserve').length;
 
     view.innerHTML = `
-        <h2>⚔️ Forces</h2>
+        <h2>️ Forces</h2>
         <div id="army-capacity">
-            <span>👥 Total ${cur}/${cap}</span>
+            <span> Total ${cur}/${cap}</span>
             <div class="cap-bar"><div class="cap-fill" style="width:${Math.min(100, cur/cap*100)}%"></div></div>
-            <span class="formation-power">⚔️ ${getArmyPower(getDeployed(currentFormation))} pwr</span>
+            <span class="formation-power">️ ${getArmyPower(getDeployed(currentFormation))} pwr</span>
         </div>
 
         <div class="formation-tabs">
             <button class="formation-tab ${currentFormation==='army'?'active':''}" onclick="switchFormation('army')">
-                ⚔️ Army <span class="ft-count">${armyN}</span><small>raids</small>
+                ️ Army <span class="ft-count">${armyN}</span><small>raids</small>
             </button>
             <button class="formation-tab ${currentFormation==='patrol'?'active':''}" onclick="switchFormation('patrol')">
-                🛡️ Patrol <span class="ft-count">${patrolN}</span><small>defends</small>
+                ️ Patrol <span class="ft-count">${patrolN}</span><small>defends</small>
             </button>
         </div>
 
         <p class="formation-hint">${currentFormation === 'army'
             ? 'These soldiers go on <b>raids</b>. Click a reserve below, then click a tile to deploy. Front rows (top) fight first.'
             : 'These soldiers <b>guard your kingdom</b> from CPU attacks. Click a reserve below, then a tile to deploy.'}
-            <br>⚠️ <b>Soldiers who die in battle are gone forever.</b></p>
+            <br>️ <b>Soldiers who die in battle are gone forever.</b></p>
 
         <div class="formation-grid-wrap">
             <div class="enemy-side-label">▲ Enemy approaches from here ▲</div>
@@ -1414,16 +1414,16 @@ function renderRecruitList() {
         const dispHP = Math.floor(def.hp * boost.hp);
         const dispATK = Math.floor(def.attack * boost.atk);
         const dispDEF = Math.floor(def.defense * boost.def);
-        const boostFlag = (boost.hp > 1 || boost.atk > 1 || boost.def > 1) ? ' <span class="boost-tag">⚡</span>' : '';
+        const boostFlag = (boost.hp > 1 || boost.atk > 1 || boost.def > 1) ? ' <span class="boost-tag"></span>' : '';
         const card = document.createElement('div');
         card.className = 'troop-card' + (locked ? ' locked' : '');
         card.innerHTML = `
             <div class="card-icon">${def.icon}</div>
             <h4>${def.name}${boostFlag}</h4>
-            <div class="card-desc">${def.desc}<br><small>❤️${dispHP} ⚔️${dispATK} 🛡️${dispDEF}</small></div>
+            <div class="card-desc">${def.desc}<br><small>️${dispHP} ️${dispATK} ️${dispDEF}</small></div>
             <div class="card-cost">Each: ${costHTML(def.cost)}</div>
             ${locked ? `
-                <div class="train-controls"><button class="btn btn-locked" disabled style="width:100%">🔒 ${RESEARCH_NODES[def.requiresResearch]?.name || '?'}</button></div>
+                <div class="train-controls"><button class="btn btn-locked" disabled style="width:100%"> ${RESEARCH_NODES[def.requiresResearch]?.name || '?'}</button></div>
             ` : `
                 <div class="train-controls">
                     <input type="number" min="1" max="50" value="1" id="train-${type}">
@@ -1558,7 +1558,7 @@ function generatePlayerTargets() {
             defense,
             trophies,
             loot,
-            icon: '🏘️',
+            icon: svgIcon('home'),
             difficulty: lvl <= state.level - 2 ? 'easy' : lvl <= state.level + 1 ? 'medium' : lvl <= state.level + 3 ? 'hard' : 'extreme'
         });
     }
@@ -1593,9 +1593,9 @@ function renderRaidView() {
                 <div class="loot-preview">${costHTML(camp.loot, false)}</div>
                 <div class="xp-pill">+${camp.xp} XP</div>
                 ${locked
-                    ? `<button class="btn btn-locked" disabled>🔒 Unlocks at Lv${camp.minLvl}</button>`
-                    : `<button class="btn btn-danger btn-glow" onclick="launchRaid('cpu', ${i})"><span class="btn-icon">⚔️</span> Attack</button>
-                       <button class="btn btn-primary" style="margin-left:6px" onclick="scoutCamp(${i})">🔍 Scout</button>`
+                    ? `<button class="btn btn-locked" disabled> Unlocks at Lv${camp.minLvl}</button>`
+                    : `<button class="btn btn-danger btn-glow" onclick="launchRaid('cpu', ${i})"><span class="btn-icon">️</span> Attack</button>
+                       <button class="btn btn-primary" style="margin-left:6px" onclick="scoutCamp(${i})"> Scout</button>`
                 }
             `;
             targets.appendChild(card);
@@ -1611,12 +1611,12 @@ function renderRaidView() {
                 <h4>${p.icon} ${p.name} <span style="color:var(--text2);font-size:0.8rem">Lv${p.level}</span></h4>
                 <div class="enemy-forces">Defense: ${p.defense} | Power: ${getArmyPower(p.troops)}</div>
                 <div class="loot-preview">Loot: ${costHTML(p.loot, false)}</div>
-                <div style="font-size:0.75rem;color:var(--gold);margin-bottom:0.5rem">🏆 ${p.trophies} trophies</div>
-                <button class="btn btn-danger" onclick="launchRaid('player', ${i})">⚔️ Attack</button>
+                <div style="font-size:0.75rem;color:var(--gold);margin-bottom:0.5rem"> ${p.trophies} trophies</div>
+                <button class="btn btn-danger" onclick="launchRaid('player', ${i})">️ Attack</button>
             `;
             targets.appendChild(card);
         }
-        targets.innerHTML += '<div style="margin-top:0.5rem"><button class="btn btn-primary" onclick="generatePlayerTargets();renderRaidView()">🔄 Find New Targets</button></div>';
+        targets.innerHTML += '<div style="margin-top:0.5rem"><button class="btn btn-primary" onclick="generatePlayerTargets();renderRaidView()"> Find New Targets</button></div>';
     }
 }
 
@@ -1662,7 +1662,7 @@ function launchRaid(type, index) {
     // Tutorial guarantee: first raid during tutorial is always a flawless win
     if (tutorialActive && type === 'cpu') {
         result = { victory: true, atkLosses: {}, defLosses: defTroops, atkSurvival: 1, rounds: 3 };
-        toast('🎓 Tutorial raid — guaranteed victory!', 'info');
+        toast(' Tutorial raid — guaranteed victory!', 'info');
     }
 
     // PERMADEATH: pick specific soldiers to kill (front rows die first)
@@ -1740,7 +1740,7 @@ function showBattleResult(result, target, logEntry) {
     el.classList.remove('hidden');
     el.innerHTML = `
         <div class="result-inner ${result.victory ? 'victory' : 'defeat'}">
-            <h2>${result.victory ? '⚔️ VICTORY!' : '💀 DEFEAT!'}</h2>
+            <h2>${result.victory ? '️ VICTORY!' : ' DEFEAT!'}</h2>
             <p style="color:var(--text2);margin-bottom:1rem">Battle against ${target.name} (${result.rounds} rounds)</p>
             ${result.victory ? `
                 <div class="loot-gained">
@@ -1748,11 +1748,11 @@ function showBattleResult(result, target, logEntry) {
                         return `<div class="loot-item">${RES_ICONS[r] || r} +${formatNum(v)}</div>`;
                     }).join('')}
                 </div>
-                ${logEntry.trophies > 0 ? `<p style="color:var(--gold)">🏆 +${logEntry.trophies} trophies</p>` : ''}
-                ${logEntry.xp > 0 ? `<p style="color:var(--blue)">⭐ +${logEntry.xp} XP</p>` : ''}
+                ${logEntry.trophies > 0 ? `<p style="color:var(--gold)"> +${logEntry.trophies} trophies</p>` : ''}
+                ${logEntry.xp > 0 ? `<p style="color:var(--blue)"> +${logEntry.xp} XP</p>` : ''}
             ` : `
                 <p style="color:var(--danger);margin-bottom:1rem">Your army was defeated!</p>
-                ${logEntry.trophies ? `<p style="color:var(--text2)">🏆 -${Math.floor(logEntry.trophies / 2)} trophies</p>` : ''}
+                ${logEntry.trophies ? `<p style="color:var(--text2)"> -${Math.floor(logEntry.trophies / 2)} trophies</p>` : ''}
             `}
             <div class="losses">
                 Losses: ${Object.entries(logEntry.losses).filter(([,v]) => v > 0).map(([t, v]) => `<span class="troop-chip"><span class="troop-chip-ico">${(typeof charSprite==='function'?charSprite(t):'')}</span>${v}</span>`).join(' ') || 'None'}
@@ -1769,7 +1769,7 @@ function showBattleResult(result, target, logEntry) {
 function cpuAttack() {
     if (state.buildings.length < 3) return;
     if (Date.now() < state.attackCooldownEnd) return;
-    if (typeof hasShield === 'function' && hasShield()) return;  // 🛡️ shield blocks attacks
+    if (typeof hasShield === 'function' && hasShield()) return;  // ️ shield blocks attacks
 
     const intensity = Math.min(state.level, 10);
     const troops = {};
@@ -1812,7 +1812,7 @@ function cpuAttack() {
             state.resources[r] = Math.max(0, state.resources[r] - stolen);
         }
         logEntry.loot = stolenLoot;
-        if (typeof grantShield === 'function') grantShield(10);   // 🛡️ post-attack shield
+        if (typeof grantShield === 'function') grantShield(10);   // ️ post-attack shield
         if (typeof notifyUser === 'function') notifyUser('You were attacked!', `${attackerName} raided your village.`);
     } else {
         const xp = intensity * 10;
@@ -1876,7 +1876,7 @@ function renderClubView() {
                 <p style="color:var(--text2);margin-bottom:1rem">Clubs compete in groups of 4 for amazing rewards!</p>
                 <div style="margin-bottom:1rem">
                     <input id="club-name-input" placeholder="Enter club name..." style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);width:200px">
-                    <button class="btn btn-gold" onclick="createClub()">Create Club (🪙 500)</button>
+                    <button class="btn btn-gold" onclick="createClub()">Create Club ( 500)</button>
                 </div>
                 <h3>Available Clubs</h3>
                 <div id="available-clubs"></div>
@@ -1892,7 +1892,7 @@ function renderClubView() {
         const sorted = [...war.groups].sort((a, b) => b.score - a.score);
         warHTML = `
             <div class="club-war-group">
-                <h4>⚔️ Club War - ${war.name}</h4>
+                <h4>️ Club War - ${war.name}</h4>
                 <p style="font-size:0.8rem;color:var(--text2);margin-bottom:0.5rem">Compete for the best rewards! Raid to earn points.</p>
                 ${sorted.map((g, i) => `
                     <div class="war-opponent ${g.isPlayer ? 'you' : ''}">
@@ -1902,22 +1902,22 @@ function renderClubView() {
                     </div>
                 `).join('')}
                 <div class="war-rewards">
-                    <div class="reward-tier first">🥇 1st<br>🪙5000 🥇1000</div>
-                    <div class="reward-tier second">🥈 2nd<br>🪙3000 🥇500</div>
-                    <div class="reward-tier third">🥉 3rd<br>🪙1500 🥇200</div>
-                    <div class="reward-tier fourth">4th<br>🪙500</div>
+                    <div class="reward-tier first"> 1st<br>5000 1000</div>
+                    <div class="reward-tier second"> 2nd<br>3000 500</div>
+                    <div class="reward-tier third"> 3rd<br>1500 200</div>
+                    <div class="reward-tier fourth">4th<br>500</div>
                 </div>
                 <button class="btn btn-primary" style="margin-top:0.75rem" onclick="collectWarRewards()">Collect Rewards & Start New War</button>
             </div>
         `;
     } else {
-        warHTML = `<button class="btn btn-gold" style="margin-bottom:1rem" onclick="startClubWar()">⚔️ Start Club War</button>`;
+        warHTML = `<button class="btn btn-gold" style="margin-bottom:1rem" onclick="startClubWar()">️ Start Club War</button>`;
     }
 
     content.innerHTML = `
         <div class="club-card">
-            <h3>🛡️ ${state.club.name}</h3>
-            <p style="color:var(--text2)">Members: ${state.club.members.length}/20 | Total Trophies: ${state.club.members.reduce((s, m) => s + m.trophies, 0)} 🏆</p>
+            <h3>️ ${state.club.name}</h3>
+            <p style="color:var(--text2)">Members: ${state.club.members.length}/20 | Total Trophies: ${state.club.members.reduce((s, m) => s + m.trophies, 0)} </p>
         </div>
         ${warHTML}
         <h3>Members</h3>
@@ -1926,7 +1926,7 @@ function renderClubView() {
                 <div class="club-member">
                     <span class="rank">#${i + 1}</span>
                     <span class="member-name">${m.name} ${m.isPlayer ? '(You)' : ''}</span>
-                    <span class="member-trophies">🏆 ${m.trophies}</span>
+                    <span class="member-trophies"> ${m.trophies}</span>
                 </div>
             `).join('')}
         </div>
@@ -1945,8 +1945,8 @@ function renderAvailableClubs() {
         el.innerHTML += `
             <div class="club-card" style="display:flex;justify-content:space-between;align-items:center">
                 <div>
-                    <strong>🛡️ ${name}</strong><br>
-                    <span style="font-size:0.8rem;color:var(--text2)">${members}/20 members | 🏆 ${trophies}</span>
+                    <strong>️ ${name}</strong><br>
+                    <span style="font-size:0.8rem;color:var(--text2)">${members}/20 members |  ${trophies}</span>
                 </div>
                 <button class="btn btn-success" onclick="joinClub('${name}', ${members}, ${trophies})">Join</button>
             </div>
@@ -2077,9 +2077,9 @@ function renderResearchView() {
     const lab = getBuilding('researchlab');
     if (!lab) {
         el.innerHTML = `
-            <h2>🔬 Research</h2>
+            <h2> Research</h2>
             <div class="club-card" style="text-align:center;padding:2rem">
-                <div style="font-size:3rem;margin-bottom:1rem">🔬</div>
+                <div style="font-size:3rem;margin-bottom:1rem"></div>
                 <h3 style="color:var(--gold);margin-bottom:0.5rem">Build a Research Lab first!</h3>
                 <p style="color:var(--text2);margin-bottom:1rem">Construct a Research Lab from the Build menu (Military tab) to unlock research that boosts production, unlocks new troops, and expands your territory.</p>
                 <button class="btn btn-gold" onclick="switchView('build')">Open Build Menu</button>
@@ -2089,7 +2089,7 @@ function renderResearchView() {
     }
 
     const categories = ['economy', 'military', 'territory'];
-    const catTitles = { economy: '💰 Economy', military: '⚔️ Military', territory: '🗺️ Territory' };
+    const catTitles = { economy: ' Economy', military: '️ Military', territory: '️ Territory' };
 
     const buildSection = (cat) => {
         const nodes = Object.entries(RESEARCH_NODES).filter(([, n]) => n.category === cat);
@@ -2101,27 +2101,27 @@ function renderResearchView() {
             const statusClass = done ? 'researched' : !prereqMet || !labOK ? 'locked' : '';
 
             const effHTML = n.effect.prodMult ? Object.entries(n.effect.prodMult).map(([r, m]) => `<span class="effect-pill">+${Math.round((m - 1) * 100)}% ${r}</span>`).join('')
-                : n.effect.unlockTroop ? `<span class="effect-pill effect-unlock">🆕 Unlock ${TROOP_DEFS[n.effect.unlockTroop]?.name || n.effect.unlockTroop}</span>`
+                : n.effect.unlockTroop ? `<span class="effect-pill effect-unlock"> Unlock ${TROOP_DEFS[n.effect.unlockTroop]?.name || n.effect.unlockTroop}</span>`
                 : n.effect.troopBoost ? Object.entries(n.effect.troopBoost).map(([t, b]) => {
                     const tName = t === 'all' ? 'All troops' : TROOP_DEFS[t]?.name || t;
                     return Object.entries(b).map(([s, v]) => `<span class="effect-pill">${tName} +${Math.round((v - 1) * 100)}% ${s.toUpperCase()}</span>`).join('');
                 }).join('')
-                : n.effect.expand ? `<span class="effect-pill effect-unlock">🗺️ +${n.effect.expand === 999 ? 'MAX' : n.effect.expand} tiles</span>`
+                : n.effect.expand ? `<span class="effect-pill effect-unlock">️ +${n.effect.expand === 999 ? 'MAX' : n.effect.expand} tiles</span>`
                 : '';
 
             return `
                 <div class="research-card ${statusClass}">
                     <div class="research-header">
                         <strong>${n.name}</strong>
-                        ${done ? '<span class="done-badge">✓ DONE</span>' : `<span class="lab-badge">Lab ${n.reqLab}+</span>`}
+                        ${done ? '<span class="done-badge"> DONE</span>' : `<span class="lab-badge">Lab ${n.reqLab}+</span>`}
                     </div>
                     <div class="research-desc">${n.desc}</div>
                     <div class="research-effects">${effHTML}</div>
-                    ${!done && n.requires ? `<div class="research-prereq">Requires: ${RESEARCH_NODES[n.requires].name}${prereqMet ? ' ✓' : ' ✗'}</div>` : ''}
+                    ${!done && n.requires ? `<div class="research-prereq">Requires: ${RESEARCH_NODES[n.requires].name}${prereqMet ? ' ' : ' '}</div>` : ''}
                     ${done ? '' : `
                         <div class="card-cost" style="margin:6px 0">${costHTML(n.cost)}</div>
                         <button class="btn ${canBuy ? 'btn-unlock' : 'btn-locked'}" ${!canBuy ? 'disabled' : ''} onclick="buyResearch('${id}')">
-                            ${!labOK ? `🔒 Lab Lv${n.reqLab}` : !prereqMet ? '🔒 Locked' : !canAfford(n.cost) ? 'Too expensive' : '⭐ Research'}
+                            ${!labOK ? ` Lab Lv${n.reqLab}` : !prereqMet ? ' Locked' : !canAfford(n.cost) ? 'Too expensive' : ' Research'}
                         </button>
                     `}
                 </div>
@@ -2137,11 +2137,11 @@ function renderResearchView() {
     const total = Object.keys(RESEARCH_NODES).length;
 
     el.innerHTML = `
-        <h2>🔬 Research</h2>
+        <h2> Research</h2>
         <div class="research-summary">
-            <span>🏛️ Lab Level <strong>${lab.level}/${BUILDING_DEFS.researchlab.maxLevel}</strong></span>
-            <span>📊 Researched <strong>${done}/${total}</strong></span>
-            <span>🗺️ Land <strong>${state.ownedTiles.length}/${landCap()}</strong> tiles (cap rises with level)</span>
+            <span>️ Lab Level <strong>${lab.level}/${BUILDING_DEFS.researchlab.maxLevel}</strong></span>
+            <span> Researched <strong>${done}/${total}</strong></span>
+            <span>️ Land <strong>${state.ownedTiles.length}/${landCap()}</strong> tiles (cap rises with level)</span>
         </div>
         ${categories.map(buildSection).join('')}
     `;
@@ -2162,7 +2162,7 @@ function renderHeroesView() {
             slot.className = 'equipped-slot filled';
             slot.innerHTML = `
                 ${h.portrait}
-                <button class="unequip-btn" onclick="unequipHero(${i})" title="Unequip">✕</button>
+                <button class="unequip-btn" onclick="unequipHero(${i})" title="Unequip"></button>
                 <div class="equipped-name">${h.name.split(' ')[0]}</div>
             `;
         } else {
@@ -2194,9 +2194,9 @@ function renderHeroesView() {
                 <div class="hero-name">${def.name}</div>
                 <div class="hero-title">${def.title}</div>
                 <div class="hero-stats">
-                    <span>❤️ ${stats.hp}</span>
-                    <span>⚔️ ${stats.attack}</span>
-                    <span>🛡️ ${stats.defense}</span>
+                    <span>️ ${stats.hp}</span>
+                    <span>️ ${stats.attack}</span>
+                    <span>️ ${stats.defense}</span>
                 </div>
                 <div class="hero-ability">
                     <strong>${def.ability}</strong>
@@ -2206,7 +2206,7 @@ function renderHeroesView() {
             </div>
             ${!owned ? `
                 <div class="lock-overlay">
-                    <div class="lock-icon">🔒</div>
+                    <div class="lock-icon"></div>
                     <div class="lock-req">
                         Requires Lv${def.unlockLevel}<br>
                         ${Object.keys(def.unlockCost).length ? Object.entries(def.unlockCost).map(([r, v]) => {
@@ -2215,7 +2215,7 @@ function renderHeroesView() {
                     </div>
                     ${state.level < def.unlockLevel
                         ? `<button class="btn btn-locked" style="margin-top:0.75rem;pointer-events:auto" disabled>Reach Lv${def.unlockLevel}</button>`
-                        : `<button class="btn btn-unlock ${canUnlock ? 'btn-glow' : ''}" style="margin-top:0.75rem;pointer-events:auto" ${!canUnlock ? 'disabled' : ''} onclick="unlockHero('${id}')">⭐ Unlock</button>`}
+                        : `<button class="btn btn-unlock ${canUnlock ? 'btn-glow' : ''}" style="margin-top:0.75rem;pointer-events:auto" ${!canUnlock ? 'disabled' : ''} onclick="unlockHero('${id}')"> Unlock</button>`}
                 </div>
             ` : ''}
         `;
@@ -2231,7 +2231,7 @@ function renderHeroActions(id, def, equipped, level) {
             ${equipped ? 'Unequip' : 'Equip'}
         </button>
         ${level < 10 ? `<button class="btn btn-primary hero-action" style="margin-top:4px" ${!canUpgrade ? 'disabled' : ''} onclick="upgradeHero('${id}')">
-            Upgrade (🪙${formatNum(upgradeCost.coins)} 🥇${formatNum(upgradeCost.gold)})
+            Upgrade (${formatNum(upgradeCost.coins)} ${formatNum(upgradeCost.gold)})
         </button>` : '<div style="text-align:center;color:var(--gold);font-size:0.75rem;margin-top:4px">MAX LEVEL</div>'}
     `;
 }
@@ -2337,11 +2337,11 @@ function renderBattleLog() {
     }
     el.innerHTML = state.battleLog.map((entry, idx) => {
         const isAttack = entry.type === 'attack';
-        const icon = isAttack ? (entry.victory ? '⚔️' : '💀') : (entry.victory ? '🛡️' : '💔');
+        const icon = isAttack ? (entry.victory ? '️' : '') : (entry.victory ? '️' : '');
         const cls = isAttack ? (entry.victory ? 'victory' : 'defeat') : (entry.victory ? 'defense victory' : 'defense defeat');
         const time = new Date(entry.time);
         const timeStr = time.toLocaleTimeString();
-        const stars = entry.stars != null ? ` <span class="log-stars">${'★'.repeat(entry.stars)}${'☆'.repeat(3 - entry.stars)}</span>` : '';
+        const stars = entry.stars != null ? ` <span class="log-stars">${''.repeat(entry.stars)}${''.repeat(3 - entry.stars)}</span>` : '';
         const destr = entry.destruction != null ? ` <span style="color:var(--text2);font-size:0.78rem">${entry.destruction}%</span>` : '';
 
         return `
@@ -2353,7 +2353,7 @@ function renderBattleLog() {
                     ${entry.victory && Object.keys(entry.loot).length > 0 ? `<div style="font-size:0.8rem;color:var(--text2)">Loot: ${Object.entries(entry.loot).filter(([,v])=>v>0).map(([r,v])=>`${r}:${formatNum(v)}`).join(', ')}</div>` : ''}
                     ${!entry.victory && entry.type === 'defense' ? `<div style="font-size:0.8rem;color:var(--danger)">Resources stolen!</div>` : ''}
                 </div>
-                ${entry.type === 'defense' && !entry.victory ? `<button class="btn btn-danger" style="padding:4px 12px;font-size:0.72rem" onclick="revengeRaid(${idx})">😤 Revenge</button>` : ''}
+                ${entry.type === 'defense' && !entry.victory ? `<button class="btn btn-danger" style="padding:4px 12px;font-size:0.72rem" onclick="revengeRaid(${idx})"> Revenge</button>` : ''}
                 <span class="log-time">${timeStr}</span>
             </div>
         `;
@@ -2501,18 +2501,18 @@ const QUEST_POOL = [
 ];
 
 const ACHIEVEMENTS = [
-    { id: 'first_build',  name: 'Master Builder',   icon: '🏗️', desc: 'Build 5 buildings',          goal: 5,   metric: 'totalBuilt',    reward: { coins: 1000 } },
-    { id: 'first_raid',   name: 'First Blood',      icon: '⚔️', desc: 'Win your first raid',        goal: 1,   metric: 'totalRaidsWon', reward: { gold: 200 } },
-    { id: 'raid_10',      name: 'Conqueror',        icon: '🏆', desc: 'Win 10 raids',               goal: 10,  metric: 'totalRaidsWon', reward: { gold: 500 } },
-    { id: 'raid_50',      name: 'Warlord',          icon: '👑', desc: 'Win 50 raids',               goal: 50,  metric: 'totalRaidsWon', reward: { gold: 2500 } },
-    { id: 'hero_3',       name: 'Champion Roster',  icon: '🎖️', desc: 'Unlock 3 heroes',           goal: 3,   metric: 'heroesUnlocked',reward: { gold: 1000 } },
-    { id: 'level_5',      name: 'Rising Lord',      icon: '⭐', desc: 'Reach player level 5',       goal: 5,   metric: 'levelReached',  reward: { coins: 2000, gold: 300 } },
-    { id: 'level_10',     name: 'Noble Champion',   icon: '🌟', desc: 'Reach player level 10',      goal: 10,  metric: 'levelReached',  reward: { coins: 5000, gold: 1000 } },
-    { id: 'level_20',     name: 'Legendary',        icon: '💫', desc: 'Reach player level 20',      goal: 20,  metric: 'levelReached',  reward: { coins: 20000, gold: 5000 } },
-    { id: 'army_50',      name: 'Big Army',         icon: '⚒️', desc: 'Have 50 troop capacity',     goal: 50,  metric: 'troopCap',      reward: { coins: 2000 } },
-    { id: 'rich',         name: 'Wealthy',          icon: '💰', desc: 'Hold 10,000 coins at once',  goal: 10000,metric: 'maxCoinsHeld', reward: { gold: 500 } },
-    { id: 'trophy_500',   name: 'Champion',         icon: '🥇', desc: 'Earn 500 trophies',          goal: 500, metric: 'trophiesPeak',  reward: { gold: 1500 } },
-    { id: 'club_war_win', name: 'Club Champion',    icon: '🛡️', desc: 'Win a club war (#1 place)', goal: 1,   metric: 'clubWarsWon',   reward: { coins: 10000, gold: 2000 } }
+    { id: 'first_build',  name: 'Master Builder',   icon: svgIcon('hammer'), desc: 'Build 5 buildings',          goal: 5,   metric: 'totalBuilt',    reward: { coins: 1000 } },
+    { id: 'first_raid',   name: 'First Blood',      icon: svgIcon('swords'), desc: 'Win your first raid',        goal: 1,   metric: 'totalRaidsWon', reward: { gold: 200 } },
+    { id: 'raid_10',      name: 'Conqueror',        icon: svgIcon('trophy'), desc: 'Win 10 raids',               goal: 10,  metric: 'totalRaidsWon', reward: { gold: 500 } },
+    { id: 'raid_50',      name: 'Warlord',          icon: svgIcon('crown'), desc: 'Win 50 raids',               goal: 50,  metric: 'totalRaidsWon', reward: { gold: 2500 } },
+    { id: 'hero_3',       name: 'Champion Roster',  icon: svgIcon('medal'), desc: 'Unlock 3 heroes',           goal: 3,   metric: 'heroesUnlocked',reward: { gold: 1000 } },
+    { id: 'level_5',      name: 'Rising Lord',      icon: svgIcon('star'), desc: 'Reach player level 5',       goal: 5,   metric: 'levelReached',  reward: { coins: 2000, gold: 300 } },
+    { id: 'level_10',     name: 'Noble Champion',   icon: svgIcon('star'), desc: 'Reach player level 10',      goal: 10,  metric: 'levelReached',  reward: { coins: 5000, gold: 1000 } },
+    { id: 'level_20',     name: 'Legendary',        icon: '', desc: 'Reach player level 20',      goal: 20,  metric: 'levelReached',  reward: { coins: 20000, gold: 5000 } },
+    { id: 'army_50',      name: 'Big Army',         icon: svgIcon('hammer'), desc: 'Have 50 troop capacity',     goal: 50,  metric: 'troopCap',      reward: { coins: 2000 } },
+    { id: 'rich',         name: 'Wealthy',          icon: svgIcon('coins'), desc: 'Hold 10,000 coins at once',  goal: 10000,metric: 'maxCoinsHeld', reward: { gold: 500 } },
+    { id: 'trophy_500',   name: 'Champion',         icon: svgIcon('medal'), desc: 'Earn 500 trophies',          goal: 500, metric: 'trophiesPeak',  reward: { gold: 1500 } },
+    { id: 'club_war_win', name: 'Club Champion',    icon: svgIcon('shield'), desc: 'Win a club war (#1 place)', goal: 1,   metric: 'clubWarsWon',   reward: { coins: 10000, gold: 2000 } }
 ];
 
 function ensureQuestState() {
@@ -2556,7 +2556,7 @@ function track(metric, amount = 1) {
             if (typeof addGems === 'function') addGems(10);
             if (typeof Audio !== 'undefined') Audio.achievement();
             if (typeof confetti !== 'undefined') confetti(40, 1500);
-            toast(`🏆 Achievement: ${a.name}! (+10 💎)`, 'success');
+            toast(` Achievement: ${a.name}! (+10 )`, 'success');
         }
     }
     updateNotificationBadges();
@@ -2597,7 +2597,7 @@ function renderQuestsView() {
                 <div class="quest-reward">
                     <div class="quest-reward-items">${costHTML(q.reward, false)}</div>
                     ${q.claimed
-                        ? `<button class="btn btn-locked" disabled>✓ Claimed</button>`
+                        ? `<button class="btn btn-locked" disabled> Claimed</button>`
                         : ready
                             ? `<button class="btn btn-gold btn-glow" onclick="claimQuest('${q.id}')">CLAIM</button>`
                             : `<button class="btn btn-locked" disabled>In Progress</button>`
@@ -2621,13 +2621,13 @@ function renderQuestsView() {
                     <div class="ach-progress-bar"><div class="ach-progress-fill" style="width:${pct}%"></div></div>
                     <div class="ach-meta">${val} / ${a.goal} · Reward: ${costHTML(a.reward, false)}</div>
                 </div>
-                ${earned ? '<div class="ach-check">✓</div>' : ''}
+                ${earned ? '<div class="ach-check"></div>' : ''}
             </div>
         `;
     }).join('');
 
     el.innerHTML = `
-        <h2>📜 Quests & Achievements</h2>
+        <h2> Quests & Achievements</h2>
         <h3 class="hero-section-title">Daily Quests <span style="font-size:0.7rem;color:var(--text2);font-weight:normal">(resets at midnight)</span></h3>
         <div class="quests-grid">${qList}</div>
         <h3 class="hero-section-title">Achievements (${earnedCount}/${ACHIEVEMENTS.length})</h3>
@@ -2739,7 +2739,7 @@ function playBirdseyeBattle({ attackerList, defenderCounts, target, result, kill
                 <div class="bt-units">${enemy.map(unitHTML).join('')}${mine.map(unitHTML).join('')}</div>
                 <div class="bt-fx" id="bt-fx"></div>
             </div>
-            <div class="bt-banner">${isDefense ? '🛡️ DEFENDING' : '⚔️ RAID'} · ${target.name || target}</div>
+            <div class="bt-banner">${isDefense ? '️ DEFENDING' : '️ RAID'} · ${target.name || target}</div>
             <div class="bt-label bt-label-top">${isDefense ? 'Invaders' : (target.name || 'Enemy')}</div>
             <div class="bt-label bt-label-bot">${isDefense ? 'Your Patrol' : 'Your Army'} · ${mine.length}</div>
             <div class="bt-status" id="bt-status">CHARGE!</div>
@@ -2803,7 +2803,7 @@ function playBirdseyeBattle({ attackerList, defenderCounts, target, result, kill
     // ---- Resolve ----
     T(() => {
         const st = overlay.querySelector('#bt-status');
-        st.textContent = playerWon ? '🏆 VICTORY!' : '💀 DEFEAT';
+        st.textContent = playerWon ? ' VICTORY!' : ' DEFEAT';
         st.className = 'bt-status ' + (playerWon ? 'victory' : 'defeat');
         field.classList.remove('bt-fighting');
         field.classList.add(playerWon ? 'bt-won' : 'bt-lost');
@@ -3004,7 +3004,7 @@ function playBattleAnimation(attackerTroops, defenderTroops, target, result, cal
                 ${atkUnits.map(renderUnit).join('')}
                 ${defUnits.map(renderUnit).join('')}
             </div>
-            <div class="bv-banner">⚔️ Assault on ${target.name || target}</div>
+            <div class="bv-banner">️ Assault on ${target.name || target}</div>
             <div class="bv-status" id="bv-status">CHARGE!</div>
             <button class="bv-skip" id="bv-skip">Skip ⏭</button>
         </div>
@@ -3046,7 +3046,7 @@ function playBattleAnimation(attackerTroops, defenderTroops, target, result, cal
     // Resolution
     T(() => {
         const status = document.getElementById('bv-status');
-        status.textContent = isVictory ? '🏆 VICTORY!' : '💀 DEFEATED';
+        status.textContent = isVictory ? ' VICTORY!' : ' DEFEATED';
         status.className = 'bv-status ' + (isVictory ? 'victory' : 'defeat');
         field.classList.remove('bv-clashing');
         field.classList.add(isVictory ? 'bv-won' : 'bv-lost');
@@ -3071,7 +3071,7 @@ function spawnClashFx(field, sceneW, groundTop) {
     for (let i = 0; i < 4; i++) {
         const s = document.createElement('div');
         s.className = 'bv-spark';
-        s.textContent = ['✦','✧','⚡','✶'][i % 4];
+        s.textContent = ['','','',''][i % 4];
         s.style.left = (50 + (Math.random() - 0.5) * 36) + '%';
         s.style.top = ((groundTop + 20 + Math.random() * 90) / sceneH * 100) + '%';
         field.appendChild(s);
@@ -3081,7 +3081,7 @@ function spawnClashFx(field, sceneW, groundTop) {
 function spawnHitSpark(field, unitEl) {
     const s = document.createElement('div');
     s.className = 'bv-spark bv-spark-hit';
-    s.textContent = '💥';
+    s.textContent = '';
     s.style.left = unitEl.style.getPropertyValue('--lineX');
     s.style.top = unitEl.style.top;
     field.appendChild(s);
@@ -3109,7 +3109,7 @@ const TUTORIAL_STEPS = [
     // Welcome — manual advance
     {
         intro: true,
-        title: "Welcome, Commander! 👋",
+        title: "Welcome, Commander! ",
         text: "I'll teach you how to play Village War in 60 seconds. Follow the gold arrows and tap what they point to.",
         cta: "Let's go!"
     },
@@ -3117,7 +3117,7 @@ const TUTORIAL_STEPS = [
     {
         action: "TAP",
         label: "the Build button",
-        hint: "It's on the left sidebar — looks like a crane 🏗️",
+        hint: "It's on the left sidebar — looks like a crane ️",
         target: '.nav-btn[data-view="build"]',
         position: 'right'
     },
@@ -3141,7 +3141,7 @@ const TUTORIAL_STEPS = [
     },
     {
         confirm: true,
-        title: "Nice work! 🎉",
+        title: "Nice work! ",
         text: "Your lumber mill is producing wood right now. Soon a wood badge will float above it — tap that badge to collect.",
         cta: "Got it"
     },
@@ -3216,7 +3216,7 @@ const TUTORIAL_STEPS = [
     // Final
     {
         intro: true,
-        title: "You're ready! 👑",
+        title: "You're ready! ",
         text: "Build production buildings → upgrade them → train an army → raid camps and players → unlock heroes → win Club Wars in groups of 4.\n\nDaily quests and achievements give bonus rewards. Have fun, Commander!",
         cta: "Play!"
     }
@@ -3385,12 +3385,12 @@ function renderTutorialStep(step) {
     arrow.style.display = 'flex';
     let ax = rect.left + rect.width / 2 - 26;
     let ay = rect.top - 60;
-    let arrowChar = '⬇️';
+    let arrowChar = '️';
     // If tip is below the target, the arrow goes above; if tip is above, arrow goes below
-    if (tx >= rect.right + 10) { ax = rect.right + 8; ay = rect.top + rect.height / 2 - 26; arrowChar = '⬅️'; }
-    else if (tx + tipW <= rect.left - 10) { ax = rect.left - 60; ay = rect.top + rect.height / 2 - 26; arrowChar = '➡️'; }
-    else if (ty > rect.bottom) { ax = rect.left + rect.width / 2 - 26; ay = rect.bottom + 4; arrowChar = '⬆️'; }
-    else { ax = rect.left + rect.width / 2 - 26; ay = rect.top - 60; arrowChar = '⬇️'; }
+    if (tx >= rect.right + 10) { ax = rect.right + 8; ay = rect.top + rect.height / 2 - 26; arrowChar = '️'; }
+    else if (tx + tipW <= rect.left - 10) { ax = rect.left - 60; ay = rect.top + rect.height / 2 - 26; arrowChar = '️'; }
+    else if (ty > rect.bottom) { ax = rect.left + rect.width / 2 - 26; ay = rect.bottom + 4; arrowChar = '️'; }
+    else { ax = rect.left + rect.width / 2 - 26; ay = rect.top - 60; arrowChar = '️'; }
 
     arrow.textContent = arrowChar;
     arrow.style.left = ax + 'px';
@@ -3504,7 +3504,7 @@ function initGame() {
 
     // Music is OFF by default. SFX is ON.
     const muteBtn = document.getElementById('mute-btn');
-    if (muteBtn) muteBtn.onclick = () => { const m = Audio.toggleSfx(); muteBtn.textContent = m ? '🔇' : '🔊'; };
+    if (muteBtn) muteBtn.onclick = () => { const m = Audio.toggleSfx(); muteBtn.textContent = m ? '' : ''; };
 
     const musicBtn = document.getElementById('music-btn');
     const musicPlayer = document.getElementById('music-player');
@@ -3514,10 +3514,10 @@ function initGame() {
     if (musicBtn) {
         musicBtn.onclick = () => {
             const on = Audio.toggleMusic();
-            musicBtn.innerHTML = on ? '🎵<span class="audio-state on">on</span>' : '🎵<span class="audio-state">off</span>';
+            musicBtn.innerHTML = on ? '<span class="audio-state on">on</span>' : '<span class="audio-state">off</span>';
             musicBtn.classList.toggle('active', on);
             if (musicPlayer) musicPlayer.classList.toggle('hidden', !on);
-            toast(on ? '🎵 Music: streaming medieval orchestral playlist' : 'Music: off', 'info');
+            toast(on ? ' Music: streaming medieval orchestral playlist' : 'Music: off', 'info');
         };
     }
     if (musicPrev) musicPrev.onclick = () => Audio.prevTrack();
@@ -3525,7 +3525,7 @@ function initGame() {
     if (musicTitle && Audio.onTrackChange) {
         Audio.onTrackChange((title, idx) => {
             if (musicTitle) musicTitle.textContent = title || '—';
-            if (title) toast(`♫ Now playing: ${title}`, 'info');
+            if (title) toast(` Now playing: ${title}`, 'info');
         });
     }
 
@@ -3559,7 +3559,7 @@ function initGame() {
     if (!document.getElementById('btn-3d')) {
         const b3 = document.createElement('button');
         b3.id = 'btn-3d';
-        b3.textContent = '🧊 3D';
+        b3.textContent = ' 3D';
         b3.title = 'Toggle true 3D view (WebGL)';
         b3.onclick = () => { try { toggle3D(); } catch(e) { toast('3D unavailable.', 'error'); } };
         document.getElementById('view-village').appendChild(b3);

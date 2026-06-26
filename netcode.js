@@ -143,12 +143,12 @@ function openOnlineHub() {
             <div class="olb-row ${r.name === me ? 'you' : ''}">
                 <span class="olb-rank">${i + 1}</span>
                 <span class="olb-name">${r.name}${r.clan ? ` <i class="olb-clan">[${r.clan}]</i>` : ''}</span>
-                <span class="olb-tr">${formatNum(r.trophies)} 🏆</span>
+                <span class="olb-tr">${formatNum(r.trophies)} ${svgIcon('trophy')}</span>
             </div>`).join('') || '<p class="exp-hint">No players yet — you could be #1!</p>';
         expModal(`
             <h3 class="exp-title">${svgIcon('cloud')} Online <span class="online-as">as ${me}</span></h3>
             <div class="online-actions">
-                <button class="btn btn-primary" onclick="cloudSaveNow();toast('Saved to cloud!','success')">☁ Save now</button>
+                <button class="btn btn-primary" onclick="cloudSaveNow();toast('Saved to cloud!','success')"> Save now</button>
                 <button class="btn" onclick="vwLogout()">Sign out</button>
             </div>
             <h4 class="codex-h">${svgIcon('trophy')} Global Leaderboard <span class="exp-hint" style="font-size:.7rem">(real players)</span></h4>
@@ -172,7 +172,7 @@ function renderOnlineClan(data) {
     }
     const chat = (data.chat || []).map(m => `<div class="chat-line"><b>${m.author}:</b> ${escapeHTMLNet(m.msg)}</div>`).join('')
         || '<div class="chat-line" style="opacity:.6">No messages yet — say hello!</div>';
-    const members = (data.members || []).map(m => `<div class="clan-mem"><span>${m.name}</span><span>${formatNum(m.trophies)} 🏆 · Lv${m.level}</span></div>`).join('');
+    const members = (data.members || []).map(m => `<div class="clan-mem"><span>${m.name}</span><span>${formatNum(m.trophies)} ${svgIcon('trophy')} · Lv${m.level}</span></div>`).join('');
     return `
         <div class="clan-head"><b>${data.clan.name}</b> · ${data.members.length} member(s)
             <button class="btn btn-small" onclick="onlineLeaveClan()">Leave</button></div>
@@ -203,7 +203,7 @@ function onlineBrowseClans() {
         if (!host) return;
         host.innerHTML = (j.clans || []).map(c => `
             <div class="clan-browse-row">
-                <span>${c.name} · ${c.members} member(s) · ${formatNum(c.trophies)} 🏆</span>
+                <span>${c.name} · ${c.members} member(s) · ${formatNum(c.trophies)} ${svgIcon('trophy')}</span>
                 <button class="btn btn-small btn-primary" onclick="onlineJoinClan(${c.id})">Join</button>
             </div>`).join('') || '<p class="exp-hint">No clans yet.</p>';
     });

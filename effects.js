@@ -3,7 +3,7 @@
 // ============================================================
 
 // ----- AUDIO -----
-// SFX always available. Music OFF by default — user toggles on with 🎵 button.
+// SFX always available. Music OFF by default — user toggles on with  button.
 const Audio = (() => {
     let ctx = null;
     let sfxMuted = false;

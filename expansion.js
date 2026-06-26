@@ -170,22 +170,22 @@ function closeExpModal() { document.getElementById('modal-overlay').classList.ad
 // LUCKY WHEEL
 // =====================================================================
 const WHEEL_PRIZES = [
-    { label: '500c',  color: '#f4b740', give: () => expGainRes({ coins: 500 }, '💰 +500 coins') },
-    { label: '5💎',   color: '#7dd3fc', give: () => { addGems(5); } },
-    { label: '300g',  color: '#fcd34d', give: () => expGainRes({ gold: 300 }, '🪙 +300 gold') },
-    { label: 'Crate', color: '#a78bfa', give: () => { state.exp.crates++; toast('🎁 +1 Mystery Crate', 'success'); } },
-    { label: '1500c', color: '#f59e0b', give: () => expGainRes({ coins: 1500 }, '💰 +1500 coins') },
-    { label: '20💎',  color: '#38bdf8', give: () => { addGems(20); } },
-    { label: 'Potion',color: '#4ade80', give: () => { state.exp.items.resource++; toast('🧪 +1 Resource Potion', 'success'); } },
-    { label: '400i',  color: '#cbd5e1', give: () => expGainRes({ iron: 400 }, '⚙️ +400 iron') }
+    { label: '500c',  color: '#f4b740', give: () => expGainRes({ coins: 500 }, ' +500 coins') },
+    { label: '5',   color: '#7dd3fc', give: () => { addGems(5); } },
+    { label: '300g',  color: '#fcd34d', give: () => expGainRes({ gold: 300 }, ' +300 gold') },
+    { label: 'Crate', color: '#a78bfa', give: () => { state.exp.crates++; toast(' +1 Mystery Crate', 'success'); } },
+    { label: '1500c', color: '#f59e0b', give: () => expGainRes({ coins: 1500 }, ' +1500 coins') },
+    { label: '20',  color: '#38bdf8', give: () => { addGems(20); } },
+    { label: 'Potion',color: '#4ade80', give: () => { state.exp.items.resource++; toast(' +1 Resource Potion', 'success'); } },
+    { label: '400i',  color: '#cbd5e1', give: () => expGainRes({ iron: 400 }, '️ +400 iron') }
 ];
 function openWheel() {
     ensureExp();
     const free = Date.now() >= state.exp.wheelFreeAt;
     const seg = 360 / WHEEL_PRIZES.length;
     expModal(`
-        <h3 class="exp-title">🎡 Lucky Wheel</h3>
-        <p class="exp-hint">${free ? 'You have a FREE spin today!' : 'Free spin used — spin again for 20💎.'}</p>
+        <h3 class="exp-title">${svgIcon('wheel')} Lucky Wheel</h3>
+        <p class="exp-hint">${free ? 'You have a FREE spin today!' : 'Free spin used — spin again for 20.'}</p>
         <div class="wheel-wrap">
             <div class="wheel-pointer">▼</div>
             <div id="wheel" class="wheel" style="background:conic-gradient(${WHEEL_PRIZES.map((p, i) => `${p.color} ${i * seg}deg ${(i + 1) * seg}deg`).join(',')})">
@@ -193,7 +193,7 @@ function openWheel() {
             </div>
         </div>
         <div class="exp-actions">
-            <button class="btn btn-primary btn-glow" onclick="spinWheel()">${free ? '🎡 FREE Spin' : '🎡 Spin (20💎)'}</button>
+            <button class="btn btn-primary btn-glow" onclick="spinWheel()">${free ? ' FREE Spin' : ' Spin (20)'}</button>
             <button class="btn" onclick="closeExpModal()">Close</button>
         </div>`);
 }
@@ -217,7 +217,7 @@ function spinWheel() {
     setTimeout(() => {
         _wheelSpinning = false;
         WHEEL_PRIZES[idx].give();
-        toast(`🎡 You won: ${WHEEL_PRIZES[idx].label}!`, 'success');
+        toast(`${svgIcon('wheel')} You won: ${WHEEL_PRIZES[idx].label}!`, 'success');
         saveGame();
         openWheel();
     }, 3500);
@@ -242,16 +242,16 @@ function crateRoll(mult) {
 function openCrates() {
     ensureExp();
     expModal(`
-        <h3 class="exp-title">🎁 Mystery Crates</h3>
+        <h3 class="exp-title">${svgIcon('gift')} Mystery Crates</h3>
         <p class="exp-hint">You own <b>${state.exp.crates}</b> free crate(s). Win more from the Wheel & battles.</p>
         <div class="crate-grid">
             ${CRATE_TYPES.map((c, i) => `
                 <div class="crate-card">
-                    <div class="crate-emoji">🎁</div>
+                    <div class="crate-emoji">${svgIcon('gift')}</div>
                     <div class="crate-name">${c.name}</div>
                     <div class="crate-meta">${c.rolls} rewards</div>
                     <button class="btn btn-primary" onclick="openCrate(${i})">
-                        ${c.gems ? c.gems + '💎' : (state.exp.crates > 0 ? 'Open Free' : 'Need crate')}
+                        ${c.gems ? c.gems + '' : (state.exp.crates > 0 ? 'Open Free' : 'Need crate')}
                     </button>
                 </div>`).join('')}
         </div>
@@ -271,7 +271,7 @@ function openCrate(i) {
     addPassXp(10);
     saveGame();
     const box = document.getElementById('crate-loot');
-    if (box) box.innerHTML = `<div class="loot-pop">${loot.map(l => `<span class="loot-chip loot-${l.t}">${l.t === 'gems' ? '💎' : l.t === 'potion' ? '🧪' : ''}${formatNum(l.n)} ${l.t}</span>`).join('')}</div>`;
+    if (box) box.innerHTML = `<div class="loot-pop">${loot.map(l => `<span class="loot-chip loot-${l.t}">${l.t === 'gems' ? '' : l.t === 'potion' ? '' : ''}${formatNum(l.n)} ${l.t}</span>`).join('')}</div>`;
     // refresh counts after a beat
     setTimeout(() => { const h = document.querySelector('.exp-modal .exp-hint'); if (h) h.innerHTML = `You own <b>${state.exp.crates}</b> free crate(s). Win more from the Wheel & battles.`; }, 50);
 }
@@ -286,9 +286,9 @@ function buildTraderDeals(day) {
         () => ({ name: 'Coin Bundle', cost: { gold: 200 }, give: { coins: 1200 }, label: '1200 coins for 200 gold' }),
         () => ({ name: 'Iron Shipment', cost: { coins: 600 }, give: { iron: 900 }, label: '900 iron for 600 coins' }),
         () => ({ name: 'Lumber Haul', cost: { coins: 500 }, give: { wood: 1000 }, label: '1000 wood for 500 coins' }),
-        () => ({ name: 'Gem Trade', gems: 10, give: { gold: 800 }, label: '800 gold for 10💎' }),
+        () => ({ name: 'Gem Trade', gems: 10, give: { gold: 800 }, label: '800 gold for 10' }),
         () => ({ name: 'Feast Supplies', cost: { gold: 150 }, give: { food: 1400 }, label: '1400 food for 150 gold' }),
-        () => ({ name: 'Builder Potion', gems: 18, item: 'build', label: '1 Builder Potion for 18💎' })
+        () => ({ name: 'Builder Potion', gems: 18, item: 'build', label: '1 Builder Potion for 18' })
     ];
     for (let i = 0; i < 4; i++) { const f = pool[Math.floor(rng() * pool.length)]; deals.push(f()); }
     return deals;
@@ -299,7 +299,7 @@ function openTrader() {
     if (state.exp.traderDay !== day) { state.exp.traderDay = day; state.exp.trader = buildTraderDeals(day).map(d => ({ ...d, bought: false })); saveGame(); }
     const deals = state.exp.trader;
     expModal(`
-        <h3 class="exp-title">🛒 Black Market</h3>
+        <h3 class="exp-title">${svgIcon('cart')} Black Market</h3>
         <p class="exp-hint">Deals refresh every day. Stock is limited to one each.</p>
         <div class="trader-list">
             ${deals.map((d, i) => `
@@ -330,7 +330,7 @@ const MARKET_RES = ['coins', 'gold', 'iron', 'wood', 'food'];
 function openMarket() {
     ensureExp();
     expModal(`
-        <h3 class="exp-title">⚖️ Marketplace</h3>
+        <h3 class="exp-title">${svgIcon('scale')}️ Marketplace</h3>
         <p class="exp-hint">Convert surplus resources. Rate: 2 in → 1 out (10% royal tax).</p>
         <div class="market-row">
             <label>Trade <select id="mk-from">${MARKET_RES.map(r => `<option value="${r}">${r}</option>`).join('')}</select>
@@ -368,10 +368,10 @@ function openBank() {
     ensureExp();
     const acc = bankAccrued();
     expModal(`
-        <h3 class="exp-title">🏦 Royal Bank</h3>
+        <h3 class="exp-title">${svgIcon('bank')} Royal Bank</h3>
         <p class="exp-hint">Deposited coins earn 2%/hr interest (max +50% per cycle). Withdraw to collect.</p>
-        <div class="bank-stat"><span>Deposited</span><b>${formatNum(state.exp.bank.deposited)} 💰</b></div>
-        <div class="bank-stat"><span>Interest ready</span><b class="bank-int">+${formatNum(acc)} 💰</b></div>
+        <div class="bank-stat"><span>Deposited</span><b>${formatNum(state.exp.bank.deposited)} ${svgIcon('coins')}</b></div>
+        <div class="bank-stat"><span>Interest ready</span><b class="bank-int">+${formatNum(acc)} ${svgIcon('coins')}</b></div>
         <div class="market-row"><label>Amount: <input id="bk-amt" type="number" value="500" min="50" step="50"></label></div>
         <div class="exp-actions">
             <button class="btn btn-primary" onclick="bankDeposit()">Deposit</button>
@@ -405,17 +405,17 @@ function bankWithdraw() {
 // MAGIC POTIONS
 // =====================================================================
 const POTIONS = {
-    build:    { name: 'Builder Potion',   icon: '🔨', desc: 'Instantly finish ALL builds & upgrades' },
-    train:    { name: 'Training Potion',  icon: '⚔️', desc: 'Instantly train a warrior, archer & cavalry' },
-    resource: { name: 'Resource Potion',  icon: '💰', desc: '+2000 coins, +1000 gold, +1000 iron' },
-    research: { name: 'Research Potion',  icon: '🔬', desc: '+250 pass XP and +25💎 (knowledge!)' },
-    shield:   { name: 'Shield Potion',    icon: '🛡️', desc: 'Activate a 3-hour shield' }
+    build:    { name: 'Builder Potion',   icon: svgIcon('hammer'), desc: 'Instantly finish ALL builds & upgrades' },
+    train:    { name: 'Training Potion',  icon: svgIcon('swords'), desc: 'Instantly train a warrior, archer & cavalry' },
+    resource: { name: 'Resource Potion',  icon: svgIcon('coins'), desc: '+2000 coins, +1000 gold, +1000 iron' },
+    research: { name: 'Research Potion',  icon: svgIcon('research'), desc: '+250 pass XP and +25 (knowledge!)' },
+    shield:   { name: 'Shield Potion',    icon: svgIcon('shield'), desc: 'Activate a 3-hour shield' }
 };
 function openItems() {
     ensureExp();
     const it = state.exp.items;
     expModal(`
-        <h3 class="exp-title">🧪 Magic Potions</h3>
+        <h3 class="exp-title">${svgIcon('flask')} Magic Potions</h3>
         <p class="exp-hint">Win potions from crates, the wheel & the market.</p>
         <div class="pot-grid">
             ${Object.entries(POTIONS).map(([id, p]) => `
@@ -435,19 +435,19 @@ function useItem(id) {
     if (id === 'build') {
         let n = 0;
         (state.buildings || []).forEach(b => { if (b.constructing) { b.constructing = false; n++; } if (b.upgrading) { b.level = b.upgrading.to; b.upgrading = null; n++; } });
-        toast(n ? `🔨 Finished ${n} job(s)!` : 'Nothing was building.', 'success');
+        toast(n ? `${svgIcon('hammer')} Finished ${n} job(s)!` : 'Nothing was building.', 'success');
         if (typeof renderGrid === 'function') renderGrid();
     } else if (id === 'train') {
         ['warrior', 'archer', 'cavalry'].forEach(t => { if (typeof trainTroop === 'function') { try { trainTroop(t, true); } catch (e) { state.troops[t] = (state.troops[t] || 0) + 1; } } else state.troops[t] = (state.troops[t] || 0) + 1; });
         state.exp.stats.troopsTrained += 3;
-        toast('⚔️ Trained a warrior, archer & cavalry!', 'success');
+        toast('️ Trained a warrior, archer & cavalry!', 'success');
     } else if (id === 'resource') {
-        expGainRes({ coins: 2000, gold: 1000, iron: 1000 }, '💰 Resources granted!');
+        expGainRes({ coins: 2000, gold: 1000, iron: 1000 }, ' Resources granted!');
     } else if (id === 'research') {
-        addPassXp(250); addGems(25); toast('🔬 +250 pass XP, +25💎', 'success');
+        addPassXp(250); addGems(25); toast(' +250 pass XP, +25', 'success');
     } else if (id === 'shield') {
         if (typeof grantShield === 'function') grantShield(180);
-        toast('🛡️ 3-hour shield active!', 'success');
+        toast('️ 3-hour shield active!', 'success');
     }
     saveGame(); updateResources(); openItems();
 }
@@ -461,12 +461,12 @@ function openBoost() {
     ensureExp();
     const active = boostActive();
     expModal(`
-        <h3 class="exp-title">⚡ Production Boost</h3>
+        <h3 class="exp-title">${svgIcon('bolt')} Production Boost</h3>
         <p class="exp-hint">Doubles all resource production while active.</p>
-        <div class="boost-status ${active ? 'on' : ''}">${active ? `🔥 ACTIVE — ${boostRemaining()} min left` : 'Inactive'}</div>
+        <div class="boost-status ${active ? 'on' : ''}">${active ? `${svgIcon('fire')} ACTIVE — ${boostRemaining()} min left` : 'Inactive'}</div>
         <div class="exp-actions">
-            <button class="btn btn-primary" onclick="buyBoost(30)">30 min · 15💎</button>
-            <button class="btn btn-primary btn-glow" onclick="buyBoost(120)">2 hr · 40💎</button>
+            <button class="btn btn-primary" onclick="buyBoost(30)">30 min · 15${svgIcon('gem')}</button>
+            <button class="btn btn-primary btn-glow" onclick="buyBoost(120)">2 hr · 40${svgIcon('gem')}</button>
             <button class="btn" onclick="closeExpModal()">Close</button>
         </div>`);
 }
@@ -476,7 +476,7 @@ function buyBoost(mins) {
     if (!spendGems(cost)) return;
     const base = boostActive() ? state.exp.boostUntil : Date.now();
     state.exp.boostUntil = base + mins * 60000;
-    toast(`⚡ Production boosted for ${mins} min!`, 'success');
+    toast(`${svgIcon('bolt')} Production boosted for ${mins} min!`, 'success');
     saveGame(); openBoost();
 }
 
@@ -497,9 +497,9 @@ const PASS_TIERS = [
 ];
 function passRewardLabel(r) {
     const k = Object.keys(r)[0], v = r[k];
-    if (k === 'crate') return '🎁 Crate';
-    if (k === 'potion') return '🧪 ' + (POTIONS[v] ? POTIONS[v].name : v);
-    if (k === 'gems') return '💎 ' + v;
+    if (k === 'crate') return ' Crate';
+    if (k === 'potion') return ' ' + (POTIONS[v] ? POTIONS[v].name : v);
+    if (k === 'gems') return ' ' + v;
     return formatNum(v) + ' ' + k;
 }
 function grantPassReward(r) {
@@ -513,8 +513,8 @@ function openPass() {
     ensureExp();
     const p = state.exp.pass;
     expModal(`
-        <h3 class="exp-title">🎖️ Season Pass <span class="pass-tier">Tier ${p.tier + 1}/${PASS_TIERS.length}</span></h3>
-        <p class="exp-hint">Earn pass XP from battles, spins & crates. ${p.gold ? '<b style="color:#fbbf24">Gold Pass active</b>' : `<button class="link-btn" onclick="buyGoldPass()">Unlock Gold Pass (120💎)</button>`}</p>
+        <h3 class="exp-title">${svgIcon('medal')}️ Season Pass <span class="pass-tier">Tier ${p.tier + 1}/${PASS_TIERS.length}</span></h3>
+        <p class="exp-hint">Earn pass XP from battles, spins & crates. ${p.gold ? '<b style="color:#fbbf24">Gold Pass active</b>' : `<button class="link-btn" onclick="buyGoldPass()">Unlock Gold Pass (120${svgIcon('gem')})</button>`}</p>
         <div class="pass-xpbar"><div class="pass-xpfill" style="width:${p.tier >= PASS_TIERS.length - 1 ? 100 : p.xp}%"></div><span>${p.tier >= PASS_TIERS.length - 1 ? 'MAX' : p.xp + '/100 XP'}</span></div>
         <div class="pass-track">
             ${PASS_TIERS.map((t, i) => {
@@ -522,14 +522,14 @@ function openPass() {
                 const fc = p.claimed.free.includes(i), gc = p.claimed.gold.includes(i);
                 return `<div class="pass-col ${unlocked ? 'unlocked' : ''}">
                     <div class="pass-no">${i + 1}</div>
-                    <button class="pass-rw free ${fc ? 'claimed' : ''}" ${unlocked && !fc ? '' : 'disabled'} onclick="claimPass(${i},'free')">${fc ? '✓' : passRewardLabel(t.free)}</button>
-                    <button class="pass-rw gold ${gc ? 'claimed' : ''}" ${unlocked && p.gold && !gc ? '' : 'disabled'} onclick="claimPass(${i},'gold')">${gc ? '✓' : '🔒 ' + passRewardLabel(t.gold)}</button>
+                    <button class="pass-rw free ${fc ? 'claimed' : ''}" ${unlocked && !fc ? '' : 'disabled'} onclick="claimPass(${i},'free')">${fc ? '' : passRewardLabel(t.free)}</button>
+                    <button class="pass-rw gold ${gc ? 'claimed' : ''}" ${unlocked && p.gold && !gc ? '' : 'disabled'} onclick="claimPass(${i},'gold')">${gc ? '' : ' ' + passRewardLabel(t.gold)}</button>
                 </div>`;
             }).join('')}
         </div>
         <div class="exp-actions"><button class="btn" onclick="closeExpModal()">Close</button></div>`);
 }
-function buyGoldPass() { ensureExp(); if (!spendGems(120)) return; state.exp.pass.gold = true; toast('🎖️ Gold Pass unlocked!', 'success'); saveGame(); openPass(); }
+function buyGoldPass() { ensureExp(); if (!spendGems(120)) return; state.exp.pass.gold = true; toast('️ Gold Pass unlocked!', 'success'); saveGame(); openPass(); }
 function claimPass(i, track) {
     ensureExp();
     const p = state.exp.pass;
@@ -538,7 +538,7 @@ function claimPass(i, track) {
     if (p.claimed[track].includes(i)) return;
     grantPassReward(PASS_TIERS[i][track]);
     p.claimed[track].push(i);
-    toast('🎖️ Reward claimed!', 'success');
+    toast('️ Reward claimed!', 'success');
     saveGame(); updateResources(); openPass();
 }
 
@@ -546,20 +546,20 @@ function claimPass(i, track) {
 // TALENT TREE
 // =====================================================================
 const TALENTS = {
-    industry:  { name: 'Industry',     icon: '🏭', max: 5, desc: '+coins/gold trickle per tick', tier: 0 },
-    forester:  { name: 'Forestry',     icon: '🌲', max: 5, desc: '+wood/iron trickle per tick', tier: 0 },
-    mason:     { name: 'Master Mason', icon: '🧱', max: 3, desc: 'Each rank: instant +1000 coins now', tier: 0 },
-    quartermaster: { name: 'Quartermaster', icon: '📦', max: 3, desc: 'Each rank: +5% storage caps now', tier: 1 },
-    warlord:   { name: 'Warlord',      icon: '🗡️', max: 3, desc: 'Each rank: instant +2 trophies & +1 troop', tier: 1 },
-    alchemist: { name: 'Alchemist',    icon: '⚗️', max: 2, desc: 'Each rank: +1 Builder & +1 Resource potion now', tier: 2 },
-    financier: { name: 'Financier',    icon: '💹', max: 2, desc: 'Each rank: instant +25💎', tier: 2 }
+    industry:  { name: 'Industry',     icon: '', max: 5, desc: '+coins/gold trickle per tick', tier: 0 },
+    forester:  { name: 'Forestry',     icon: svgIcon('tree'), max: 5, desc: '+wood/iron trickle per tick', tier: 0 },
+    mason:     { name: 'Master Mason', icon: '', max: 3, desc: 'Each rank: instant +1000 coins now', tier: 0 },
+    quartermaster: { name: 'Quartermaster', icon: svgIcon('crate'), max: 3, desc: 'Each rank: +5% storage caps now', tier: 1 },
+    warlord:   { name: 'Warlord',      icon: svgIcon('dagger'), max: 3, desc: 'Each rank: instant +2 trophies & +1 troop', tier: 1 },
+    alchemist: { name: 'Alchemist',    icon: '', max: 2, desc: 'Each rank: +1 Builder & +1 Resource potion now', tier: 2 },
+    financier: { name: 'Financier',    icon: '', max: 2, desc: 'Each rank: instant +25', tier: 2 }
 };
 function talentRank(id) { return (state.exp.talents[id] || 0); }
 function openTalents() {
     ensureExp();
     const tiers = [0, 1, 2];
     expModal(`
-        <h3 class="exp-title">🌳 Talent Tree <span class="tp-badge">${state.exp.talentPoints} pts</span></h3>
+        <h3 class="exp-title">${svgIcon('tree')} Talent Tree <span class="tp-badge">${state.exp.talentPoints} pts</span></h3>
         <p class="exp-hint">Earn 1 talent point each level. Passive talents trickle resources every few seconds.</p>
         ${tiers.map(tr => `
             <div class="talent-tier">
@@ -591,7 +591,7 @@ function buyTalent(id) {
     if (id === 'warlord') { state.trophies += 2; const tt = ['warrior', 'archer', 'cavalry'][Math.floor(Math.random() * 3)]; state.troops[tt] = (state.troops[tt] || 0) + 1; }
     if (id === 'alchemist') { state.exp.items.build++; state.exp.items.resource++; }
     if (id === 'financier') addGems(25);
-    toast(`🌳 Learned ${t.name}!`, 'success');
+    toast(`${svgIcon('tree')} Learned ${t.name}!`, 'success');
     saveGame(); updateResources(); openTalents();
 }
 
@@ -625,7 +625,7 @@ function challengeProgress(id, amt) {
 function openChallenges() {
     ensureExp();
     expModal(`
-        <h3 class="exp-title">✅ Daily Challenges</h3>
+        <h3 class="exp-title">${svgIcon('check')} Daily Challenges</h3>
         <p class="exp-hint">Fresh tasks every day. Complete them as you play.</p>
         <div class="chal-list">
             ${state.exp.challenges.map((c, i) => {
@@ -634,7 +634,7 @@ function openChallenges() {
                     <div class="chal-info"><div class="chal-text">${c.text}</div>
                         <div class="chal-bar"><div class="chal-fill" style="width:${Math.round(c.prog / c.goal * 100)}%"></div></div>
                         <div class="chal-meta">${c.prog}/${c.goal} · reward ${passRewardLabel(c.reward)}</div></div>
-                    <button class="btn btn-primary" ${done && !c.claimed ? '' : 'disabled'} onclick="claimChallenge(${i})">${c.claimed ? '✓' : 'Claim'}</button>
+                    <button class="btn btn-primary" ${done && !c.claimed ? '' : 'disabled'} onclick="claimChallenge(${i})">${c.claimed ? '' : 'Claim'}</button>
                 </div>`;
             }).join('')}
         </div>
@@ -645,7 +645,7 @@ function claimChallenge(i) {
     const c = state.exp.challenges[i];
     if (!c || c.claimed || c.prog < c.goal) return;
     grantPassReward(c.reward); c.claimed = true; addPassXp(20);
-    toast('✅ Challenge reward claimed!', 'success');
+    toast(' Challenge reward claimed!', 'success');
     saveGame(); updateResources(); openChallenges();
 }
 
@@ -653,18 +653,18 @@ function claimChallenge(i) {
 // WORLD REGIONS (conquer for passive bonus)
 // =====================================================================
 const REGIONS = [
-    { id: 'meadow',  name: 'Green Meadows',  icon: '🌾', cost: { coins: 2000, food: 500 },  bonus: '+1 food/tick', need: 1 },
-    { id: 'forest',  name: 'Darkwood',       icon: '🌲', cost: { coins: 3000, wood: 800 },  bonus: '+1 wood/tick', need: 2 },
-    { id: 'hills',   name: 'Iron Hills',     icon: '⛰️', cost: { coins: 4000, iron: 800 },  bonus: '+1 iron/tick', need: 3 },
-    { id: 'mines',   name: 'Gold Mines',     icon: '🏔️', cost: { coins: 6000, gold: 1000 }, bonus: '+2 gold/tick', need: 4 },
-    { id: 'capital', name: 'Old Capital',    icon: '🏰', cost: { coins: 10000, gold: 2000 },bonus: '+3 coins/tick & +50 trophies', need: 5 }
+    { id: 'meadow',  name: 'Green Meadows',  icon: svgIcon('wheat'), cost: { coins: 2000, food: 500 },  bonus: '+1 food/tick', need: 1 },
+    { id: 'forest',  name: 'Darkwood',       icon: svgIcon('tree'), cost: { coins: 3000, wood: 800 },  bonus: '+1 wood/tick', need: 2 },
+    { id: 'hills',   name: 'Iron Hills',     icon: '', cost: { coins: 4000, iron: 800 },  bonus: '+1 iron/tick', need: 3 },
+    { id: 'mines',   name: 'Gold Mines',     icon: '', cost: { coins: 6000, gold: 1000 }, bonus: '+2 gold/tick', need: 4 },
+    { id: 'capital', name: 'Old Capital',    icon: svgIcon('castle'), cost: { coins: 10000, gold: 2000 },bonus: '+3 coins/tick & +50 trophies', need: 5 }
 ];
 function regionOwned(id) { return !!(state.exp.regions && state.exp.regions[id]); }
 function openRegions() {
     ensureExp();
     const thLvl = (typeof getBuilding === 'function' && getBuilding('townhall')) ? getBuilding('townhall').level : 1;
     expModal(`
-        <h3 class="exp-title">🗺️ World Regions</h3>
+        <h3 class="exp-title">${svgIcon('map')}️ World Regions</h3>
         <p class="exp-hint">Conquer regions for permanent passive bonuses. Higher regions need a bigger Town Hall.</p>
         <div class="region-list">
             ${REGIONS.map(r => {
@@ -675,7 +675,7 @@ function openRegions() {
                     <div class="region-info"><div class="region-nm">${r.name} ${owned ? '<b class="region-flag">CONQUERED</b>' : ''}</div>
                     <div class="region-bonus">${r.bonus}</div>
                     <div class="region-cost">${owned ? 'Active' : Object.entries(r.cost).map(([k, v]) => `${formatNum(v)} ${k}`).join(' · ')}</div></div>
-                    <button class="btn btn-primary" ${owned || locked ? 'disabled' : ''} onclick="conquerRegion('${r.id}')">${owned ? '✓' : locked ? '🔒 TH ' + r.need : 'Conquer'}</button>
+                    <button class="btn btn-primary" ${owned || locked ? 'disabled' : ''} onclick="conquerRegion('${r.id}')">${owned ? '' : locked ? ' TH ' + r.need : 'Conquer'}</button>
                 </div>`;
             }).join('')}
         </div>
@@ -690,7 +690,7 @@ function conquerRegion(id) {
     state.exp.regions[id] = true;
     if (id === 'capital') state.trophies += 50;
     addPassXp(40);
-    toast(`🚩 Conquered ${r.name}!`, 'success');
+    toast(`${svgIcon('flag')} Conquered ${r.name}!`, 'success');
     saveGame(); updateResources(); openRegions();
 }
 function regionTrickle() {
@@ -710,22 +710,22 @@ function openBossRaid() {
     ensureExp();
     const bossLvl = Math.max(3, (state.level || 1) + 2);
     expModal(`
-        <h3 class="exp-title">🐉 Boss Raid</h3>
+        <h3 class="exp-title">${svgIcon('dragon')} Boss Raid</h3>
         <p class="exp-hint">A fearsome warlord guards a hoard. Defeat him for huge loot, gems & a crate.</p>
         <div class="boss-card">
-            <div class="boss-emoji">🐉</div>
+            <div class="boss-emoji">${svgIcon('dragon')}</div>
             <div class="boss-name">Warlord Grimfang · Lv ${bossLvl}</div>
-            <div class="boss-reward">Rewards: 💰5000 · 🪙2500 · 💎30 · 🎁 Crate</div>
+            <div class="boss-reward">Rewards: ${svgIcon('coins')}5000 · ${svgIcon('coin')}2500 · ${svgIcon('gem')}30 · ${svgIcon('gift')} Crate</div>
         </div>
         <div class="exp-actions">
-            <button class="btn btn-danger btn-glow" onclick="startBossRaid(${bossLvl})">⚔️ Attack Boss</button>
+            <button class="btn btn-danger btn-glow" onclick="startBossRaid(${bossLvl})">${svgIcon('swords')}️ Attack Boss</button>
             <button class="btn" onclick="closeExpModal()">Close</button>
         </div>`);
 }
 function startBossRaid(bossLvl) {
     ensureExp();
     closeExpModal();
-    const reward = () => { expGainRes({ coins: 5000, gold: 2500 }); addGems(30); state.exp.crates++; state.exp.stats.bossKills++; addPassXp(60); toast('🐉 Boss defeated! Loot claimed.', 'success'); saveGame(); };
+    const reward = () => { expGainRes({ coins: 5000, gold: 2500 }); addGems(30); state.exp.crates++; state.exp.stats.bossKills++; addPassXp(60); toast(' Boss defeated! Loot claimed.', 'success'); saveGame(); };
     if (typeof runLiveRaid === 'function' && typeof getDeployed === 'function' && getDeployed('army') && getDeployed('army').length) {
         runLiveRaid({ name: 'Warlord Grimfang', level: bossLvl, loot: { coins: 5000, gold: 2500 }, xp: 120, kind: 'boss', onWin: reward });
         // also reward on win via outcome hook fallback
@@ -734,7 +734,7 @@ function startBossRaid(bossLvl) {
         // fallback: quick simulated fight based on army size
         const power = (state.soldiers ? state.soldiers.length : 0) + Object.values(state.troops || {}).reduce((a, b) => a + b, 0);
         if (power >= bossLvl * 2) { reward(); }
-        else { state.exp.stats.raidsLost++; toast('🐉 Your army was too weak! Train more troops.', 'error'); saveGame(); }
+        else { state.exp.stats.raidsLost++; toast(' Your army was too weak! Train more troops.', 'error'); saveGame(); }
     }
 }
 
@@ -746,15 +746,15 @@ function openClanWar() {
     let w = state.exp.clanWar;
     if (!w || w.over) {
         expModal(`
-            <h3 class="exp-title">⚔️ Clan Wars</h3>
+            <h3 class="exp-title">${svgIcon('swords')}️ Clan Wars</h3>
             <p class="exp-hint">Declare war on a rival clan. Win 3 of 5 attacks to claim victory.</p>
             <div class="war-foes">
-                <div class="war-foe">🛡️ Your Clan<br><b>${(state.club && state.club.name) || 'Lone Wolves'}</b></div>
+                <div class="war-foe">${svgIcon('shield')}️ Your Clan<br><b>${(state.club && state.club.name) || 'Lone Wolves'}</b></div>
                 <div class="war-vs">VS</div>
-                <div class="war-foe">🔥 Iron Vipers<br><b>5 warriors</b></div>
+                <div class="war-foe">${svgIcon('fire')} Iron Vipers<br><b>5 warriors</b></div>
             </div>
             <div class="exp-actions">
-                <button class="btn btn-danger btn-glow" onclick="startClanWar()">⚔️ Declare War</button>
+                <button class="btn btn-danger btn-glow" onclick="startClanWar()">${svgIcon('swords')}️ Declare War</button>
                 <button class="btn" onclick="closeExpModal()">Close</button>
             </div>`);
     } else { renderClanWar(); }
@@ -763,11 +763,11 @@ function startClanWar() { ensureExp(); state.exp.clanWar = { round: 0, wins: 0, 
 function renderClanWar() {
     const w = state.exp.clanWar;
     expModal(`
-        <h3 class="exp-title">⚔️ Clan War — Battle ${Math.min(w.round + 1, 5)}/5</h3>
+        <h3 class="exp-title">${svgIcon('swords')}️ Clan War — Battle ${Math.min(w.round + 1, 5)}/5</h3>
         <div class="war-score"><span class="war-win">${w.wins} won</span> · <span class="war-loss">${w.losses} lost</span></div>
-        <div class="war-log">${w.log.map(l => `<div class="war-line ${l.win ? 'w' : 'l'}">${l.win ? '✅' : '❌'} ${l.text}</div>`).join('') || '<div class="war-line">Attack to begin!</div>'}</div>
+        <div class="war-log">${w.log.map(l => `<div class="war-line ${l.win ? 'w' : 'l'}">${l.win ? '' : ''} ${l.text}</div>`).join('') || '<div class="war-line">Attack to begin!</div>'}</div>
         <div class="exp-actions">
-            ${w.over ? '' : `<button class="btn btn-danger btn-glow" onclick="clanWarAttack()">⚔️ Send Attack</button>`}
+            ${w.over ? '' : `<button class="btn btn-danger btn-glow" onclick="clanWarAttack()">${svgIcon('swords')}️ Send Attack</button>`}
             <button class="btn" onclick="closeExpModal()">Close</button>
         </div>`);
 }
@@ -782,8 +782,8 @@ function clanWarAttack() {
     else { w.losses++; w.log.push({ win: false, text: `Battle ${w.round}: defeat. (${Math.round(power)} vs ${Math.round(enemy)})` }); }
     if (w.wins >= 3 || w.losses >= 3 || w.round >= 5) {
         w.over = true;
-        if (w.wins > w.losses) { expGainRes({ coins: 4000, gold: 2000 }); addGems(25); state.exp.stats.warWins++; addPassXp(50); w.log.push({ win: true, text: '🏆 WAR WON! +4000c +2000g +25💎' }); }
-        else { w.log.push({ win: false, text: '💀 War lost. Regroup and try again.' }); }
+        if (w.wins > w.losses) { expGainRes({ coins: 4000, gold: 2000 }); addGems(25); state.exp.stats.warWins++; addPassXp(50); w.log.push({ win: true, text: ' WAR WON! +4000c +2000g +25' }); }
+        else { w.log.push({ win: false, text: ' War lost. Regroup and try again.' }); }
     }
     saveGame(); updateResources(); renderClanWar();
 }
@@ -797,8 +797,8 @@ function openTournament() {
     let t = state.exp.tournament;
     if (!t || t.over) {
         expModal(`
-            <h3 class="exp-title">🏆 Tournament</h3>
-            <p class="exp-hint">An 8-fighter knockout bracket. Win it all for 50💎 and glory.</p>
+            <h3 class="exp-title">${svgIcon('trophy')} Tournament</h3>
+            <p class="exp-hint">An 8-fighter knockout bracket. Win it all for 50${svgIcon('gem')} and glory.</p>
             <div class="exp-actions">
                 <button class="btn btn-primary btn-glow" onclick="startTournament()">Enter (free)</button>
                 <button class="btn" onclick="closeExpModal()">Close</button>
@@ -810,11 +810,11 @@ function renderTournament() {
     const t = state.exp.tournament;
     const roundName = ['Quarter-finals', 'Semi-finals', 'Final', 'Champion!'][Math.min(t.round, 3)];
     expModal(`
-        <h3 class="exp-title">🏆 Tournament — ${roundName}</h3>
-        <p class="exp-hint">${t.out ? 'You were knocked out.' : t.over ? '🎉 You are the champion!' : `${t.alive.length} fighters remain.`}</p>
+        <h3 class="exp-title">${svgIcon('trophy')} Tournament — ${roundName}</h3>
+        <p class="exp-hint">${t.out ? 'You were knocked out.' : t.over ? ' You are the champion!' : `${t.alive.length} fighters remain.`}</p>
         <div class="tourney-bracket">${t.alive.map(n => `<span class="tourney-chip ${n === 'You' ? 'you' : ''}">${n}</span>`).join('')}</div>
         <div class="exp-actions">
-            ${(!t.over && !t.out) ? `<button class="btn btn-primary btn-glow" onclick="tourneyFight()">⚔️ Fight Round</button>` : ''}
+            ${(!t.over && !t.out) ? `<button class="btn btn-primary btn-glow" onclick="tourneyFight()">${svgIcon('swords')}️ Fight Round</button>` : ''}
             <button class="btn" onclick="closeExpModal()">Close</button>
         </div>`);
 }
@@ -826,7 +826,7 @@ function tourneyFight() {
     const survivors = [];
     // you fight first
     const youWin = Math.random() < power;
-    if (!youWin) { t.out = true; toast('🏆 Knocked out of the tournament.', 'info'); }
+    if (!youWin) { t.out = true; toast(' Knocked out of the tournament.', 'info'); }
     else survivors.push('You');
     // others
     const others = t.alive.filter(n => n !== 'You');
@@ -840,7 +840,7 @@ function tourneyFight() {
     t.round++;
     if (!t.out && t.alive.length <= 1 && t.alive[0] === 'You') {
         t.over = true; expGainRes({ coins: 3000 }); addGems(50); addPassXp(50);
-        toast('🏆 Tournament WON! +50💎', 'success');
+        toast(' Tournament WON! +50', 'success');
     }
     saveGame(); updateResources(); renderTournament();
 }
@@ -851,16 +851,16 @@ function tourneyFight() {
 function openFriends() {
     ensureExp();
     expModal(`
-        <h3 class="exp-title">🤝 Friends</h3>
+        <h3 class="exp-title">${svgIcon('handshake')} Friends</h3>
         <p class="exp-hint">Send daily gifts to receive rewards back. Visiting earns a little XP.</p>
         <div class="friend-list">
             ${state.exp.friends.map((f, i) => {
                 const ready = Date.now() >= f.giftReadyAt;
                 return `<div class="friend-row">
                     <span class="friend-av">${f.name[0]}</span>
-                    <div class="friend-info"><div class="friend-nm">${f.name}</div><div class="friend-meta">🏰 TH${f.th} · 🏆 ${f.trophies}</div></div>
+                    <div class="friend-info"><div class="friend-nm">${f.name}</div><div class="friend-meta">${svgIcon('castle')} TH${f.th} · ${svgIcon('trophy')} ${f.trophies}</div></div>
                     <div class="friend-acts">
-                        <button class="btn btn-primary" ${ready ? '' : 'disabled'} onclick="giftFriend(${i})">${ready ? '🎁 Gift' : 'Sent'}</button>
+                        <button class="btn btn-primary" ${ready ? '' : 'disabled'} onclick="giftFriend(${i})">${ready ? ' Gift' : 'Sent'}</button>
                         <button class="btn" onclick="visitFriend(${i})">Visit</button>
                     </div>
                 </div>`;
@@ -874,7 +874,7 @@ function giftFriend(i) {
     if (Date.now() < f.giftReadyAt) return;
     f.giftReadyAt = Date.now() + DAY_MS;
     const back = { coins: 300 + Math.round(f.trophies / 4) };
-    expGainRes(back, `🎁 ${f.name} sent ${formatNum(back.coins)} coins back!`);
+    expGainRes(back, `${svgIcon('gift')} ${f.name} sent ${formatNum(back.coins)} coins back!`);
     challengeProgress('gift', 1);
     saveGame(); openFriends();
 }
@@ -882,7 +882,7 @@ function visitFriend(i) {
     ensureExp();
     const f = state.exp.friends[i];
     addPassXp(5);
-    toast(`🏰 You visited ${f.name}'s village. +5 pass XP`, 'info');
+    toast(`${svgIcon('castle')} You visited ${f.name}'s village. +5 pass XP`, 'info');
     saveGame();
 }
 
@@ -899,11 +899,11 @@ function openGemMine() {
     ensureExp();
     const r = gemMineReady();
     expModal(`
-        <h3 class="exp-title">💎 Gem Mine</h3>
-        <p class="exp-hint">Produces ${GEM_MINE_PER_HR}💎/hour, storing up to ${GEM_MINE_CAP}. Collect anytime.</p>
-        <div class="gemmine-box"><div class="gemmine-amt">💎 ${r}</div><div class="gemmine-cap">/ ${GEM_MINE_CAP} stored</div></div>
+        <h3 class="exp-title">${svgIcon('gem')} Gem Mine</h3>
+        <p class="exp-hint">Produces ${GEM_MINE_PER_HR}${svgIcon('gem')}/hour, storing up to ${GEM_MINE_CAP}. Collect anytime.</p>
+        <div class="gemmine-box"><div class="gemmine-amt">${svgIcon('gem')} ${r}</div><div class="gemmine-cap">/ ${GEM_MINE_CAP} stored</div></div>
         <div class="exp-actions">
-            <button class="btn btn-primary btn-glow" ${r <= 0 ? 'disabled' : ''} onclick="collectGemMine()">Collect ${r}💎</button>
+            <button class="btn btn-primary btn-glow" ${r <= 0 ? 'disabled' : ''} onclick="collectGemMine()">Collect ${r}${svgIcon('gem')}</button>
             <button class="btn" onclick="closeExpModal()">Close</button>
         </div>`);
 }
@@ -912,7 +912,7 @@ function collectGemMine() {
     const r = gemMineReady();
     if (r <= 0) return;
     addGems(r); state.exp.gemMineSince = Date.now();
-    toast(`💎 Collected ${r} gems from the mine!`, 'success');
+    toast(`${svgIcon('gem')} Collected ${r} gems from the mine!`, 'success');
     saveGame(); openGemMine();
 }
 
@@ -920,16 +920,16 @@ function collectGemMine() {
 // DECORATIONS
 // =====================================================================
 const DECOR = [
-    { id: 'fountain', name: 'Fountain',     icon: '⛲', cost: { coins: 1500 }, trophies: 10 },
-    { id: 'statue',   name: 'Hero Statue',  icon: '🗿', cost: { coins: 3000, iron: 500 }, trophies: 25 },
-    { id: 'garden',   name: 'Royal Garden', icon: '🌷', cost: { coins: 2000, food: 800 }, trophies: 15 },
-    { id: 'banner',   name: 'War Banner',   icon: '🚩', cost: { gold: 1000 }, trophies: 20 },
-    { id: 'fire',     name: 'Great Brazier', icon: '🔥', cost: { coins: 5000, gold: 1500 }, trophies: 40 }
+    { id: 'fountain', name: 'Fountain',     icon: '', cost: { coins: 1500 }, trophies: 10 },
+    { id: 'statue',   name: 'Hero Statue',  icon: '', cost: { coins: 3000, iron: 500 }, trophies: 25 },
+    { id: 'garden',   name: 'Royal Garden', icon: svgIcon('flower'), cost: { coins: 2000, food: 800 }, trophies: 15 },
+    { id: 'banner',   name: 'War Banner',   icon: svgIcon('flag'), cost: { gold: 1000 }, trophies: 20 },
+    { id: 'fire',     name: 'Great Brazier', icon: svgIcon('fire'), cost: { coins: 5000, gold: 1500 }, trophies: 40 }
 ];
 function openDecor() {
     ensureExp();
     expModal(`
-        <h3 class="exp-title">🌷 Decorations</h3>
+        <h3 class="exp-title">${svgIcon('flower')} Decorations</h3>
         <p class="exp-hint">Cosmetic pride pieces — each grants a one-time trophy boost.</p>
         <div class="decor-grid">
             ${DECOR.map(d => {
@@ -937,9 +937,9 @@ function openDecor() {
                 return `<div class="decor-card ${owned ? 'owned' : ''}">
                     <span class="decor-ic">${d.icon}</span>
                     <div class="decor-nm">${d.name}</div>
-                    <div class="decor-tr">+${d.trophies} 🏆</div>
+                    <div class="decor-tr">+${d.trophies} ${svgIcon('trophy')}</div>
                     <div class="decor-cost">${owned ? 'Owned' : Object.entries(d.cost).map(([k, v]) => `${formatNum(v)} ${k}`).join(' · ')}</div>
-                    <button class="btn btn-primary" ${owned ? 'disabled' : ''} onclick="buyDecor('${d.id}')">${owned ? '✓' : 'Buy'}</button>
+                    <button class="btn btn-primary" ${owned ? 'disabled' : ''} onclick="buyDecor('${d.id}')">${owned ? '' : 'Buy'}</button>
                 </div>`;
             }).join('')}
         </div>
@@ -953,7 +953,7 @@ function buyDecor(id) {
     spendResources(d.cost);
     state.exp.decor[id] = true;
     state.trophies += d.trophies;
-    toast(`🌷 Placed ${d.name}! +${d.trophies} trophies`, 'success');
+    toast(`${svgIcon('flower')} Placed ${d.name}! +${d.trophies} trophies`, 'success');
     saveGame(); updateResources(); openDecor();
 }
 
@@ -966,13 +966,13 @@ function openCollection() {
     const heroes = (typeof HERO_DEFS !== 'undefined') ? Object.entries(HERO_DEFS) : ((typeof HEROES !== 'undefined') ? Object.entries(HEROES) : []);
     const ownedHero = state.heroes || {};
     expModal(`
-        <h3 class="exp-title">📖 Collection</h3>
+        <h3 class="exp-title">${svgIcon('book')} Collection</h3>
         <p class="exp-hint">Every troop and hero in the realm. Heroes you own are highlighted.</p>
         <h4 class="codex-h">Troops</h4>
         <div class="codex-grid">
             ${troops.map(([id, d]) => `<div class="codex-card">
                 <div class="codex-nm">${d.name || id}</div>
-                <div class="codex-stat">${d.hp ? '❤ ' + d.hp : ''} ${d.attack || d.atk ? '🗡️ ' + (d.attack || d.atk) : ''}</div>
+                <div class="codex-stat">${d.hp ? ' ' + d.hp : ''} ${d.attack || d.atk ? '️ ' + (d.attack || d.atk) : ''}</div>
             </div>`).join('') || '<div class="codex-empty">—</div>'}
         </div>
         <h4 class="codex-h">Heroes</h4>
@@ -996,22 +996,22 @@ function openProfile() {
     const s = state.exp.stats;
     const owned = (state.buildings || []).length;
     const rows = [
-        ['🏆 Trophies', formatNum(state.trophies || 0)],
-        ['⭐ Level', state.level || 1],
-        ['🏰 Buildings', owned],
-        ['🗺️ Regions conquered', Object.keys(state.exp.regions).length],
-        ['⚔️ Raids won', s.raidsWon],
-        ['💀 Raids lost', s.raidsLost],
-        ['🐉 Boss kills', s.bossKills],
-        ['🛡️ Clan wars won', s.warWins],
-        ['🎡 Wheel spins', s.spins],
-        ['🎁 Crates opened', s.cratesOpened],
-        ['👥 Troops trained', s.troopsTrained],
-        ['💰 Total resources earned', formatNum(s.resourcesEarned)],
-        ['🌳 Talent points spent', Object.values(state.exp.talents).reduce((a, b) => a + b, 0)]
+        [' Trophies', formatNum(state.trophies || 0)],
+        [' Level', state.level || 1],
+        [' Buildings', owned],
+        ['️ Regions conquered', Object.keys(state.exp.regions).length],
+        ['️ Raids won', s.raidsWon],
+        [' Raids lost', s.raidsLost],
+        [' Boss kills', s.bossKills],
+        ['️ Clan wars won', s.warWins],
+        [' Wheel spins', s.spins],
+        [' Crates opened', s.cratesOpened],
+        [' Troops trained', s.troopsTrained],
+        [' Total resources earned', formatNum(s.resourcesEarned)],
+        [' Talent points spent', Object.values(state.exp.talents).reduce((a, b) => a + b, 0)]
     ];
     expModal(`
-        <h3 class="exp-title">🧑‍🚀 ${state.playerName || 'Commander'}</h3>
+        <h3 class="exp-title">‍ ${state.playerName || 'Commander'}</h3>
         <p class="exp-hint">Your lifetime record across the realm.</p>
         <div class="profile-grid">
             ${rows.map(([k, v]) => `<div class="profile-stat"><span>${k}</span><b>${v}</b></div>`).join('')}
@@ -1026,24 +1026,24 @@ function openSettings() {
     ensureExp();
     const s = state.exp.settings;
     expModal(`
-        <h3 class="exp-title">⚙️ Settings</h3>
+        <h3 class="exp-title">${svgIcon('gear')}️ Settings</h3>
         <div class="set-row" style="gap:8px">
-            <span>🏰 Commander name</span>
+            <span>${svgIcon('castle')} Commander name</span>
             <span style="display:flex;gap:6px;flex:1;justify-content:flex-end">
                 <input id="set-name" value="${(state.playerName || 'Commander').replace(/"/g, '&quot;')}" maxlength="16" style="max-width:150px;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)">
                 <button class="btn btn-primary btn-small" onclick="renamePlayer()">Save</button>
             </span>
         </div>
         <div class="settings-list">
-            <label class="set-row"><span>🔊 Sound effects</span><input type="checkbox" ${s.sfx ? 'checked' : ''} onchange="toggleSetting('sfx',this.checked)"></label>
-            <label class="set-row"><span>🎵 Music</span><input type="checkbox" ${s.music ? 'checked' : ''} onchange="toggleSetting('music',this.checked)"></label>
-            <label class="set-row"><span>🔔 Notifications</span><input type="checkbox" ${s.notify ? 'checked' : ''} onchange="toggleSetting('notify',this.checked)"></label>
-            <label class="set-row"><span>🪶 Low-graphics mode</span><input type="checkbox" ${s.lowGfx ? 'checked' : ''} onchange="toggleSetting('lowGfx',this.checked)"></label>
+            <label class="set-row"><span> Sound effects</span><input type="checkbox" ${s.sfx ? 'checked' : ''} onchange="toggleSetting('sfx',this.checked)"></label>
+            <label class="set-row"><span> Music</span><input type="checkbox" ${s.music ? 'checked' : ''} onchange="toggleSetting('music',this.checked)"></label>
+            <label class="set-row"><span> Notifications</span><input type="checkbox" ${s.notify ? 'checked' : ''} onchange="toggleSetting('notify',this.checked)"></label>
+            <label class="set-row"><span> Low-graphics mode</span><input type="checkbox" ${s.lowGfx ? 'checked' : ''} onchange="toggleSetting('lowGfx',this.checked)"></label>
         </div>
         <div class="settings-actions">
-            <button class="btn btn-primary" onclick="exportSave()">📤 Export Save</button>
-            <button class="btn btn-primary" onclick="importSave()">📥 Import Save</button>
-            <button class="btn btn-danger" onclick="confirmHardReset()">🗑️ Reset Game</button>
+            <button class="btn btn-primary" onclick="exportSave()"> Export Save</button>
+            <button class="btn btn-primary" onclick="importSave()"> Import Save</button>
+            <button class="btn btn-danger" onclick="confirmHardReset()">️ Reset Game</button>
         </div>
         <div class="exp-actions"><button class="btn" onclick="closeExpModal()">Close</button></div>`);
 }

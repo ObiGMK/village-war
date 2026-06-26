@@ -258,7 +258,7 @@ const BUILDING_RENDERERS = {
         ${FLAG(x, y - 78)}
         <!-- gold crest on facade -->
         <circle cx="${x}" cy="${y - 32}" r="5" fill="#f0c050" stroke="#7a5410" stroke-width="0.6"/>
-        <text x="${x}" y="${y - 29}" text-anchor="middle" font-size="6" font-weight="900" fill="#7a5410" font-family="Inter">★</text>
+        <text x="${x}" y="${y - 29}" text-anchor="middle" font-size="6" font-weight="900" fill="#7a5410" font-family="Inter">${svgIcon('star')}</text>
         ${lvl >= 3 ? `<g>${FLAG(x - 36, y - 22, '#3b82f6')}${FLAG(x + 36, y - 22, '#3b82f6')}</g>` : ''}
         ${lvl >= 5 ? `<rect x="${x - 4}" y="${y - 12}" width="8" height="3" fill="#7a1818" stroke="#3a0808" stroke-width="0.3"/><polygon points="${x-4},${y-12} ${x+4},${y-12} ${x},${y-15}" fill="#dc2626"/>` : ''}
     `,
@@ -873,7 +873,7 @@ function renderIsoWorld() {
             else if (e.type === 'bush') svg = bushSVG(e.gx, e.gy);
             else if (e.type === 'flower') svg = flowerSVG(e.gx, e.gy, e.variant);
             if (clearable) {
-                const reward = e.type === 'tree' ? '🪵' : '⛏';
+                const reward = e.type === 'tree' ? '' : '';
                 entSVG += `<g class="deco-clear" data-key="${key}" data-type="${e.type}" style="cursor:pointer">${svg}</g>`;
             } else {
                 entSVG += svg;
@@ -897,7 +897,7 @@ function renderIsoWorld() {
                 entSVG += `<g class="build-timer" data-pos="${e.pos}" style="cursor:pointer" transform="translate(${bx},${by - 56})">
                     <rect x="-30" y="-11" width="60" height="22" rx="10" fill="#0e1726" stroke="#fbbf24" stroke-width="1.4"/>
                     <text x="-12" y="4" text-anchor="middle" font-size="10" fill="#fde68a" font-weight="800">⏳${remain}s</text>
-                    <text x="16" y="4" text-anchor="middle" font-size="9" fill="#7dd3fc" font-weight="800">💎${gems}</text>
+                    <text x="16" y="4" text-anchor="middle" font-size="9" fill="#7dd3fc" font-weight="800">${svgIcon('gem')}${gems}</text>
                 </g>`;
             }
         }
@@ -980,7 +980,7 @@ function renderIsoWorld() {
         } else if (resKey === 'food') {
             iconSVG = `<g stroke="#9a7320" stroke-width="0.9"><line x1="0" y1="8" x2="0" y2="-2"/><line x1="0" y1="6" x2="-4" y2="2"/><line x1="0" y1="6" x2="4" y2="2"/></g><ellipse cx="0" cy="-4" rx="2" ry="3.4" fill="#f0c850" stroke="#a9842c" stroke-width="0.5"/><ellipse cx="-3" cy="-1" rx="1.6" ry="2.8" fill="#f0c850" stroke="#a9842c" stroke-width="0.5" transform="rotate(-28 -3 -1)"/><ellipse cx="3" cy="-1" rx="1.6" ry="2.8" fill="#f0c850" stroke="#a9842c" stroke-width="0.5" transform="rotate(28 3 -1)"/>`;
         } else {
-            iconSVG = `<text x="0" y="4" text-anchor="middle" font-size="14">✨</text>`;
+            iconSVG = `<text x="0" y="4" text-anchor="middle" font-size="14"></text>`;
         }
         prodSVG += `<g class="prod-indicator" data-pos="${b.pos}" style="cursor:pointer" transform="translate(${x}, ${y - 70})">
             <circle cx="0" cy="0" r="14" fill="#1a1a2e" stroke="#fbbf24" stroke-width="2" opacity="0.95"/>
