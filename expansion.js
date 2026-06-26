@@ -1027,6 +1027,13 @@ function openSettings() {
     const s = state.exp.settings;
     expModal(`
         <h3 class="exp-title">⚙️ Settings</h3>
+        <div class="set-row" style="gap:8px">
+            <span>🏰 Commander name</span>
+            <span style="display:flex;gap:6px;flex:1;justify-content:flex-end">
+                <input id="set-name" value="${(state.playerName || 'Commander').replace(/"/g, '&quot;')}" maxlength="16" style="max-width:150px;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)">
+                <button class="btn btn-primary btn-small" onclick="renamePlayer()">Save</button>
+            </span>
+        </div>
         <div class="settings-list">
             <label class="set-row"><span>🔊 Sound effects</span><input type="checkbox" ${s.sfx ? 'checked' : ''} onchange="toggleSetting('sfx',this.checked)"></label>
             <label class="set-row"><span>🎵 Music</span><input type="checkbox" ${s.music ? 'checked' : ''} onchange="toggleSetting('music',this.checked)"></label>
@@ -1039,6 +1046,16 @@ function openSettings() {
             <button class="btn btn-danger" onclick="confirmHardReset()">🗑️ Reset Game</button>
         </div>
         <div class="exp-actions"><button class="btn" onclick="closeExpModal()">Close</button></div>`);
+}
+function renamePlayer() {
+    const inp = document.getElementById('set-name');
+    const name = (inp && inp.value || '').trim().slice(0, 16);
+    if (name.length < 2) { toast('Name must be at least 2 characters.', 'error'); return; }
+    state.playerName = name;
+    if (state.club) { const me = state.club.members.find(m => m.isPlayer); if (me) me.name = name; }
+    saveGame();
+    if (typeof cloudSaveNow === 'function') cloudSaveNow();
+    toast(`You are now Commander ${name}!`, 'success');
 }
 function toggleSetting(k, v) {
     ensureExp();
