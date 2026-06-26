@@ -1286,7 +1286,7 @@ function renderArmyView() {
             <br>️ <b>Soldiers who die in battle are gone forever.</b></p>
 
         <div class="formation-grid-wrap">
-            <div class="enemy-side-label">▲ Enemy approaches from here ▲</div>
+            <div class="enemy-side-label"> Enemy approaches from here </div>
             <div class="formation-grid" id="formation-grid"></div>
         </div>
 
@@ -1570,7 +1570,7 @@ function renderRaidView() {
 
     if (state.raidCooldown > Date.now()) {
         const secs = Math.ceil((state.raidCooldown - Date.now()) / 1000);
-        targets.innerHTML = `<div class="club-card"><p>⏳ Raid cooldown: ${secs}s remaining</p></div>`;
+        targets.innerHTML = `<div class="club-card"><p> Raid cooldown: ${secs}s remaining</p></div>`;
         return;
     }
 
@@ -2743,7 +2743,7 @@ function playBirdseyeBattle({ attackerList, defenderCounts, target, result, kill
             <div class="bt-label bt-label-top">${isDefense ? 'Invaders' : (target.name || 'Enemy')}</div>
             <div class="bt-label bt-label-bot">${isDefense ? 'Your Patrol' : 'Your Army'} · ${mine.length}</div>
             <div class="bt-status" id="bt-status">CHARGE!</div>
-            <button class="bv-skip" id="bt-skip">Skip ⏭</button>
+            <button class="bv-skip" id="bt-skip">Skip</button>
         </div>`;
     document.body.appendChild(overlay);
     const field = overlay.querySelector('#bt-field');
@@ -3006,7 +3006,7 @@ function playBattleAnimation(attackerTroops, defenderTroops, target, result, cal
             </div>
             <div class="bv-banner">️ Assault on ${target.name || target}</div>
             <div class="bv-status" id="bv-status">CHARGE!</div>
-            <button class="bv-skip" id="bv-skip">Skip ⏭</button>
+            <button class="bv-skip" id="bv-skip">Skip</button>
         </div>
     `;
     document.body.appendChild(overlay);
