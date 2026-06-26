@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0d1220">
+    <title>Village War</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <header id="resource-bar">
+            <div class="game-title">⚔️ Village War</div>
+            <div class="resources">
+                <div class="resource" title="Coins"><span class="res-icon" id="ico-coins"></span><span id="res-coins">500</span></div>
+                <div class="resource" title="Gold"><span class="res-icon" id="ico-gold"></span><span id="res-gold">100</span></div>
+                <div class="resource" title="Iron"><span class="res-icon" id="ico-iron"></span><span id="res-iron">150</span></div>
+                <div class="resource" title="Wood"><span class="res-icon" id="ico-wood"></span><span id="res-wood">200</span></div>
+                <div class="resource" title="Food"><span class="res-icon" id="ico-food"></span><span id="res-food">300</span></div>
+                <div class="resource resource-gems" title="Gems — open the Gem Shop" onclick="openShop()"><span class="res-icon nav-ic" data-ic="gem"></span><span id="res-gems">50</span></div>
+            </div>
+            <div class="player-info">
+                <span id="player-level">Level 1</span>
+                <span id="player-xp-bar"><span id="player-xp-fill"></span></span>
+                <div id="music-player" class="hidden">
+                    <button id="music-prev" title="Previous track">⏮</button>
+                    <span id="music-title">—</span>
+                    <button id="music-next" title="Next track">⏭</button>
+                </div>
+                <button id="account-chip" title="Online account — cloud saves, leaderboard & clans" onclick="openOnline()" style="display:none"></button>
+                <button id="music-btn" title="Toggle music (off by default — real medieval tracks stream from archive.org)">🎵<span class="audio-state">off</span></button>
+                <button id="mute-btn" title="Sound effects toggle">🔊</button>
+            </div>
+        </header>
+
+        <nav id="sidebar">
+            <button class="nav-btn active" data-view="village"><span class="nav-ic" data-ic="home"></span><span>Village</span></button>
+            <button class="nav-btn" data-view="build"><span class="nav-ic" data-ic="hammer"></span><span>Build</span></button>
+            <button class="nav-btn" data-view="army"><span class="nav-ic" data-ic="swords"></span><span>Army</span></button>
+            <button class="nav-btn" data-view="heroes"><span class="nav-ic" data-ic="crown"></span><span>Heroes</span></button>
+            <button class="nav-btn" data-view="research"><span class="nav-ic" data-ic="research"></span><span>Research</span></button>
+            <button class="nav-btn" data-view="raid"><span class="nav-ic" data-ic="dagger"></span><span>Raid</span></button>
+            <button class="nav-btn" data-view="world"><span class="nav-ic" data-ic="globe"></span><span>World</span></button>
+            <button class="nav-btn" data-view="more"><span class="nav-ic" data-ic="plus"></span><span>More</span></button>
+            <button class="nav-btn" data-view="club"><span class="nav-ic" data-ic="shield"></span><span>Club</span></button>
+            <button class="nav-btn" data-view="quests"><span class="nav-ic" data-ic="scroll"></span><span>Quests</span></button>
+            <button class="nav-btn" data-view="log"><span class="nav-ic" data-ic="book"></span><span>Log</span></button>
+        </nav>
+
+        <main id="main-content">
+            <!-- Village View -->
+            <div id="view-village" class="view active">
+                <div id="village-grid"></div>
+                <div id="building-info-panel" class="hidden">
+                    <button id="close-info" class="close-btn">✕</button>
+                    <h3 id="info-name"></h3>
+                    <p id="info-level"></p>
+                    <p id="info-desc"></p>
+                    <p id="info-production"></p>
+                    <div id="info-upgrade"></div>
+                </div>
+            </div>
+
+            <!-- Build View -->
+            <div id="view-build" class="view">
+                <h2>🏗️ Construction</h2>
+                <div class="build-categories">
+                    <button class="cat-btn active" data-cat="resource">Resource</button>
+                    <button class="cat-btn" data-cat="military">Military</button>
+                    <button class="cat-btn" data-cat="defense">Defense</button>
+                </div>
+                <div id="build-list" class="card-grid"></div>
+            </div>
+
+            <!-- Army View -->
+            <div id="view-army" class="view"></div>
+
+            <!-- Research View -->
+            <div id="view-research" class="view"></div>
+
+            <!-- Heroes View -->
+            <div id="view-heroes" class="view">
+                <h2>👑 Heroes</h2>
+                <div id="equipped-heroes-section">
+                    <h3 class="hero-section-title">Equipped Heroes (max 3)</h3>
+                    <div id="equipped-heroes"></div>
+                </div>
+                <h3 class="hero-section-title">Available Heroes</h3>
+                <div id="hero-roster" class="hero-grid"></div>
+            </div>
+
+            <!-- Raid View -->
+            <div id="view-raid" class="view">
+                <h2>🗡️ Raid</h2>
+                <div class="raid-tabs">
+                    <button class="raid-tab active" data-raid="cpu">CPU Camps</button>
+                    <button class="raid-tab" data-raid="player">Player Villages</button>
+                </div>
+                <div id="raid-targets"></div>
+                <div id="battle-result" class="hidden"></div>
+            </div>
+
+            <!-- Club View -->
+            <div id="view-club" class="view">
+                <h2>🛡️ Clubs</h2>
+                <div id="club-content"></div>
+            </div>
+
+            <!-- Quests View -->
+            <div id="view-quests" class="view"></div>
+
+            <!-- World View -->
+            <div id="view-world" class="view"></div>
+
+            <!-- More View -->
+            <div id="view-more" class="view"></div>
+
+            <!-- Log View -->
+            <div id="view-log" class="view">
+                <h2>📜 Battle Log</h2>
+                <div id="battle-log"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal-overlay" class="hidden">
+        <div id="modal">
+            <button id="modal-close" class="close-btn">✕</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast-container"></div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorial-overlay" class="hidden">
+        <div id="tutorial-spotlight"></div>
+        <div id="tutorial-ring"></div>
+        <div id="tutorial-arrow">⬇️</div>
+        <div id="tutorial-tip"></div>
+    </div>
+    <button id="restart-tutorial-btn" title="Restart tutorial">❓ Tutorial</button>
+
+    <!-- Attack notification -->
+    <div id="attack-alert" class="hidden">
+        <div class="attack-alert-inner">
+            <h2>⚠️ YOUR VILLAGE IS UNDER ATTACK!</h2>
+            <p id="attack-alert-info"></p>
+            <button id="attack-watch-btn">Watch Battle</button>
+        </div>
+    </div>
+
+    <!-- Animated sky background -->
+    <div id="sky-bg">
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        <div class="cloud cloud-4"></div>
+    </div>
+
+    <!-- Splash / Title screen -->
+    <div id="splash-screen">
+        <div class="splash-bg-overlay"></div>
+        <div class="splash-content">
+            <div class="splash-logo-frame">
+                <div class="splash-rays"></div>
+                <div class="splash-title">
+                    <span class="splash-village">VILLAGE</span>
+                    <span class="splash-war">WAR</span>
+                </div>
+                <div class="splash-sword-cross">⚔️</div>
+                <div class="splash-tagline">Build · Train · Raid · Conquer</div>
+            </div>
+            <div class="splash-loading-area">
+                <div class="splash-loading-bar"><div class="splash-loading-fill"></div></div>
+                <div class="splash-loading-text">Loading kingdom…</div>
+            </div>
+            <button id="splash-play" class="splash-play-btn hidden">
+                <span class="splash-play-icon">▶</span>
+                <span class="splash-play-text">PLAY</span>
+            </button>
+            <div class="splash-credits">A real-time strategy adventure</div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="icons.js"></script>
+    <script src="assets.js"></script>
+    <script src="characters.js"></script>
+    <script src="effects.js"></script>
+    <script src="world.js"></script>
+    <script src="newfeatures.js"></script>
+    <script src="livebattle.js"></script>
+    <script src="three-village.js"></script>
+    <script src="expansion.js"></script>
+    <script src="game.js"></script>
+    <script src="netcode.js"></script>
+</body>
+</html>

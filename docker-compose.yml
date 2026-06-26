@@ -1,0 +1,10 @@
+services:
+  villagewar:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - vw-data:/data
+    restart: unless-stopped
+volumes:
+  vw-data:
