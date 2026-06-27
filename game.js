@@ -3517,7 +3517,7 @@ function initGame() {
             musicBtn.innerHTML = on ? '<span class="audio-state on">on</span>' : '<span class="audio-state">off</span>';
             musicBtn.classList.toggle('active', on);
             if (musicPlayer) musicPlayer.classList.toggle('hidden', !on);
-            toast(on ? ' Music: streaming medieval orchestral playlist' : 'Music: off', 'info');
+            toast(on ? 'Music on — live medieval score that rises into battle' : 'Music: off', 'info');
         };
     }
     if (musicPrev) musicPrev.onclick = () => Audio.prevTrack();

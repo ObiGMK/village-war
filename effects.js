@@ -194,13 +194,22 @@ const Audio = (() => {
         error: () => tone(150, 0.15, 'sine', 0.10),
         whoosh: () => noise(0.2, 0.05, 400),
         achievement: () => { chord([659, 880, 1175], 0.3, 'sine', 0.13); setTimeout(() => chord([784, 1047, 1397], 0.4, 'sine', 0.12), 200); },
-        startMusic: () => { if (musicEnabled) startMusic(); },
-        stopMusic,
-        nextTrack: () => { if (musicPlaying) nextTrack(); },
-        prevTrack: () => { if (musicPlaying) prevTrack(); },
-        getCurrentTrack,
-        onTrackChange: (cb) => { onTrackChange = cb; },
-        toggleMusic: () => { musicEnabled = !musicEnabled; if (musicEnabled) startMusic(); else stopMusic(); return musicEnabled; },
+        // ---- Music now runs on the procedural adaptive engine (always works,
+        // shifts calm↔battle). Falls back to the streamed playlist only if the
+        // engine is somehow unavailable. ----
+        startMusic: () => { if (musicEnabled) { (typeof ProcMusic !== 'undefined') ? ProcMusic.start() : startMusic(); } },
+        stopMusic: () => { (typeof ProcMusic !== 'undefined') ? ProcMusic.stop() : stopMusic(); },
+        nextTrack: () => { (typeof ProcMusic !== 'undefined') ? ProcMusic.next() : (musicPlaying && nextTrack()); },
+        prevTrack: () => { (typeof ProcMusic !== 'undefined') ? ProcMusic.prev() : (musicPlaying && prevTrack()); },
+        getCurrentTrack: () => (typeof ProcMusic !== 'undefined') ? (ProcMusic.isPlaying() ? { title: ProcMusic.currentName() } : null) : getCurrentTrack(),
+        onTrackChange: (cb) => { onTrackChange = cb; if (typeof ProcMusic !== 'undefined') ProcMusic.onChange(cb); },
+        setBattleMusic: (on) => { if (typeof ProcMusic !== 'undefined') ProcMusic.setBattle(on); },
+        toggleMusic: () => {
+            musicEnabled = !musicEnabled;
+            if (typeof ProcMusic !== 'undefined') { musicEnabled ? ProcMusic.start() : ProcMusic.stop(); }
+            else { musicEnabled ? startMusic() : stopMusic(); }
+            return musicEnabled;
+        },
         isMusicOn: () => musicEnabled,
         toggleSfx: () => { sfxMuted = !sfxMuted; return sfxMuted; },
         isSfxMuted: () => sfxMuted,

@@ -131,6 +131,7 @@ function applyRaidOutcome(spec, r) {
 
 // ---- The live battle itself ----
 function startLiveBattle({ armyList, base, spec, onDone }) {
+    try { Audio.setBattleMusic && Audio.setBattleMusic(true); } catch (e) {}
     const overlay = document.createElement('div');
     overlay.className = 'battle-viewer';
     const totalHP = base.buildings.reduce((s, b) => s + b.hp, 0) + base.defenses.reduce((s, d) => s + d.hp, 0);
@@ -419,6 +420,7 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
     function endBattle() {
         if (!running) return;
         running = false;
+        try { Audio.setBattleMusic && Audio.setBattleMusic(false); } catch (e) {}
         clearInterval(timerIv);
         clearInterval(pumpIv);
         const destr = Math.min(1, destroyedHP / totalHP);
