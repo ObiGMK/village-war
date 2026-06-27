@@ -487,7 +487,7 @@ function buyLand(pos) {
         const el = grid && grid.querySelector(`.buy-tile[data-pos="${pos}"]`);
         if (el) { const r = el.getBoundingClientRect(); sparkleBurst(r.left + r.width/2, r.top + r.height/2, 14); }
     } catch(e) {}
-    toast(' Land claimed!', 'success');
+    toast('Land claimed!', 'success');
     renderGrid();
     updateResources();
     saveGame();
@@ -770,7 +770,7 @@ function addXP(amount) {
         try {
             Audio.levelup();
             confetti(50, 2000);
-            popup(`${svgIcon('star')} LEVEL ${state.level}!`, { big: true, color: '#fbbf24' });
+            popup(`LEVEL ${state.level}!`, { big: true, color: '#fbbf24' });
             track('levelReached', 1);
             state.achievements && (state.achievements.metrics.levelReached = state.level);
         } catch(e) {}
@@ -1662,7 +1662,7 @@ function launchRaid(type, index) {
     // Tutorial guarantee: first raid during tutorial is always a flawless win
     if (tutorialActive && type === 'cpu') {
         result = { victory: true, atkLosses: {}, defLosses: defTroops, atkSurvival: 1, rounds: 3 };
-        toast(' Tutorial raid — guaranteed victory!', 'info');
+        toast('Tutorial raid — guaranteed victory!', 'info');
     }
 
     // PERMADEATH: pick specific soldiers to kill (front rows die first)

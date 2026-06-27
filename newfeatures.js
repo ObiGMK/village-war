@@ -20,7 +20,7 @@ function addGems(n) {
     ensureMeta();
     state.gems += n;
     updateGemDisplay();
-    try { popup(`${svgIcon('gem')} +${n}`, { color: '#7dd3fc' }); } catch(e) {}
+    try { popup(`+${n}`, { color: '#7dd3fc' }); } catch(e) {}
 }
 
 function spendGems(n) {
@@ -162,7 +162,7 @@ function buyShopItem(id) {
         if (state.builders.count >= 3) return;
         if (!spendGems(it.gems)) return;
         state.builders.count = 3;
-        toast(' Third builder hired!', 'success');
+        toast('Third builder hired!', 'success');
     } else {
         if (!spendGems(it.gems)) return;
         addResources(it.give);
@@ -176,10 +176,10 @@ function buyShopItem(id) {
 
 // ---------- EVENTS (weekly rotation) ----------
 const WEEKLY_EVENTS = [
-    { id: 'coinrush',  name: ' Coin Rush',      desc: '+50% coins from raids',  lootMult: { coins: 1.5 } },
-    { id: 'goldrush',  name: ' Gold Rush',      desc: '+50% gold from raids',   lootMult: { gold: 1.5 } },
+    { id: 'coinrush',  name: 'Coin Rush',      desc: '+50% coins from raids',  lootMult: { coins: 1.5 } },
+    { id: 'goldrush',  name: 'Gold Rush',      desc: '+50% gold from raids',   lootMult: { gold: 1.5 } },
     { id: 'warweek',   name: '️ War Week',       desc: '+50% XP from battles',   xpMult: 1.5 },
-    { id: 'harvest',   name: ' Harvest Fest',   desc: '+50% food & wood loot',  lootMult: { food: 1.5, wood: 1.5 } }
+    { id: 'harvest',   name: 'Harvest Fest',   desc: '+50% food & wood loot',  lootMult: { food: 1.5, wood: 1.5 } }
 ];
 function activeEvent() {
     const week = Math.floor(Date.now() / (7 * 24 * 3600 * 1000));
@@ -254,7 +254,7 @@ function hasShield() { ensureMeta(); return Date.now() < state.shieldUntil; }
 function grantShield(mins) {
     ensureMeta();
     state.shieldUntil = Date.now() + mins * 60000;
-    toast(`${svgIcon('shield')}️ Shield active for ${mins} minutes — no attacks can reach you.`, 'info');
+    toast(`Shield active for ${mins} minutes — no attacks can reach you.`, 'info');
 }
 function breakShield() { if (hasShield()) { state.shieldUntil = 0; toast('Your shield dropped (you attacked someone).', 'warning'); } }
 
@@ -342,14 +342,14 @@ const CLAN_BOT_LINES = [
 ];
 function requestClanTroops() {
     if (!state.club) { toast('Join a club first!', 'error'); return; }
-    toast(' Troop request sent to your club...', 'info');
+    toast('Troop request sent to your club...', 'info');
     setTimeout(() => {
         const types = ['warrior', 'archer', 'shieldbearer'];
         const t = types[Math.floor(Math.random() * types.length)];
         ensureSoldiers();
         addSoldier(t, 'reserve');
         const donor = state.club.members.find(m => !m.isPlayer);
-        toast(`${svgIcon('gift')} ${donor ? donor.name : 'A clanmate'} donated a ${TROOP_DEFS[t].name}!`, 'success');
+        toast(`${donor ? donor.name : 'A clanmate'} donated a ${TROOP_DEFS[t].name}!`, 'success');
         clanChatPush(donor ? donor.name : 'Clanmate', `Sent you a ${TROOP_DEFS[t].name}!`);
         updateNotificationBadges();
         saveGame();

@@ -93,7 +93,7 @@ function applyRaidOutcome(spec, r) {
                 state.campaign.stars[spec.missionIndex] = r.stars;
                 const gemGain = (r.stars - prev) * 5;
                 addGems(gemGain);
-                toast(`Mission ${spec.missionIndex + 1}: ${r.stars}${svgIcon('star')} — +${gemGain} gems!`, 'success');
+                toast(`Mission ${spec.missionIndex + 1}: ${r.stars}— +${gemGain} gems!`, 'success');
             }
         }
         if (spec.kind === 'cpu' || spec.kind === 'revenge') {
@@ -117,7 +117,7 @@ function applyRaidOutcome(spec, r) {
     el.classList.remove('hidden');
     el.innerHTML = `
         <div class="result-inner ${victory ? 'victory' : 'defeat'}">
-            <h2>${victory ? '️ VICTORY!' : ' DEFEAT!'}</h2>
+            <h2>${victory ? 'VICTORY!' : 'DEFEAT!'}</h2>
             <div class="result-stars">${[1,2,3].map(s => `<span class="rstar ${r.stars >= s ? 'lit' : ''}">${svgIcon('star')}</span>`).join('')}</div>
             <p style="color:var(--text2)">${spec.name} — ${Math.round(r.destruction * 100)}% destroyed</p>
             ${victory ? `<div class="loot-gained">${Object.entries(lootGained).filter(([,v]) => v > 0).map(([res, v]) => `<div class="loot-item">${RES_ICONS[res] || res} +${formatNum(v)}</div>`).join('')}</div>` : '<p style="color:var(--danger)">Destroy at least 50% to win loot.</p>'}

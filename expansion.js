@@ -173,10 +173,10 @@ const WHEEL_PRIZES = [
     { label: '500c',  color: '#f4b740', give: () => expGainRes({ coins: 500 }, ' +500 coins') },
     { label: '5',   color: '#7dd3fc', give: () => { addGems(5); } },
     { label: '300g',  color: '#fcd34d', give: () => expGainRes({ gold: 300 }, ' +300 gold') },
-    { label: 'Crate', color: '#a78bfa', give: () => { state.exp.crates++; toast(' +1 Mystery Crate', 'success'); } },
+    { label: 'Crate', color: '#a78bfa', give: () => { state.exp.crates++; toast('+1 Mystery Crate', 'success'); } },
     { label: '1500c', color: '#f59e0b', give: () => expGainRes({ coins: 1500 }, ' +1500 coins') },
     { label: '20',  color: '#38bdf8', give: () => { addGems(20); } },
-    { label: 'Potion',color: '#4ade80', give: () => { state.exp.items.resource++; toast(' +1 Resource Potion', 'success'); } },
+    { label: 'Potion',color: '#4ade80', give: () => { state.exp.items.resource++; toast('+1 Resource Potion', 'success'); } },
     { label: '400i',  color: '#cbd5e1', give: () => expGainRes({ iron: 400 }, '️ +400 iron') }
 ];
 function openWheel() {
@@ -217,7 +217,7 @@ function spinWheel() {
     setTimeout(() => {
         _wheelSpinning = false;
         WHEEL_PRIZES[idx].give();
-        toast(`${svgIcon('wheel')} You won: ${WHEEL_PRIZES[idx].label}!`, 'success');
+        toast(`You won: ${WHEEL_PRIZES[idx].label}!`, 'success');
         saveGame();
         openWheel();
     }, 3500);
@@ -435,7 +435,7 @@ function useItem(id) {
     if (id === 'build') {
         let n = 0;
         (state.buildings || []).forEach(b => { if (b.constructing) { b.constructing = false; n++; } if (b.upgrading) { b.level = b.upgrading.to; b.upgrading = null; n++; } });
-        toast(n ? `${svgIcon('hammer')} Finished ${n} job(s)!` : 'Nothing was building.', 'success');
+        toast(n ? `Finished ${n} job(s)!` : 'Nothing was building.', 'success');
         if (typeof renderGrid === 'function') renderGrid();
     } else if (id === 'train') {
         ['warrior', 'archer', 'cavalry'].forEach(t => { if (typeof trainTroop === 'function') { try { trainTroop(t, true); } catch (e) { state.troops[t] = (state.troops[t] || 0) + 1; } } else state.troops[t] = (state.troops[t] || 0) + 1; });
@@ -444,7 +444,7 @@ function useItem(id) {
     } else if (id === 'resource') {
         expGainRes({ coins: 2000, gold: 1000, iron: 1000 }, ' Resources granted!');
     } else if (id === 'research') {
-        addPassXp(250); addGems(25); toast(' +250 pass XP, +25', 'success');
+        addPassXp(250); addGems(25); toast('+250 pass XP, +25', 'success');
     } else if (id === 'shield') {
         if (typeof grantShield === 'function') grantShield(180);
         toast('️ 3-hour shield active!', 'success');
@@ -476,7 +476,7 @@ function buyBoost(mins) {
     if (!spendGems(cost)) return;
     const base = boostActive() ? state.exp.boostUntil : Date.now();
     state.exp.boostUntil = base + mins * 60000;
-    toast(`${svgIcon('bolt')} Production boosted for ${mins} min!`, 'success');
+    toast(`Production boosted for ${mins} min!`, 'success');
     saveGame(); openBoost();
 }
 
@@ -591,7 +591,7 @@ function buyTalent(id) {
     if (id === 'warlord') { state.trophies += 2; const tt = ['warrior', 'archer', 'cavalry'][Math.floor(Math.random() * 3)]; state.troops[tt] = (state.troops[tt] || 0) + 1; }
     if (id === 'alchemist') { state.exp.items.build++; state.exp.items.resource++; }
     if (id === 'financier') addGems(25);
-    toast(`${svgIcon('tree')} Learned ${t.name}!`, 'success');
+    toast(`Learned ${t.name}!`, 'success');
     saveGame(); updateResources(); openTalents();
 }
 
@@ -645,7 +645,7 @@ function claimChallenge(i) {
     const c = state.exp.challenges[i];
     if (!c || c.claimed || c.prog < c.goal) return;
     grantPassReward(c.reward); c.claimed = true; addPassXp(20);
-    toast(' Challenge reward claimed!', 'success');
+    toast('Challenge reward claimed!', 'success');
     saveGame(); updateResources(); openChallenges();
 }
 
@@ -690,7 +690,7 @@ function conquerRegion(id) {
     state.exp.regions[id] = true;
     if (id === 'capital') state.trophies += 50;
     addPassXp(40);
-    toast(`${svgIcon('flag')} Conquered ${r.name}!`, 'success');
+    toast(`Conquered ${r.name}!`, 'success');
     saveGame(); updateResources(); openRegions();
 }
 function regionTrickle() {
@@ -725,7 +725,7 @@ function openBossRaid() {
 function startBossRaid(bossLvl) {
     ensureExp();
     closeExpModal();
-    const reward = () => { expGainRes({ coins: 5000, gold: 2500 }); addGems(30); state.exp.crates++; state.exp.stats.bossKills++; addPassXp(60); toast(' Boss defeated! Loot claimed.', 'success'); saveGame(); };
+    const reward = () => { expGainRes({ coins: 5000, gold: 2500 }); addGems(30); state.exp.crates++; state.exp.stats.bossKills++; addPassXp(60); toast('Boss defeated! Loot claimed.', 'success'); saveGame(); };
     if (typeof runLiveRaid === 'function' && typeof getDeployed === 'function' && getDeployed('army') && getDeployed('army').length) {
         runLiveRaid({ name: 'Warlord Grimfang', level: bossLvl, loot: { coins: 5000, gold: 2500 }, xp: 120, kind: 'boss', onWin: reward });
         // also reward on win via outcome hook fallback
@@ -734,7 +734,7 @@ function startBossRaid(bossLvl) {
         // fallback: quick simulated fight based on army size
         const power = (state.soldiers ? state.soldiers.length : 0) + Object.values(state.troops || {}).reduce((a, b) => a + b, 0);
         if (power >= bossLvl * 2) { reward(); }
-        else { state.exp.stats.raidsLost++; toast(' Your army was too weak! Train more troops.', 'error'); saveGame(); }
+        else { state.exp.stats.raidsLost++; toast('Your army was too weak! Train more troops.', 'error'); saveGame(); }
     }
 }
 
@@ -782,8 +782,8 @@ function clanWarAttack() {
     else { w.losses++; w.log.push({ win: false, text: `Battle ${w.round}: defeat. (${Math.round(power)} vs ${Math.round(enemy)})` }); }
     if (w.wins >= 3 || w.losses >= 3 || w.round >= 5) {
         w.over = true;
-        if (w.wins > w.losses) { expGainRes({ coins: 4000, gold: 2000 }); addGems(25); state.exp.stats.warWins++; addPassXp(50); w.log.push({ win: true, text: ' WAR WON! +4000c +2000g +25' }); }
-        else { w.log.push({ win: false, text: ' War lost. Regroup and try again.' }); }
+        if (w.wins > w.losses) { expGainRes({ coins: 4000, gold: 2000 }); addGems(25); state.exp.stats.warWins++; addPassXp(50); w.log.push({ win: true, text: 'WAR WON! +4000c +2000g +25' }); }
+        else { w.log.push({ win: false, text: 'War lost. Regroup and try again.' }); }
     }
     saveGame(); updateResources(); renderClanWar();
 }
@@ -826,7 +826,7 @@ function tourneyFight() {
     const survivors = [];
     // you fight first
     const youWin = Math.random() < power;
-    if (!youWin) { t.out = true; toast(' Knocked out of the tournament.', 'info'); }
+    if (!youWin) { t.out = true; toast('Knocked out of the tournament.', 'info'); }
     else survivors.push('You');
     // others
     const others = t.alive.filter(n => n !== 'You');
@@ -840,7 +840,7 @@ function tourneyFight() {
     t.round++;
     if (!t.out && t.alive.length <= 1 && t.alive[0] === 'You') {
         t.over = true; expGainRes({ coins: 3000 }); addGems(50); addPassXp(50);
-        toast(' Tournament WON! +50', 'success');
+        toast('Tournament WON! +50', 'success');
     }
     saveGame(); updateResources(); renderTournament();
 }
@@ -882,7 +882,7 @@ function visitFriend(i) {
     ensureExp();
     const f = state.exp.friends[i];
     addPassXp(5);
-    toast(`${svgIcon('castle')} You visited ${f.name}'s village. +5 pass XP`, 'info');
+    toast(`You visited ${f.name}'s village. +5 pass XP`, 'info');
     saveGame();
 }
 
@@ -912,7 +912,7 @@ function collectGemMine() {
     const r = gemMineReady();
     if (r <= 0) return;
     addGems(r); state.exp.gemMineSince = Date.now();
-    toast(`${svgIcon('gem')} Collected ${r} gems from the mine!`, 'success');
+    toast(`Collected ${r} gems from the mine!`, 'success');
     saveGame(); openGemMine();
 }
 
@@ -953,7 +953,7 @@ function buyDecor(id) {
     spendResources(d.cost);
     state.exp.decor[id] = true;
     state.trophies += d.trophies;
-    toast(`${svgIcon('flower')} Placed ${d.name}! +${d.trophies} trophies`, 'success');
+    toast(`Placed ${d.name}! +${d.trophies} trophies`, 'success');
     saveGame(); updateResources(); openDecor();
 }
 
