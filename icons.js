@@ -119,7 +119,9 @@ const ICON_PATHS = {
     close: `<path d="M6 6l12 12M18 6 6 18" stroke-linecap="round" stroke-width="2"/>`,
     warn: `<path d="M12 3 22 20H2Z" fill="currentColor" fill-opacity="0.16"/><path d="M12 3 22 20H2Z"/><path d="M12 9v5" stroke-linecap="round" stroke-width="2"/><circle cx="12" cy="17.3" r="1.1" fill="currentColor" stroke="none"/>`,
     prev: `<path d="M17 5 8 12l9 7zM7 5v14" stroke-linejoin="round" fill="currentColor" fill-opacity="0.5"/>`,
-    next: `<path d="M7 5l9 7-9 7zM17 5v14" stroke-linejoin="round" fill="currentColor" fill-opacity="0.5"/>`
+    next: `<path d="M7 5l9 7-9 7zM17 5v14" stroke-linejoin="round" fill="currentColor" fill-opacity="0.5"/>`,
+    // bold signpost-style arrow, points DOWN by default (rotated per direction)
+    tutArrow: `<path d="M12 22 3 11h5.2V3h7.6v8H21z" fill="currentColor" stroke="#7a5410" stroke-width="0.8" stroke-linejoin="round"/>`
 };
 
 // Hydrate any element with data-ic="name" (and clear stray emoji text nodes).

@@ -3405,18 +3405,20 @@ function renderTutorialStep(step) {
     tip.style.left = tx + 'px';
     tip.style.top = ty + 'px';
 
-    // Bouncing arrow positioned beside the target, pointing at it
+    // Bouncing arrow positioned beside the target, pointing AT it. Uses an SVG
+    // arrow (the default points DOWN) rotated toward the target.
     arrow.style.display = 'flex';
     let ax = rect.left + rect.width / 2 - 26;
     let ay = rect.top - 60;
-    let arrowChar = '️';
-    // If tip is below the target, the arrow goes above; if tip is above, arrow goes below
-    if (tx >= rect.right + 10) { ax = rect.right + 8; ay = rect.top + rect.height / 2 - 26; arrowChar = '️'; }
-    else if (tx + tipW <= rect.left - 10) { ax = rect.left - 60; ay = rect.top + rect.height / 2 - 26; arrowChar = '️'; }
-    else if (ty > rect.bottom) { ax = rect.left + rect.width / 2 - 26; ay = rect.bottom + 4; arrowChar = '️'; }
-    else { ax = rect.left + rect.width / 2 - 26; ay = rect.top - 60; arrowChar = '️'; }
+    let rot = 0; // 0 = point down (arrow sits above target)
+    if (tx >= rect.right + 10) { ax = rect.right + 8; ay = rect.top + rect.height / 2 - 26; rot = -90; }      // arrow on the right → point left
+    else if (tx + tipW <= rect.left - 10) { ax = rect.left - 60; ay = rect.top + rect.height / 2 - 26; rot = 90; } // arrow on the left → point right
+    else if (ty > rect.bottom) { ax = rect.left + rect.width / 2 - 26; ay = rect.bottom + 4; rot = 180; }      // arrow below → point up
+    else { ax = rect.left + rect.width / 2 - 26; ay = rect.top - 60; rot = 0; }                                 // arrow above → point down
 
-    arrow.textContent = arrowChar;
+    arrow.innerHTML = (typeof svgIcon === 'function') ? svgIcon('tutArrow') : '';
+    const arrowSvg = arrow.querySelector('svg');
+    if (arrowSvg) arrowSvg.style.transform = `rotate(${rot}deg)`;
     arrow.style.left = ax + 'px';
     arrow.style.top = ay + 'px';
 
