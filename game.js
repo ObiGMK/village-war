@@ -3259,6 +3259,12 @@ function startTutorial() {
     tutorialActive = true;
     tutorialStep = 0;
     state.tutorialDone = false;
+    // Mark the tutorial as SEEN the moment it first opens, so it never auto-opens
+    // again — even if the player abandons it without finishing. Stored both on the
+    // device (localStorage) and in the saved game (so it follows the person/account).
+    state.tutorialSeen = true;
+    try { localStorage.setItem('villagewar_tutorial_done', '1'); } catch (e) {}
+    try { saveGame(); } catch (e) {}
     if (!tutorialDelegateAttached) {
         document.addEventListener('click', tutorialDocClickHandler, true);
         tutorialDelegateAttached = true;
@@ -3543,10 +3549,12 @@ function initGame() {
     state.achievements.metrics.troopCap = getTroopCapacity();
     updateNotificationBadges();
 
-    // Tutorial trigger — only ever auto-runs once (persistent flag survives save resets)
+    // Tutorial trigger — auto-opens ONLY the very first time this person opens the
+    // game. `tutorialSeen` lives in the save (follows the account/cloud), and the
+    // localStorage flag covers the device even if the save is wiped.
     let tutorialEverDone = false;
     try { tutorialEverDone = localStorage.getItem('villagewar_tutorial_done') === '1'; } catch(e) {}
-    if (!state.tutorialDone && !tutorialEverDone) {
+    if (!state.tutorialSeen && !state.tutorialDone && !tutorialEverDone) {
         setTimeout(() => startTutorial(), 600);
     }
 
@@ -3554,6 +3562,15 @@ function initGame() {
     window.addEventListener('resize', () => {
         if (tutorialActive) showTutorialStep();
     });
+
+    // Robust persistence — progress is saved for this person no matter what:
+    // periodically, and whenever the tab is closed/hidden. (Writes to localStorage
+    // always; the cloud too when signed in, via the saveGame wrapper.)
+    if (!window._vwAutosave) {
+        window._vwAutosave = setInterval(() => { try { saveGame(); } catch (e) {} }, 20000);
+        window.addEventListener('beforeunload', () => { try { saveGame(); } catch (e) {} });
+        document.addEventListener('visibilitychange', () => { if (document.hidden) { try { saveGame(); } catch (e) {} } });
+    }
 
     // New meta systems
     if (typeof ensureMeta === 'function') {
