@@ -3689,3 +3689,13 @@ h2 .nav-ic .vw-ic, .exp-title .vw-ic, .codex-h .vw-ic { width: 1.05em; height: 1
     20% { transform: translateX(-9px); } 40% { transform: translateX(8px); }
     60% { transform: translateX(-6px); } 80% { transform: translateX(4px); }
 }
+
+/* Build cards you can't afford — clearly disabled so you can't make stuff for free */
+.build-card.unaffordable { opacity: 0.55; cursor: not-allowed; filter: grayscale(0.4); }
+.build-card.unaffordable:hover { transform: none; box-shadow: none; }
+.build-card.unaffordable .card-cost { color: var(--danger); }
+.build-card.unaffordable::after {
+    content: 'Not enough resources';
+    display: block; margin-top: 4px; font-size: 0.66rem; font-weight: 700;
+    color: var(--danger); text-align: center;
+}

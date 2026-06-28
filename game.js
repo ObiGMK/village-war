@@ -322,7 +322,7 @@ const PLAYER_NAMES = [
 // ============================================================
 
 let state = {
-    resources: { coins: 500, gold: 100, iron: 150, wood: 200, food: 300 },
+    resources: { coins: 1200, gold: 200, iron: 250, wood: 450, food: 350 }, // enough to comfortably afford the whole tutorial (lumber mill + barracks + first troop)
     maxResources: { coins: 2000, gold: 1000, iron: 1000, wood: 1000, food: 1000 },
     buildings: [],
     troops: { warrior: 0, archer: 0, shieldbearer: 0, cavalry: 0, siege: 0 },
@@ -1214,8 +1214,9 @@ function renderBuildView() {
         const locked = !isMaxed && getTHLevel() < reqTH;
         const cost = getPlaceCost(type);               // escalates with how many you own
 
+        const affordable = canAfford(cost);
         const card = document.createElement('div');
-        card.className = 'build-card' + (locked || isMaxed ? ' locked' : '');
+        card.className = 'build-card' + (locked || isMaxed ? ' locked' : (!affordable ? ' unaffordable' : ''));
         card.dataset.type = type;
         const bIcon = (typeof buildingIcon === 'function' && buildingIcon(type)) ? buildingIcon(type) : def.icon;
 
@@ -1235,11 +1236,19 @@ function renderBuildView() {
                     : `<div class="card-cost">${costHTML(cost)}</div>`}
         `;
         if (!locked && !isMaxed) {
-            card.onclick = () => {
-                placingBuilding = type;
-                switchView('village');
-                toast('Click an empty tile to place the building', 'info');
-            };
+            if (affordable) {
+                card.onclick = () => {
+                    placingBuilding = type;
+                    switchView('village');
+                    toast('Click an empty tile to place the building', 'info');
+                };
+            } else {
+                // Can't afford it — don't let the player enter placement mode for it.
+                card.onclick = () => {
+                    toast(`Not enough resources to build ${def.name}!`, 'error');
+                    try { Audio.error(); } catch (e) {}
+                };
+            }
         }
         list.appendChild(card);
     }
