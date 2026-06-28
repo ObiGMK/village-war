@@ -302,6 +302,13 @@ const DAILY_REWARDS = [
 ];
 function checkDailyReward() {
     ensureMeta();
+    // Never pop a blocking modal over the tutorial — its overlay would swallow
+    // the player's taps and the tutorial could never be completed. Wait it out.
+    if ((typeof tutorialActive !== 'undefined' && tutorialActive) ||
+        (document.getElementById('tutorial-overlay') && !document.getElementById('tutorial-overlay').classList.contains('hidden'))) {
+        setTimeout(checkDailyReward, 2500);
+        return;
+    }
     const today = new Date().toDateString();
     if (state.daily.last === today) return;
     const yesterday = new Date(Date.now() - 86400000).toDateString();

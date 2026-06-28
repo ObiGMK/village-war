@@ -199,6 +199,30 @@ const ProcMusic = (function () {
         clearInterval(timer); timer = null;
         if (onChange) onChange(null, -1);
     }
+    // A short triumphant medieval flourish — the "quick theme" played on entry.
+    function fanfare() {
+        if (!init()) return;
+        if (ctx.state === 'suspended') ctx.resume();
+        const t0 = ctx.currentTime + 0.04;
+        // bump master so the fanfare is heard even if continuous music isn't on yet
+        master.gain.cancelScheduledValues(ctx.currentTime);
+        master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), ctx.currentTime);
+        master.gain.linearRampToValueAtTime(0.9, t0);
+        const root = THEMES[themeIdx].root;
+        // rising arpeggio (root, 5th, octave, 10th) then a held major-ish chord
+        const arp = [root + 12, root + 19, root + 24, root + 28];
+        arp.forEach((n, i) => pluck(semi(n), t0 + i * 0.13, 0.5, 0.16, 'triangle'));
+        const t1 = t0 + arp.length * 0.13 + 0.02;
+        [root + 12, root + 16, root + 19, root + 24].forEach(n => pad(semi(n), t1, 1.3, 0.07));
+        pluck(semi(root + 31), t1 + 0.05, 0.9, 0.16, 'triangle');     // bright top note
+        bass(semi(root), t0, 1.2, 0.18); bass(semi(root), t1, 1.0, 0.16);
+        if (!playing) {
+            // settle the master volume back down after the flourish if music isn't running
+            master.gain.setValueAtTime(0.9, t1 + 1.0);
+            master.gain.linearRampToValueAtTime(0, t1 + 1.6);
+        }
+    }
+
     function setBattle(on) { targetIntensity = on ? 1 : 0; }
     function nextTheme(dir) {
         themeIdx = (themeIdx + (dir || 1) + THEMES.length) % THEMES.length;
@@ -208,7 +232,7 @@ const ProcMusic = (function () {
     let onChange = null;
 
     return {
-        start, stop, setBattle,
+        start, stop, setBattle, fanfare,
         isPlaying: () => playing,
         next: () => nextTheme(1),
         prev: () => nextTheme(-1),

@@ -204,6 +204,12 @@ const Audio = (() => {
         getCurrentTrack: () => (typeof ProcMusic !== 'undefined') ? (ProcMusic.isPlaying() ? { title: ProcMusic.currentName() } : null) : getCurrentTrack(),
         onTrackChange: (cb) => { onTrackChange = cb; if (typeof ProcMusic !== 'undefined') ProcMusic.onChange(cb); },
         setBattleMusic: (on) => { if (typeof ProcMusic !== 'undefined') ProcMusic.setBattle(on); },
+        fanfare: () => { if (typeof ProcMusic !== 'undefined') ProcMusic.fanfare(); },
+        enableMusic: () => {   // force music ON (used when the player enters the game)
+            musicEnabled = true;
+            if (typeof ProcMusic !== 'undefined') ProcMusic.start(); else startMusic();
+            return true;
+        },
         toggleMusic: () => {
             musicEnabled = !musicEnabled;
             if (typeof ProcMusic !== 'undefined') { musicEnabled ? ProcMusic.start() : ProcMusic.stop(); }

@@ -3514,9 +3514,7 @@ function initGame() {
     if (musicBtn) {
         musicBtn.onclick = () => {
             const on = Audio.toggleMusic();
-            musicBtn.innerHTML = on ? '<span class="audio-state on">on</span>' : '<span class="audio-state">off</span>';
-            musicBtn.classList.toggle('active', on);
-            if (musicPlayer) musicPlayer.classList.toggle('hidden', !on);
+            updateMusicButtonUI(on);
             toast(on ? 'Music on — live medieval score that rises into battle' : 'Music: off', 'info');
         };
     }
@@ -3599,10 +3597,28 @@ function setupSplash() {
     }, 220);
 
     playBtn.onclick = () => {
-        try { Audio.victory(); } catch(e) {}
+        // Entering the game — play the quick fanfare theme and turn music ON.
+        // (This click is a user gesture, so the browser allows audio to start.)
+        try {
+            Audio.fanfare();
+            Audio.enableMusic();
+            updateMusicButtonUI(true);
+        } catch (e) {}
         splash.classList.add('splash-fade');
         setTimeout(() => splash.style.display = 'none', 700);
     };
+}
+
+// Keep the music button + mini-player in sync with the music on/off state.
+function updateMusicButtonUI(on) {
+    const musicBtn = document.getElementById('music-btn');
+    const musicPlayer = document.getElementById('music-player');
+    if (musicBtn) {
+        musicBtn.innerHTML = '<span class="nav-ic" data-ic="music"></span><span class="audio-state' + (on ? ' on' : '') + '">' + (on ? 'on' : 'off') + '</span>';
+        musicBtn.classList.toggle('active', !!on);
+        if (typeof hydrateIcons === 'function') hydrateIcons(musicBtn);
+    }
+    if (musicPlayer) musicPlayer.classList.toggle('hidden', !on);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
