@@ -3411,8 +3411,8 @@ function renderTutorialStep(step) {
     let ax = rect.left + rect.width / 2 - 26;
     let ay = rect.top - 60;
     let rot = 0; // 0 = point down (arrow sits above target)
-    if (tx >= rect.right + 10) { ax = rect.right + 8; ay = rect.top + rect.height / 2 - 26; rot = -90; }      // arrow on the right → point left
-    else if (tx + tipW <= rect.left - 10) { ax = rect.left - 60; ay = rect.top + rect.height / 2 - 26; rot = 90; } // arrow on the left → point right
+    if (tx >= rect.right + 10) { ax = rect.right + 8; ay = rect.top + rect.height / 2 - 26; rot = 90; }       // arrow on the right → point left
+    else if (tx + tipW <= rect.left - 10) { ax = rect.left - 60; ay = rect.top + rect.height / 2 - 26; rot = -90; } // arrow on the left → point right
     else if (ty > rect.bottom) { ax = rect.left + rect.width / 2 - 26; ay = rect.bottom + 4; rot = 180; }      // arrow below → point up
     else { ax = rect.left + rect.width / 2 - 26; ay = rect.top - 60; rot = 0; }                                 // arrow above → point down
 
