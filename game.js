@@ -3264,6 +3264,15 @@ function startTutorial() {
     // device (localStorage) and in the saved game (so it follows the person/account).
     state.tutorialSeen = true;
     try { localStorage.setItem('villagewar_tutorial_done', '1'); } catch (e) {}
+    // Guarantee enough resources to finish the whole tutorial (lumber mill +
+    // barracks + first troop). Math.max never reduces what you already have, and
+    // the cost is still really deducted as you build — you just can't run dry.
+    state.resources.coins = Math.max(state.resources.coins || 0, 2000);
+    state.resources.wood = Math.max(state.resources.wood || 0, 700);
+    state.resources.iron = Math.max(state.resources.iron || 0, 400);
+    state.resources.gold = Math.max(state.resources.gold || 0, 300);
+    state.resources.food = Math.max(state.resources.food || 0, 500);
+    try { updateResources(); } catch (e) {}
     try { saveGame(); } catch (e) {}
     if (!tutorialDelegateAttached) {
         document.addEventListener('click', tutorialDocClickHandler, true);
