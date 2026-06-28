@@ -57,129 +57,128 @@ const Audio = (() => {
         freqs.forEach((f, i) => setTimeout(() => tone(f, dur, type, vol), i * 40));
     }
 
-    // ----- MUSIC: real CC0 medieval orchestral tracks streamed from archive.org -----
+    // ----- MUSIC: real recorded medieval instrument tracks (CC0, archive.org) -----
+    // Actual composed songs played by real instruments — no synth. Tagged by mood
+    // so the score adapts: calm pieces in the village, epic pieces in battle.
+    // Smooth crossfades between tracks; falls back to the synth engine only if the
+    // network ever fails, so it's never silent.
+    const BASE = 'https://archive.org/download/medieval-instrumental-background-music/';
     const PLAYLIST = [
-        { title: 'Celebration',        url: 'https://archive.org/download/medieval-instrumental-background-music/Celebration.mp3' },
-        { title: 'Dancing at the Inn', url: 'https://archive.org/download/medieval-instrumental-background-music/Dancing%20at%20the%20Inn.mp3' },
-        { title: 'Royal Coupling',     url: 'https://archive.org/download/medieval-instrumental-background-music/Royal%20Coupling.mp3' },
-        { title: 'The Britons',        url: 'https://archive.org/download/medieval-instrumental-background-music/The%20Britons.mp3' },
-        { title: 'Nordic Wist',        url: 'https://archive.org/download/medieval-instrumental-background-music/Nordic%20Wist.mp3' },
-        { title: 'Beyond New Horizons',url: 'https://archive.org/download/medieval-instrumental-background-music/beyond-new-horizons-free-epic-viking-medieval-soundtrack-22081.mp3' },
-        { title: 'Toward the Mountains',url:'https://archive.org/download/medieval-instrumental-background-music/toward-the-mountains-epic-adventure-music-7581.mp3' },
-        { title: 'Town Theme',         url: 'https://archive.org/download/medieval-instrumental-background-music/town-theme-1-113018.mp3' },
-        { title: 'Cold Journey',       url: 'https://archive.org/download/medieval-instrumental-background-music/Cold%20Journey.mp3' },
-        { title: 'Painting Room',      url: 'https://archive.org/download/medieval-instrumental-background-music/Painting%20Room.mp3' },
-        { title: 'Rogue Meadow',       url: 'https://archive.org/download/medieval-instrumental-background-music/rogue-meadow-113856.mp3' },
-        { title: 'Nimue (Lady of the Lake)', url: 'https://archive.org/download/medieval-instrumental-background-music/nimue-the-lady-of-the-lake-medieval-love-ballad-5638.mp3' }
+        { title: 'Town Theme',          mood: 'calm', url: BASE + 'town-theme-1-113018.mp3' },
+        { title: 'Dancing at the Inn',  mood: 'calm', url: BASE + 'Dancing%20at%20the%20Inn.mp3' },
+        { title: 'The Britons',         mood: 'calm', url: BASE + 'The%20Britons.mp3' },
+        { title: 'Celebration',         mood: 'calm', url: BASE + 'Celebration.mp3' },
+        { title: 'Royal Coupling',      mood: 'calm', url: BASE + 'Royal%20Coupling.mp3' },
+        { title: 'Painting Room',       mood: 'calm', url: BASE + 'Painting%20Room.mp3' },
+        { title: 'Rogue Meadow',        mood: 'calm', url: BASE + 'rogue-meadow-113856.mp3' },
+        { title: 'Nimue, Lady of the Lake', mood: 'calm', url: BASE + 'nimue-the-lady-of-the-lake-medieval-love-ballad-5638.mp3' },
+        { title: 'Beyond New Horizons', mood: 'epic', url: BASE + 'beyond-new-horizons-free-epic-viking-medieval-soundtrack-22081.mp3' },
+        { title: 'Toward the Mountains',mood: 'epic', url: BASE + 'toward-the-mountains-epic-adventure-music-7581.mp3' },
+        { title: 'Nordic Wist',         mood: 'epic', url: BASE + 'Nordic%20Wist.mp3' },
+        { title: 'Cold Journey',        mood: 'epic', url: BASE + 'Cold%20Journey.mp3' }
     ];
+    const CALM = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'calm');
+    const EPIC = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'epic');
+
+    const MUSIC_VOL = 0.55;
     let musicAudio = null;
     let musicTrackIdx = 0;
-    let onTrackChange = null;  // callback for UI updates
+    let onTrackChange = null;
+    let musicMode = 'calm';
+    let queue = [], qpos = 0;
+    let failCount = 0, usingFallback = false;
+    let preloadEl = null;
 
-    // "The Britons" is the recurring MAIN THEME — it returns every few tracks
-    // so the soundtrack feels cohesive, with varied tracks woven in between.
-    const MAIN_THEME = 3;
-    function buildMusicOrder() {
-        const others = PLAYLIST.map((_, i) => i).filter(i => i !== MAIN_THEME);
-        for (let i = others.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [others[i], others[j]] = [others[j], others[i]];
-        }
-        // Weave: main theme, then 2 different tracks, repeat — recognizable but never monotonous
-        const order = [];
-        let oi = 0;
-        while (oi < others.length) {
-            order.push(MAIN_THEME);
-            order.push(others[oi++]);
-            if (oi < others.length) order.push(others[oi++]);
-        }
-        return order;
+    function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function buildQueue(mode) { return shuffle((mode === 'epic' ? EPIC : CALM).slice()); }
+
+    function fadeTo(el, target, done) {
+        if (!el) return;
+        const step = target > el.volume ? 0.05 : -0.06;
+        const iv = setInterval(() => {
+            let v = el.volume + step;
+            if ((step > 0 && v >= target) || (step < 0 && v <= target)) { v = target; clearInterval(iv); if (done) done(); }
+            try { el.volume = Math.max(0, Math.min(1, v)); } catch (e) { clearInterval(iv); }
+        }, 60);
     }
-    let musicOrder = buildMusicOrder();
-    let musicOrderPos = 0;
 
-    const MUSIC_VOL = 0.5;
-    function playTrack(idx) {
-        if (musicAudio) {
-            try { musicAudio.pause(); musicAudio.src = ''; } catch(e) {}
-            musicAudio = null;
-        }
-        musicTrackIdx = idx;
-        const track = PLAYLIST[idx];
-        if (!track) return;
+    // Preload the next likely track during the title/gate screen so entry is instant.
+    function preloadFirst() {
+        if (preloadEl) return;
+        const idx = (buildQueue('calm'))[0];
         const a = new window.Audio();
-        a.preload = 'auto';
-        a.volume = MUSIC_VOL;          // audible immediately (no async gate)
-        a.src = track.url;
-        a.addEventListener('ended', () => { if (musicPlaying) nextTrack(); });
-        a.addEventListener('error', () => { if (musicPlaying) setTimeout(nextTrack, 1000); });
-        musicAudio = a;
-        // CRITICAL: call play() synchronously now (within the user-gesture stack)
-        const pr = a.play();
-        if (pr && pr.catch) {
-            pr.catch(() => {
-                // If blocked, retry once on the next user interaction
-                const retry = () => { a.play().catch(() => {}); document.removeEventListener('pointerdown', retry); };
-                document.addEventListener('pointerdown', retry, { once: true });
-            });
-        }
-        // Gentle fade-in from 0 to MUSIC_VOL
-        a.volume = 0;
-        let v = 0;
-        const fadeIv = setInterval(() => {
-            if (a !== musicAudio || !musicPlaying) { clearInterval(fadeIv); return; }
-            v = Math.min(MUSIC_VOL, v + 0.04);
-            try { a.volume = v; } catch(e) {}
-            if (v >= MUSIC_VOL) clearInterval(fadeIv);
-        }, 70);
-        if (onTrackChange) onTrackChange(track.title, idx);
+        a.preload = 'auto'; a.src = PLAYLIST[idx].url; a.volume = 0;
+        a.load();
+        preloadEl = a; preloadEl._idx = idx;
     }
 
-    function nextTrack() {
-        musicOrderPos++;
-        if (musicOrderPos >= musicOrder.length) {
-            // Reshuffle the non-theme tracks for a fresh cycle (variety never repeats identically)
-            musicOrder = buildMusicOrder();
-            musicOrderPos = 0;
+    function attachHandlers(a) {
+        a.addEventListener('ended', () => { if (musicPlaying && a === musicAudio) playNext(); });
+        a.addEventListener('error', () => { onTrackError(a); });
+        a.addEventListener('playing', () => { failCount = 0; });
+    }
+    function retryOnGesture(a) {
+        const retry = () => { if (a === musicAudio) a.play().catch(() => {}); document.removeEventListener('pointerdown', retry); };
+        document.addEventListener('pointerdown', retry, { once: true });
+    }
+    function onTrackError(a) {
+        if (a !== musicAudio || !musicPlaying) return;
+        failCount++;
+        if (failCount >= 3 && typeof ProcMusic !== 'undefined') {
+            // network keeps failing — switch to the synth engine so we're never silent
+            usingFallback = true;
+            ProcMusic.setBattle(musicMode === 'epic');
+            ProcMusic.start();
+            if (onTrackChange) onTrackChange('Live score (offline)', -1);
+            return;
         }
-        playTrack(musicOrder[musicOrderPos]);
+        setTimeout(() => { if (musicPlaying) playNext(); }, 700);
     }
-    function prevTrack() {
-        musicOrderPos = (musicOrderPos - 1 + musicOrder.length) % musicOrder.length;
-        playTrack(musicOrder[musicOrderPos]);
+
+    function crossfadeTo(idx) {
+        const old = musicAudio;
+        let a;
+        if (preloadEl && preloadEl._idx === idx) { a = preloadEl; preloadEl = null; }
+        else { a = new window.Audio(); a.preload = 'auto'; a.src = PLAYLIST[idx].url; }
+        a.volume = 0;
+        attachHandlers(a);
+        musicAudio = a; musicTrackIdx = idx;
+        const pr = a.play();
+        if (pr && pr.catch) pr.catch(() => retryOnGesture(a));
+        fadeTo(a, MUSIC_VOL);
+        if (old && old !== a) fadeTo(old, 0, () => { try { old.pause(); old.src = ''; } catch (e) {} });
+        if (onTrackChange) onTrackChange(PLAYLIST[idx].title, idx);
     }
+
+    function playNext() {
+        if (usingFallback) return; // synth engine handles itself
+        qpos++;
+        if (!queue.length || qpos >= queue.length) { queue = buildQueue(musicMode); qpos = 0; }
+        crossfadeTo(queue[qpos]);
+    }
+    function nextTrack() { if (musicPlaying && !usingFallback) playNext(); }
+    function prevTrack() { if (musicPlaying && !usingFallback) { qpos = (qpos - 2 + queue.length) % queue.length; playNext(); } }
 
     function startMusic() {
         if (musicPlaying) return;
-        musicPlaying = true;
-        musicOrderPos = 0;
-        musicOrder = buildMusicOrder();
-        playTrack(musicOrder[musicOrderPos]);
+        musicPlaying = true; failCount = 0; usingFallback = false;
+        queue = buildQueue(musicMode); qpos = 0;
+        crossfadeTo(queue[0]);
     }
-
     function stopMusic() {
         musicPlaying = false;
-        if (musicAudio) {
-            const a = musicAudio;
-            // Fade out then stop
-            let v = a.volume;
-            const fadeIv = setInterval(() => {
-                v = Math.max(0, v - 0.04);
-                try { a.volume = v; } catch(e) {}
-                if (v <= 0) {
-                    clearInterval(fadeIv);
-                    try { a.pause(); a.src = ''; } catch(e) {}
-                }
-            }, 50);
-            musicAudio = null;
-        }
+        if (usingFallback && typeof ProcMusic !== 'undefined') { ProcMusic.stop(); usingFallback = false; }
+        if (musicAudio) { const a = musicAudio; fadeTo(a, 0, () => { try { a.pause(); a.src = ''; } catch (e) {} }); musicAudio = null; }
         if (onTrackChange) onTrackChange(null, -1);
     }
-
-    function getCurrentTrack() {
-        if (!musicPlaying) return null;
-        return PLAYLIST[musicTrackIdx];
+    // Adaptive: swap the whole mood (calm village ↔ epic battle) with a crossfade.
+    function setMusicMode(mode) {
+        if (mode === musicMode) return;
+        musicMode = mode;
+        if (usingFallback && typeof ProcMusic !== 'undefined') { ProcMusic.setBattle(mode === 'epic'); return; }
+        if (musicPlaying) { queue = buildQueue(mode); qpos = 0; crossfadeTo(queue[0]); }
     }
+    function getCurrentTrack() { return musicPlaying ? PLAYLIST[musicTrackIdx] : null; }
 
     return {
         click: () => tone(660, 0.04, 'sine', 0.05),
@@ -194,26 +193,21 @@ const Audio = (() => {
         error: () => tone(150, 0.15, 'sine', 0.10),
         whoosh: () => noise(0.2, 0.05, 400),
         achievement: () => { chord([659, 880, 1175], 0.3, 'sine', 0.13); setTimeout(() => chord([784, 1047, 1397], 0.4, 'sine', 0.12), 200); },
-        // ---- Music now runs on the procedural adaptive engine (always works,
-        // shifts calm↔battle). Falls back to the streamed playlist only if the
-        // engine is somehow unavailable. ----
-        startMusic: () => { if (musicEnabled) { (typeof ProcMusic !== 'undefined') ? ProcMusic.start() : startMusic(); } },
-        stopMusic: () => { (typeof ProcMusic !== 'undefined') ? ProcMusic.stop() : stopMusic(); },
-        nextTrack: () => { (typeof ProcMusic !== 'undefined') ? ProcMusic.next() : (musicPlaying && nextTrack()); },
-        prevTrack: () => { (typeof ProcMusic !== 'undefined') ? ProcMusic.prev() : (musicPlaying && prevTrack()); },
-        getCurrentTrack: () => (typeof ProcMusic !== 'undefined') ? (ProcMusic.isPlaying() ? { title: ProcMusic.currentName() } : null) : getCurrentTrack(),
+        // ---- Music: real recorded medieval tracks (real instruments / real songs),
+        // mood-adaptive (calm village ↔ epic battle), synth fallback if offline. ----
+        startMusic: () => { if (musicEnabled) startMusic(); },
+        stopMusic,
+        nextTrack: () => { if (musicPlaying) nextTrack(); },
+        prevTrack: () => { if (musicPlaying) prevTrack(); },
+        getCurrentTrack,
         onTrackChange: (cb) => { onTrackChange = cb; if (typeof ProcMusic !== 'undefined') ProcMusic.onChange(cb); },
-        setBattleMusic: (on) => { if (typeof ProcMusic !== 'undefined') ProcMusic.setBattle(on); },
-        fanfare: () => { if (typeof ProcMusic !== 'undefined') ProcMusic.fanfare(); },
-        enableMusic: () => {   // force music ON (used when the player enters the game)
-            musicEnabled = true;
-            if (typeof ProcMusic !== 'undefined') ProcMusic.start(); else startMusic();
-            return true;
-        },
+        setBattleMusic: (on) => { setMusicMode(on ? 'epic' : 'calm'); },
+        preloadMusic: () => { try { preloadFirst(); } catch (e) {} },
+        fanfare: () => {},   // entry is now the real recorded theme (no synth flourish)
+        enableMusic: () => { musicEnabled = true; startMusic(); return true; },
         toggleMusic: () => {
             musicEnabled = !musicEnabled;
-            if (typeof ProcMusic !== 'undefined') { musicEnabled ? ProcMusic.start() : ProcMusic.stop(); }
-            else { musicEnabled ? startMusic() : stopMusic(); }
+            musicEnabled ? startMusic() : stopMusic();
             return musicEnabled;
         },
         isMusicOn: () => musicEnabled,

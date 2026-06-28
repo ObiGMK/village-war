@@ -3575,6 +3575,10 @@ function setupSplash() {
     const playBtn = document.getElementById('splash-play');
     if (!splash || !playBtn) return;
 
+    // Start buffering the first music track while the player is on the title
+    // screen, so the recorded theme begins instantly when they hit Play.
+    try { Audio.preloadMusic(); } catch (e) {}
+
     // Simulate a brief "loading" then show Play
     const fill = splash.querySelector('.splash-loading-fill');
     const text = splash.querySelector('.splash-loading-text');
