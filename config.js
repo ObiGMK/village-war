@@ -18,7 +18,8 @@ window.VW_API_BASE = "";
 // ... and paste the resulting hash below.
 window.VW_GATE = {
     enabled: true,
-    // default password is:  villagewar   (change it!)
-    hash: "10fb4c9ee60d97914350ab603dc3f6ddb1fbdfb9fd3adff8aca46893f8569783",
+    // Secure randomly-generated password (the owner keeps the plaintext; only this
+    // SHA-256 hash ships). To rotate it, paste a new hash here (see snippet above).
+    hash: "a752a775095220bd86a467d38616d78a29f28bc3ef67e6ddeeaf6c1ba563f35a",
     remember: true   // remember unlock on this device so it's not asked every visit
 };
