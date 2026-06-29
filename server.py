@@ -310,7 +310,8 @@ class Handler(BaseHTTPRequestHandler):
             return
         ctypes = {".html": "text/html", ".js": "application/javascript", ".css": "text/css",
                   ".json": "application/json", ".png": "image/png", ".jpg": "image/jpeg",
-                  ".svg": "image/svg+xml", ".ico": "image/x-icon"}
+                  ".svg": "image/svg+xml", ".ico": "image/x-icon",
+                  ".mp3": "audio/mpeg", ".ogg": "audio/ogg", ".m4a": "audio/mp4"}
         ext = os.path.splitext(safe)[1].lower()
         with open(safe, "rb") as f:
             data = f.read()

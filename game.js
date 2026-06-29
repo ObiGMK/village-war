@@ -3150,9 +3150,19 @@ const TUTORIAL_STEPS = [
     },
     {
         confirm: true,
-        title: "Nice work! ",
-        text: "Your lumber mill is producing wood right now. Soon a wood badge will float above it — tap that badge to collect.",
-        cta: "Got it"
+        title: "How resources work",
+        text: "Your buildings make resources over time (coins, gold, iron, wood, food). When a building is ready, a glowing badge floats above it — TAP the badge to collect. You spend resources to build & train, and earn lots more by raiding enemy camps. Let's collect some now!",
+        cta: "Show me"
+    },
+    // 3b. Collect resources from a building (badges are forced to appear for this step)
+    {
+        action: "TAP",
+        label: "a glowing resource badge above a building",
+        hint: "Tap the round glowing badge floating over any building to collect its resources.",
+        target: '.prod-indicator',
+        position: 'top',
+        autoSwitch: 'village',
+        forceCollectables: true
     },
     // 4. Build menu again
     {
@@ -3291,8 +3301,19 @@ function showTutorialStep() {
 
     if (step.autoSwitch) switchView(step.autoSwitch);
 
+    // For the "collect resources" step, make sure a collectable badge is actually
+    // showing so the player has something to tap.
+    if (step.forceCollectables) {
+        let any = false;
+        for (const b of state.buildings) {
+            const def = BUILDING_DEFS[b.type];
+            if (def && def.production) { b.collectReady = Math.max(b.collectReady || 0, 50); any = true; }
+        }
+        if (any && typeof renderGrid === 'function') renderGrid();
+    }
+
     // Wait for the DOM to update if we switched view
-    setTimeout(() => renderTutorialStep(step), step.autoSwitch ? 250 : 30);
+    setTimeout(() => renderTutorialStep(step), step.autoSwitch ? 280 : 30);
 }
 
 function renderTutorialStep(step) {

@@ -62,20 +62,15 @@ const Audio = (() => {
     // so the score adapts: calm pieces in the village, epic pieces in battle.
     // Smooth crossfades between tracks; falls back to the synth engine only if the
     // network ever fails, so it's never silent.
-    const BASE = 'https://archive.org/download/medieval-instrumental-background-music/';
+    // Bundled locally (in /music) so music is instant & reliable — no streaming.
+    const BASE = 'music/';
     const PLAYLIST = [
-        { title: 'Town Theme',          mood: 'calm', url: BASE + 'town-theme-1-113018.mp3' },
-        { title: 'Dancing at the Inn',  mood: 'calm', url: BASE + 'Dancing%20at%20the%20Inn.mp3' },
-        { title: 'The Britons',         mood: 'calm', url: BASE + 'The%20Britons.mp3' },
-        { title: 'Celebration',         mood: 'calm', url: BASE + 'Celebration.mp3' },
-        { title: 'Royal Coupling',      mood: 'calm', url: BASE + 'Royal%20Coupling.mp3' },
-        { title: 'Painting Room',       mood: 'calm', url: BASE + 'Painting%20Room.mp3' },
-        { title: 'Rogue Meadow',        mood: 'calm', url: BASE + 'rogue-meadow-113856.mp3' },
-        { title: 'Nimue, Lady of the Lake', mood: 'calm', url: BASE + 'nimue-the-lady-of-the-lake-medieval-love-ballad-5638.mp3' },
-        { title: 'Beyond New Horizons', mood: 'epic', url: BASE + 'beyond-new-horizons-free-epic-viking-medieval-soundtrack-22081.mp3' },
-        { title: 'Toward the Mountains',mood: 'epic', url: BASE + 'toward-the-mountains-epic-adventure-music-7581.mp3' },
-        { title: 'Nordic Wist',         mood: 'epic', url: BASE + 'Nordic%20Wist.mp3' },
-        { title: 'Cold Journey',        mood: 'epic', url: BASE + 'Cold%20Journey.mp3' }
+        { title: 'Village Green',       mood: 'calm', url: BASE + 'village-green.mp3' },
+        { title: 'Dancing at the Inn',  mood: 'calm', url: BASE + 'tavern-dance.mp3' },
+        { title: 'The Britons',         mood: 'calm', url: BASE + 'the-britons.mp3' },
+        { title: 'Rogue Meadow',        mood: 'calm', url: BASE + 'rogue-meadow.mp3' },
+        { title: 'Beyond New Horizons', mood: 'epic', url: BASE + 'epic-horizons.mp3' },
+        { title: 'Toward the Mountains',mood: 'epic', url: BASE + 'mountains.mp3' }
     ];
     const CALM = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'calm');
     const EPIC = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'epic');
