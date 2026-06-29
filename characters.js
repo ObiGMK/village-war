@@ -389,13 +389,25 @@ function topUnitSVG(type, isEnemy, variant) {
             <ellipse cx="20" cy="7" rx="3.6" ry="2.6" fill="#3a3328" stroke="#000" stroke-width="0.6"/>
         </svg>`;
     }
+    const ranged = weapon === 'bow' || weapon === 'crossbow';
     return `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="20" cy="25" rx="13" ry="5.5" fill="rgba(0,0,0,0.32)"/>
+        <ellipse cx="20" cy="27" rx="11" ry="4.5" fill="rgba(0,0,0,0.32)"/>
         <g ${isEnemy ? 'transform="rotate(180 20 20)"' : ''}>
-            <circle cx="20" cy="20" r="11" fill="${pal.base}" stroke="${pal.baseDark}" stroke-width="2"/>
-            <circle cx="20" cy="20" r="11" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
-            <rect x="12.5" y="16" width="15" height="9" rx="4.5" fill="${pal.body}" stroke="${pal.bodyDark}" stroke-width="1"/>
-            <circle cx="20" cy="17.5" r="4.6" fill="${pal.skin}" stroke="#8a5a2a" stroke-width="0.9"/>
+            ${ranged ? '' : `<!-- round shield on the left arm -->
+            <circle cx="10.5" cy="21" r="5" fill="#c79a4e" stroke="#4a2f14" stroke-width="1.5"/>
+            <circle cx="10.5" cy="21" r="2" fill="#e9cd86" stroke="#7a5320" stroke-width="0.8"/>`}
+            <!-- armored shoulders -->
+            <circle cx="13" cy="16" r="4.2" fill="${pal.base}" stroke="${pal.baseDark}" stroke-width="1.5"/>
+            <circle cx="27" cy="16" r="4.2" fill="${pal.base}" stroke="${pal.baseDark}" stroke-width="1.5"/>
+            <!-- torso / chestplate -->
+            <path d="M12.5 16 Q20 13.5 27.5 16 L26 25.5 Q20 28.5 14 25.5 Z" fill="${pal.body}" stroke="${pal.bodyDark}" stroke-width="1.5"/>
+            <path d="M20 16.5 V26" stroke="${pal.bodyDark}" stroke-width="0.9" opacity="0.45"/>
+            <path d="M14 18 Q20 16.5 26 18" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <!-- helmet + face -->
+            <circle cx="20" cy="15.5" r="6.2" fill="${pal.base}" stroke="${pal.baseDark}" stroke-width="1.8"/>
+            <path d="M14.2 13.5 Q20 11 25.8 13.5" fill="none" stroke="${pal.baseDark}" stroke-width="1.6"/>
+            <ellipse cx="20" cy="16.3" rx="3.4" ry="3.8" fill="${pal.skin}" stroke="#8a5a2a" stroke-width="0.9"/>
+            <line x1="20" y1="13" x2="20" y2="19.5" stroke="rgba(0,0,0,0.25)" stroke-width="0.7"/>
             ${_topWeapon(weapon)}
         </g>
     </svg>`;

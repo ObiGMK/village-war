@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -25,6 +25,10 @@
 html { height: 100%; }
 body {
     font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    letter-spacing: 0.005em;
     background: var(--bg);
     color: var(--text);
     overflow: hidden;
@@ -55,7 +59,7 @@ body {
 }
 
 .game-title {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     font-size: 1.4rem;
     color: var(--gold);
     white-space: nowrap;
@@ -156,7 +160,7 @@ body {
 .view { display: none; }
 .view.active { display: block; }
 .view h2 {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     font-size: 1.5rem;
     margin-bottom: 1rem;
     color: var(--gold);
@@ -347,7 +351,7 @@ body {
     width: 220px;
     max-width: 240px;
 }
-.iso-tooltip .tip-title { font-family: 'MedievalSharp', cursive; font-size: 1rem; color: #4a2010; }
+.iso-tooltip .tip-title { font-family: 'Cinzel', serif; font-size: 1rem; color: #4a2010; }
 .iso-tooltip .tip-level { background: #6b4520; color: #fde047; padding: 1px 6px; border-radius: 6px; font-size: 0.7rem; }
 .iso-tooltip .tip-desc { font-size: 0.7rem; margin: 4px 0; opacity: 0.85; }
 .iso-tooltip .tip-prod { color: #166534; font-weight: 700; font-size: 0.78rem; }
@@ -483,7 +487,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     color: #fff;
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     font-size: 2.1rem;
     text-shadow: 0 0 14px rgba(0,0,0,0.9), 0 0 28px rgba(255,200,80,0.6), 0 4px 8px rgba(0,0,0,1);
     z-index: 8;
@@ -577,7 +581,7 @@ body {
 @keyframes raysSpin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
 .splash-title {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -897,7 +901,7 @@ body {
     box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
-#building-info-panel h3 { color: var(--gold); font-family: 'MedievalSharp', cursive; margin-bottom: 0.5rem; }
+#building-info-panel h3 { color: var(--gold); font-family: 'Cinzel', serif; margin-bottom: 0.5rem; }
 #building-info-panel p { font-size: 0.85rem; color: var(--text2); margin-bottom: 0.4rem; }
 
 /* Build View */
@@ -1266,7 +1270,7 @@ body {
 .tutorial-tip-content { position: relative; }
 
 .tutorial-title {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     font-size: 1.7rem;
     color: #6b1f10;
     text-align: center;
@@ -1283,7 +1287,7 @@ body {
 }
 
 .tutorial-step-action {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     font-size: 1.5rem;
     color: #3a1a08;
     text-align: center;
@@ -1701,7 +1705,7 @@ body { background: transparent; }
     left: 50%;
     transform: translateX(-50%);
     color: #fff;
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     font-size: 1.6rem;
     font-weight: 700;
     text-shadow: 0 0 12px rgba(255,255,255,0.8), 0 4px 8px rgba(0,0,0,0.9);
@@ -2092,7 +2096,7 @@ body { background: transparent; }
 /* Building info panel - parchment plaque */
 #building-info-panel h3 {
     color: #f4e4b8 !important;
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     text-shadow: 0 2px 0 rgba(0,0,0,0.5);
 }
 #building-info-panel p {
@@ -2280,7 +2284,7 @@ body { background: transparent; }
     to { transform: scale(1); opacity: 1; }
 }
 
-.result-inner h2 { font-family: 'MedievalSharp', cursive; font-size: 2rem; margin-bottom: 1rem; }
+.result-inner h2 { font-family: 'Cinzel', serif; font-size: 2rem; margin-bottom: 1rem; }
 .result-inner.victory h2 { color: var(--gold); }
 .result-inner.defeat h2 { color: var(--danger); }
 
@@ -2307,7 +2311,7 @@ body { background: transparent; }
 
 /* Club View */
 #club-content h3 {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     color: var(--gold);
     margin: 1rem 0 0.5rem;
 }
@@ -2380,7 +2384,7 @@ body { background: transparent; }
 
 /* Heroes */
 .hero-section-title {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     color: var(--gold);
     margin: 1rem 0 0.75rem;
     font-size: 1.1rem;
@@ -2569,7 +2573,7 @@ body { background: transparent; }
 .hero-card .hero-info { padding: 0.75rem; }
 
 .hero-card .hero-name {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     font-size: 1.05rem;
     color: var(--gold);
     margin-bottom: 2px;
@@ -2667,7 +2671,7 @@ body { background: transparent; }
 }
 
 .attack-alert-inner h2 {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     font-size: 2rem;
     color: var(--danger);
     margin-bottom: 1rem;
@@ -2945,7 +2949,7 @@ body { background: transparent; }
 .bt-label-top { top: 40px; color: #fca5a5; background: rgba(80,10,10,0.45); }
 .bt-label-bot { bottom: 8px; color: #bfe3ff; background: rgba(10,30,80,0.45); }
 .bt-status { position: absolute; top: 48%; left: 50%; transform: translate(-50%,-50%);
-    font-family: 'MedievalSharp', cursive; font-size: 2.2rem; color: #fff; z-index: 61;
+    font-family: 'Cinzel', serif; font-size: 2.2rem; color: #fff; z-index: 61;
     text-shadow: 0 0 16px rgba(0,0,0,0.9), 0 0 30px rgba(255,200,80,0.5); animation: bvStatusPulse 0.8s ease-in-out infinite; white-space: nowrap; pointer-events: none; }
 .bt-status.victory { color: #fde047; text-shadow: 0 0 24px #fde047, 0 4px 8px #000; }
 .bt-status.defeat { color: #f87171; text-shadow: 0 0 24px #f87171, 0 4px 8px #000; }
@@ -3058,7 +3062,7 @@ body { background: transparent; }
 .resource-gems:hover { background: linear-gradient(180deg, rgba(125,211,252,0.2), rgba(125,211,252,0.05)); }
 
 /* Shop */
-.shop-title { font-family: 'MedievalSharp', cursive; color: var(--gold); display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.shop-title { font-family: 'Cinzel', serif; color: var(--gold); display:flex; justify-content:space-between; align-items:center; gap:12px; }
 .shop-gems { font-size: 0.85rem; color: #7dd3fc; font-family: 'Inter', sans-serif; }
 .shop-hint { font-size: 0.78rem; color: var(--text2); margin: 6px 0 12px; }
 .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
@@ -3148,8 +3152,8 @@ body { background: transparent; }
 .lb-bld.lb-destroyed { filter: grayscale(1) brightness(0.45) !important; transform: translate(-50%, -50%) scale(0.92); }
 .lb-bld.lb-destroyed .lb-bhp { display: none; }
 .lb-troops, .lb-fx { position: absolute; inset: 0; pointer-events: none; z-index: 6; }
-.lb-troop { position: absolute; width: 34px; height: 34px; margin: -22px 0 0 -17px; transition: left 0.08s linear, top 0.08s linear; }
-.lb-troop svg { width: 100%; height: 100%; }
+.lb-troop { position: absolute; width: 40px; height: 40px; margin: -26px 0 0 -20px; transition: left 0.08s linear, top 0.08s linear; }
+.lb-troop svg { width: 100%; height: 100%; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4)); }
 .lb-thp { position: absolute; left: 10%; top: -5px; width: 80%; height: 3.5px; background: rgba(0,0,0,0.6); border-radius: 2px; overflow: hidden; }
 .lb-thpfill { height: 100%; width: 100%; background: linear-gradient(90deg,#16a34a,#4ade80); }
 .lb-tdead { animation: btDie 0.5s ease-in forwards; }
@@ -3183,7 +3187,7 @@ body { background: transparent; }
 @keyframes lbRing { 0% { width: 20px; height: 14px; opacity: 1; } 100% { width: 150px; height: 105px; opacity: 0; } }
 .lb-reveal { position: absolute; inset: 0; background: rgba(5,10,18,0.72); z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .lb-reveal-stars { letter-spacing: 14px; }
-.lb-reveal-pct { color: #fff; font-family: 'MedievalSharp', cursive; font-size: 1.6rem; margin-top: 10px; text-shadow: 0 2px 8px #000; }
+.lb-reveal-pct { color: #fff; font-family: 'Cinzel', serif; font-size: 1.6rem; margin-top: 10px; text-shadow: 0 2px 8px #000; }
 
 /* Builder timer badge on map */
 .build-timer:hover rect { stroke: #7dd3fc; }
@@ -3211,7 +3215,7 @@ body { background: transparent; }
 
 /* shared modal shell for expansion panels */
 .exp-modal { max-width: 560px; }
-.exp-title { font-family: 'MedievalSharp', cursive; color: var(--gold); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.exp-title { font-family: 'Cinzel', serif; color: var(--gold); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .exp-hint { font-size: 0.78rem; color: var(--text2); margin: 6px 0 12px; }
 .exp-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; justify-content: flex-end; }
 .link-btn { background: none; border: none; color: #7dd3fc; text-decoration: underline; cursor: pointer; font: inherit; }
@@ -3304,7 +3308,7 @@ body { background: transparent; }
 
 /* Clan War */
 .war-foes { display: flex; align-items: center; justify-content: space-around; margin: 10px 0; text-align: center; font-size: 0.8rem; }
-.war-vs { font-family: 'MedievalSharp', cursive; color: var(--gold); font-size: 1.2rem; }
+.war-vs { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.2rem; }
 .war-score { text-align: center; font-weight: 800; margin: 6px 0; }
 .war-win { color: #4ade80; } .war-loss { color: #f87171; }
 .war-log { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 8px; max-height: 160px; overflow-y: auto; }
@@ -3348,7 +3352,7 @@ body { background: transparent; }
 .more-section { margin-bottom: 20px; }
 .more-section-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
     border-bottom: 1.5px solid var(--border); padding-bottom: 6px; margin-bottom: 12px; }
-.more-section-title { font-family: 'MedievalSharp', cursive; color: var(--gold); font-size: 1.05rem; margin: 0; }
+.more-section-title { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.05rem; margin: 0; }
 .more-section-blurb { font-size: 0.74rem; color: var(--text2); }
 /* per-category accent on hover */
 .more-card.more-rewards:hover     { border-color: #c084fc; box-shadow: 0 8px 20px rgba(192,132,252,0.25); }
@@ -3562,7 +3566,7 @@ h2, .more-section-title, .exp-title, .shop-title {
 
 /* Brand title — embossed gold */
 .game-title {
-    font-family: 'MedievalSharp', cursive;
+    font-family: 'Cinzel', serif;
     text-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 0 18px rgba(244,196,77,0.25);
     letter-spacing: 0.5px;
 }
@@ -3659,7 +3663,7 @@ h2 .nav-ic .vw-ic, .exp-title .vw-ic, .codex-h .vw-ic { width: 1.05em; height: 1
 .gate-crest { display: flex; justify-content: center; margin-bottom: 10px; }
 .gate-crest .vw-ic, .gate-crest svg { width: 44px; height: 44px; color: var(--gold, #f4c44d); filter: drop-shadow(0 0 12px rgba(244,196,77,0.4)); }
 .gate-title {
-    font-family: 'MedievalSharp', cursive; color: var(--gold, #f4c44d);
+    font-family: 'Cinzel', serif; color: var(--gold, #f4c44d);
     font-size: 1.9rem; margin: 4px 0 6px; letter-spacing: 1px;
     text-shadow: 0 2px 0 rgba(0,0,0,0.5), 0 0 18px rgba(244,196,77,0.25);
 }
@@ -3718,3 +3722,25 @@ h2 .nav-ic .vw-ic, .exp-title .vw-ic, .codex-h .vw-ic { width: 1.05em; height: 1
     color: var(--gold); background: rgba(244,196,77,0.12); border: 1px solid rgba(244,196,77,0.35);
     border-radius: 6px; padding: 2px 6px; margin-top: 2px; }
 .mission-req .vw-ic { width: 12px; height: 12px; }
+
+/* Clear battle projectiles (glowing arrow with arrowhead) */
+.lb-proj {
+    position: absolute; width: 20px; height: 5px; margin: -2.5px 0 0 -10px;
+    border-radius: 3px; z-index: 52; pointer-events: none;
+    transform: rotate(var(--ang, 0deg)); transform-origin: 50% 50%;
+    background: linear-gradient(90deg, rgba(255,247,204,0) 0%, #fff3b0 45%, #ffd23a 100%);
+    box-shadow: 0 0 9px 2px rgba(255,206,58,0.85);
+}
+.lb-proj::after {
+    content: ''; position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
+    border-left: 9px solid #ffd23a; border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+    filter: drop-shadow(0 0 3px rgba(255,206,58,0.9));
+}
+.lb-proj.hostile {
+    background: linear-gradient(90deg, rgba(255,210,210,0) 0%, #ffc2c2 45%, #ff5252 100%);
+    box-shadow: 0 0 9px 2px rgba(255,82,82,0.85);
+}
+.lb-proj.hostile::after { border-left-color: #ff5252; filter: drop-shadow(0 0 3px rgba(255,82,82,0.9)); }
+
+/* Heading polish for the Cinzel display face */
+.logo, h1, h2, h3, .hero-section-title, .view-tab { letter-spacing: 0.02em; }

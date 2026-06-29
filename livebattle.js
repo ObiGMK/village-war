@@ -145,7 +145,7 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
         return {
             hp: Math.round(d.hp * rb.hp * (heroB.all.hpMult || 1)),
             atk: Math.round(d.attack * rb.atk * (heroB.all.atkMult || 1)),
-            speed: type === 'cavalry' ? 11 : (type === 'siege' || type === 'catapult') ? 4.5 : 7,
+            speed: type === 'cavalry' ? 20 : (type === 'siege' || type === 'catapult') ? 9 : 13,
             range: isRangedT(type) ? (type === 'catapult' ? 30 : 22) : 4.5
         };
     };
@@ -180,7 +180,7 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
                 <span class="lb-title">${svgIcon('swords')}️ ${spec.name}</span>
                 <span class="lb-destruction" id="lb-destr">0%</span>
                 <span class="lb-starbar" id="lb-stars">${svgIcon('starOutline').repeat(3)}</span>
-                <span class="lb-timer" id="lb-timer">60</span>
+                <span class="lb-timer" id="lb-timer">20</span>
                 <button class="bv-skip" id="lb-end">End Battle</button>
             </div>
             <div class="lb-bottom">
@@ -200,7 +200,7 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
     // ---- live entities ----
     const troops = [];     // {id, type, x, y, hp, maxHp, atk, speed, range, el, dead, rageUntil}
     const killedIds = [];
-    let destroyedHP = 0, thDown = false, running = true, timeLeft = 60;
+    let destroyedHP = 0, thDown = false, running = true, timeLeft = 20;
 
     function renderTray() {
         const trayEl = overlay.querySelector('#lb-tray');
@@ -351,7 +351,7 @@ function startLiveBattle({ armyList, base, spec, onDone }) {
             } else {
                 t.atkCd -= dt;
                 if (t.atkCd <= 0) {
-                    t.atkCd = 0.8;
+                    t.atkCd = 0.5;
                     const raged = performance.now() < t.rageUntil;
                     damageStructure(target, Math.round(t.atk * (raged ? 1.6 : 1)));
                     if (isRangedT(t.type)) lbShot(fxLayer, t.x, t.y, target.x, target.y);
@@ -464,14 +464,15 @@ function lbBoom(fx, x, y) {
     setTimeout(() => fl.remove(), 380);
 }
 function lbShot(fx, x1, y1, x2, y2, hostile) {
+    const ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
     const w = document.createElement('div');
-    w.className = 'bt-proj';
+    w.className = 'lb-proj' + (hostile ? ' hostile' : '');
     w.style.left = x1 + '%'; w.style.top = y1 + '%';
-    w.innerHTML = `<div class="bt-arrow" style="background:${hostile ? '#fca5a5' : '#fde68a'}; transform: rotate(${Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI + 90}deg)"></div>`;
+    w.style.setProperty('--ang', ang + 'deg');
     fx.appendChild(w);
-    w.style.transition = 'left 0.3s linear, top 0.3s linear';
+    w.style.transition = 'left 0.24s linear, top 0.24s linear';
     requestAnimationFrame(() => { w.style.left = x2 + '%'; w.style.top = y2 + '%'; });
-    setTimeout(() => w.remove(), 330);
+    setTimeout(() => w.remove(), 270);
 }
 function lbSlash(fx, x, y) {
     const s = document.createElement('div');
