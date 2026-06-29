@@ -3707,3 +3707,14 @@ h2 .nav-ic .vw-ic, .exp-title .vw-ic, .codex-h .vw-ic { width: 1.05em; height: 1
     filter: drop-shadow(0 0 12px rgba(253,224,71,1)) drop-shadow(0 3px 6px rgba(0,0,0,0.75));
     transition: transform 0.2s ease;
 }
+
+/* Campaign Town-Hall gate */
+.campaign-note { font-size: 0.8rem; color: var(--text2); margin: -2px 0 12px; display: flex; align-items: center; gap: 6px; }
+.campaign-note .vw-ic { width: 16px; height: 16px; color: var(--gold); }
+.campaign-note b { color: var(--gold); }
+.mission-node.th-gated { opacity: 0.7; cursor: pointer; }
+.mission-node.th-gated:hover { border-color: var(--gold); transform: translateY(-2px); }
+.mission-req { display: inline-flex; align-items: center; gap: 4px; font-size: 0.66rem; font-weight: 800;
+    color: var(--gold); background: rgba(244,196,77,0.12); border: 1px solid rgba(244,196,77,0.35);
+    border-radius: 6px; padding: 2px 6px; margin-top: 2px; }
+.mission-req .vw-ic { width: 12px; height: 12px; }

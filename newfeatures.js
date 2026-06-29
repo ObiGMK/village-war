@@ -232,15 +232,30 @@ const CAMPAIGN_MISSIONS = [
     { name: "Tyrant's Throne",    level: 22, troops: { warrior: 70, archer: 38, shieldbearer: 16, cavalry: 12, siege: 4 }, loot: { coins: 18000, gold: 4000 } }
 ];
 
+// Town Hall gate: you may only complete 2 campaign missions per Town Hall level.
+// Mission i (0-indexed) needs Town Hall level ceil((i+1)/2): missions 1-2 → TH1,
+// 3-4 → TH2, 5-6 → TH3 … so finishing the campaign means grinding the TH to Lv6.
+function missionReqTH(i) { return Math.ceil((i + 1) / 2); }
+function getCampaignTHLevel() { return (typeof getTHLevel === 'function') ? getTHLevel() : 1; }
+
 function missionUnlocked(i) {
-    if (i === 0) return true;
-    return (state.campaign.stars[i - 1] || 0) >= 1;
+    const prevDone = i === 0 || (state.campaign.stars[i - 1] || 0) >= 1;
+    const thOk = getCampaignTHLevel() >= missionReqTH(i);
+    return prevDone && thOk;
 }
 
 function startCampaignMission(i) {
     ensureMeta();
     const m = CAMPAIGN_MISSIONS[i];
-    if (!m || !missionUnlocked(i)) { toast('Beat the previous mission first!', 'error'); return; }
+    if (!m) return;
+    if (!missionUnlocked(i)) {
+        const prevDone = i === 0 || (state.campaign.stars[i - 1] || 0) >= 1;
+        if (!prevDone) { toast('Beat the previous mission first!', 'error'); return; }
+        // blocked by the Town Hall gate
+        toast(`Upgrade your Town Hall to Lv${missionReqTH(i)} to take on this mission! (2 missions per Town Hall level)`, 'error');
+        try { Audio.error(); } catch (e) {}
+        return;
+    }
     const army = getDeployed('army');
     if (army.length === 0) { toast('Deploy soldiers to your ARMY first!', 'error'); switchView('army'); return; }
     runLiveRaid({
@@ -434,14 +449,20 @@ function renderWorldView() {
     const lg = currentLeague();
     const rows = leaderboardRows();
     const shieldLeft = Math.max(0, state.shieldUntil - Date.now());
+    const thLevel = getCampaignTHLevel();
     const missions = CAMPAIGN_MISSIONS.map((m, i) => {
         const stars = state.campaign.stars[i] || 0;
         const unlocked = missionUnlocked(i);
-        return `<div class="mission-node ${unlocked ? '' : 'locked'} ${stars > 0 ? 'done' : ''}" onclick="${unlocked ? `startCampaignMission(${i})` : ''}">
+        const prevDone = i === 0 || (state.campaign.stars[i - 1] || 0) >= 1;
+        const thGated = prevDone && !unlocked;   // previous done, but Town Hall too low
+        const reqTH = missionReqTH(i);
+        return `<div class="mission-node ${unlocked ? '' : 'locked'} ${thGated ? 'th-gated' : ''} ${stars > 0 ? 'done' : ''}" onclick="startCampaignMission(${i})">
             <div class="mission-num">${i + 1}</div>
             <div class="mission-name">${m.name}</div>
             <div class="mission-stars">${svgIcon('star').repeat(stars)}${svgIcon('starOutline').repeat(3 - stars)}</div>
-            <div class="mission-lv">Lv${m.level}</div>
+            ${thGated
+                ? `<div class="mission-req">${svgIcon('lock')} Town Hall Lv${reqTH}</div>`
+                : `<div class="mission-lv">Lv${m.level}</div>`}
             ${unlocked ? '' : '<div class="mission-lock"></div>'}
         </div>`;
     }).join('');
@@ -464,6 +485,7 @@ function renderWorldView() {
         </div>
 
         <h3 class="hero-section-title">${svgIcon('swords')}️ Campaign</h3>
+        <p class="campaign-note">${svgIcon('castle')} You can clear <b>2 missions per Town Hall level</b>. You're at Town Hall <b>Lv${thLevel}</b> — upgrade it to unlock more.</p>
         <div class="mission-map">${missions}</div>
 
         <h3 class="hero-section-title">${svgIcon('castle')} Clan Hall</h3>
