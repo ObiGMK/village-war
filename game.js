@@ -1099,15 +1099,22 @@ function showBuildingInfo(building) {
         const nextLvl = building.level + 1;
         const reqLevel = thUpgradeReqLevel(building.type, nextLvl); // 0 if no gate
         const levelLocked = reqLevel > 0 && state.level < reqLevel;
+        const thBlockers = building.type === 'townhall' ? townHallUpgradeBlockers(building.level) : [];
+        const buildLocked = thBlockers.length > 0;
+        const locked = levelLocked || buildLocked;
         upgradeDiv.innerHTML = `
             <div style="margin-top:0.5rem">
                 <p style="font-size:0.8rem;margin-bottom:4px">Upgrade to Lv${nextLvl}:</p>
                 <div class="card-cost">${costHTML(cost)}</div>
-                ${levelLocked
-                    ? `<button class="btn btn-locked" style="margin-top:8px" disabled> Reach Level ${reqLevel}</button>`
+                ${locked
+                    ? `<button class="btn btn-locked" style="margin-top:8px" disabled>${buildLocked ? 'Upgrade buildings first' : 'Reach Level ' + reqLevel}</button>`
                     : `<button class="btn btn-primary" style="margin-top:8px" ${!canAfford(cost) ? 'disabled' : ''} onclick="upgradeBuilding(${building.pos})">Upgrade</button>`}
-                <button class="btn btn-danger" style="margin-top:8px;margin-left:4px" onclick="demolishBuilding(${building.pos})">Demolish</button>
-                ${levelLocked ? `<p style="font-size:0.72rem;color:var(--danger);margin-top:6px">The Town Hall can only be upgraded once you reach player Level ${reqLevel}.</p>` : ''}
+                ${buildLocked ? `<div class="th-prereq">
+                    <p style="font-size:0.74rem;color:var(--gold);margin-top:8px;font-weight:700">Bring these to Lv${building.level} first:</p>
+                    <ul style="margin:4px 0 0;padding-left:16px;font-size:0.72rem;color:var(--text2)">${thBlockers.map(b => `<li>${b.name} — Lv${b.have} / ${building.level}</li>`).join('')}</ul>
+                </div>` : ''}
+                ${(levelLocked && !buildLocked) ? `<p style="font-size:0.72rem;color:var(--danger);margin-top:6px">The Town Hall can only be upgraded once you reach player Level ${reqLevel}.</p>` : ''}
+                <button class="btn btn-danger" style="margin-top:8px" onclick="demolishBuilding(${building.pos})">Demolish</button>
             </div>
         `;
     } else {
@@ -1122,6 +1129,22 @@ function thUpgradeReqLevel(type, targetLevel) {
     return 0;
 }
 
+// Essential buildings whose level must keep pace with the Town Hall. Before the
+// Town Hall can go from Lv N to Lv N+1, every one of these that you own must
+// already be at least Lv N — so you can't rush the Town Hall without first
+// developing the village around it. (Buildings you don't own yet don't block.)
+const TH_PREREQ_TYPES = ['goldmine', 'ironmine', 'lumbermill', 'farm', 'coinmint', 'barracks'];
+function townHallUpgradeBlockers(currentLevel) {
+    const blockers = [];
+    for (const type of TH_PREREQ_TYPES) {
+        const owned = state.buildings.filter(b => b.type === type);
+        if (owned.length === 0) continue; // not built / not unlocked yet — don't gate on it
+        const best = Math.max(...owned.map(b => b.level));
+        if (best < currentLevel) blockers.push({ type, name: BUILDING_DEFS[type].name, have: best, need: currentLevel });
+    }
+    return blockers;
+}
+
 function upgradeBuilding(pos) {
     const building = state.buildings.find(b => b.pos === pos);
     if (!building) return;
@@ -1132,6 +1155,15 @@ function upgradeBuilding(pos) {
         toast(`Reach player Level ${reqLevel} to upgrade the Town Hall!`, 'error');
         try { Audio.error(); } catch(e) {}
         return;
+    }
+    if (building.type === 'townhall') {
+        const blockers = townHallUpgradeBlockers(building.level);
+        if (blockers.length) {
+            const names = blockers.map(b => `${b.name} (Lv${b.have}/${building.level})`).join(', ');
+            toast(`Upgrade your essential buildings to Lv${building.level} first: ${names}`, 'error');
+            try { Audio.error(); } catch(e) {}
+            return;
+        }
     }
     if (building.constructing || building.upgrading) { toast('Already being worked on!', 'error'); return; }
     if (typeof freeBuilders === 'function' && freeBuilders() <= 0) {
