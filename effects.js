@@ -64,16 +64,19 @@ const Audio = (() => {
     // network ever fails, so it's never silent.
     // Bundled locally (in /music) so music is instant & reliable — no streaming.
     const BASE = 'music/';
+    // `vibe` groups similar-sounding tracks so the queue never plays two of the
+    // same vibe back-to-back (keeps the rotation feeling varied).
     const PLAYLIST = [
-        { title: 'Village Green',       mood: 'calm', url: BASE + 'village-green.mp3' },
-        { title: 'Dancing at the Inn',  mood: 'calm', url: BASE + 'tavern-dance.mp3' },
-        { title: 'The Britons',         mood: 'calm', url: BASE + 'the-britons.mp3' },
-        { title: 'Rogue Meadow',        mood: 'calm', url: BASE + 'rogue-meadow.mp3' },
-        { title: 'Beyond New Horizons', mood: 'epic', url: BASE + 'epic-horizons.mp3' },
-        { title: 'Toward the Mountains',mood: 'epic', url: BASE + 'mountains.mp3' }
+        { title: 'Village Green',       mood: 'calm', vibe: 'soft',   url: BASE + 'village-green.mp3' },
+        { title: 'Dancing at the Inn',  mood: 'calm', vibe: 'lively', url: BASE + 'tavern-dance.mp3' },
+        { title: 'The Britons',         mood: 'calm', vibe: 'grand',  url: BASE + 'the-britons.mp3' },
+        { title: 'Rogue Meadow',        mood: 'calm', vibe: 'soft',   url: BASE + 'rogue-meadow.mp3' },
+        { title: 'Beyond New Horizons', mood: 'epic', vibe: 'epicA',  url: BASE + 'epic-horizons.mp3' },
+        { title: 'Toward the Mountains',mood: 'epic', vibe: 'epicB',  url: BASE + 'mountains.mp3' }
     ];
     const CALM = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'calm');
     const EPIC = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'epic');
+    let lastPlayedIdx = -1;
 
     const MUSIC_VOL = 0.55;
     let musicAudio = null;
@@ -85,7 +88,24 @@ const Audio = (() => {
     let preloadEl = null;
 
     function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-    function buildQueue(mode) { return shuffle((mode === 'epic' ? EPIC : CALM).slice()); }
+    // Build a play order that maximises contrast: randomise, then greedily pick so
+    // each next track has a different `vibe` from the previous one. Also avoids
+    // starting the new cycle on the track that just finished.
+    function buildQueue(mode) {
+        const remaining = shuffle((mode === 'epic' ? EPIC : CALM).slice());
+        const order = [];
+        let prevVibe = lastPlayedIdx >= 0 ? PLAYLIST[lastPlayedIdx].vibe : null;
+        while (remaining.length) {
+            let at = remaining.findIndex(i => PLAYLIST[i].vibe !== prevVibe);
+            if (at < 0) at = 0;
+            const idx = remaining.splice(at, 1)[0];
+            order.push(idx);
+            prevVibe = PLAYLIST[idx].vibe;
+        }
+        // don't immediately replay the track that just ended
+        if (order.length > 1 && order[0] === lastPlayedIdx) order.push(order.shift());
+        return order;
+    }
 
     function fadeTo(el, target, done) {
         if (!el) return;
@@ -137,7 +157,7 @@ const Audio = (() => {
         else { a = new window.Audio(); a.preload = 'auto'; a.src = PLAYLIST[idx].url; }
         a.volume = 0;
         attachHandlers(a);
-        musicAudio = a; musicTrackIdx = idx;
+        musicAudio = a; musicTrackIdx = idx; lastPlayedIdx = idx;
         const pr = a.play();
         if (pr && pr.catch) pr.catch(() => retryOnGesture(a));
         fadeTo(a, MUSIC_VOL);
