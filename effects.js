@@ -57,38 +57,40 @@ const Audio = (() => {
         freqs.forEach((f, i) => setTimeout(() => tone(f, dur, type, vol), i * 40));
     }
 
-    // ----- MUSIC: real recorded medieval instrument tracks (CC0, archive.org) -----
+    // ----- MUSIC: real recorded medieval instrument tracks -----
     // Actual composed songs played by real instruments — no synth. Tagged by mood
     // so the score adapts: calm pieces in the village, epic pieces in battle.
-    // Smooth crossfades between tracks; falls back to the synth engine only if the
-    // network ever fails, so it's never silent.
-    // Bundled locally (in /music) so music is instant & reliable — no streaming.
+    // Most tracks are by Kevin MacLeod (incompetech.com), CC-BY 4.0 — see the
+    // Credits screen (More > System) for full attribution.
+    // Bundled locally (in /music) as compact AAC/.m4a so music is instant &
+    // reliable — no streaming. Crossfades between tracks; falls back to the synth
+    // engine only if playback ever fails, so it's never silent.
     const BASE = 'music/';
     // `vibe` groups similar-sounding tracks so the queue never plays two of the
     // same vibe back-to-back (keeps the rotation feeling varied).
     const PLAYLIST = [
         // Calm — village / exploration
-        { title: 'Village Green',       mood: 'calm', vibe: 'soft',   url: BASE + 'village-green.mp3' },
-        { title: 'Rogue Meadow',        mood: 'calm', vibe: 'soft',   url: BASE + 'rogue-meadow.mp3' },
-        { title: 'Teller of the Tales', mood: 'calm', vibe: 'soft',   url: BASE + 'kml-teller.mp3' },
-        { title: 'Skye Cuillin',        mood: 'calm', vibe: 'soft',   url: BASE + 'kml-skye.mp3' },
-        { title: 'Folk Round',          mood: 'calm', vibe: 'soft',   url: BASE + 'kml-folkround.mp3' },
+        { title: 'Village Green',       mood: 'calm', vibe: 'soft',   url: BASE + 'village-green.m4a' },
+        { title: 'Rogue Meadow',        mood: 'calm', vibe: 'soft',   url: BASE + 'rogue-meadow.m4a' },
+        { title: 'Teller of the Tales', mood: 'calm', vibe: 'soft',   url: BASE + 'kml-teller.m4a' },
+        { title: 'Skye Cuillin',        mood: 'calm', vibe: 'soft',   url: BASE + 'kml-skye.m4a' },
+        { title: 'Folk Round',          mood: 'calm', vibe: 'soft',   url: BASE + 'kml-folkround.m4a' },
         // Calm — lively tavern / folk
-        { title: 'Dancing at the Inn',  mood: 'calm', vibe: 'lively', url: BASE + 'tavern-dance.mp3' },
-        { title: 'Fiddles McGinty',     mood: 'calm', vibe: 'lively', url: BASE + 'kml-fiddles.mp3' },
-        { title: 'Achaidh Cheide',      mood: 'calm', vibe: 'lively', url: BASE + 'kml-achaidh.mp3' },
-        { title: 'Master of the Feast', mood: 'calm', vibe: 'lively', url: BASE + 'kml-feast.mp3' },
-        { title: 'Celtic Impulse',      mood: 'calm', vibe: 'lively', url: BASE + 'kml-celtic.mp3' },
+        { title: 'Dancing at the Inn',  mood: 'calm', vibe: 'lively', url: BASE + 'tavern-dance.m4a' },
+        { title: 'Fiddles McGinty',     mood: 'calm', vibe: 'lively', url: BASE + 'kml-fiddles.m4a' },
+        { title: 'Achaidh Cheide',      mood: 'calm', vibe: 'lively', url: BASE + 'kml-achaidh.m4a' },
+        { title: 'Master of the Feast', mood: 'calm', vibe: 'lively', url: BASE + 'kml-feast.m4a' },
+        { title: 'Celtic Impulse',      mood: 'calm', vibe: 'lively', url: BASE + 'kml-celtic.m4a' },
         // Calm — grand / stately
-        { title: 'The Britons',         mood: 'calm', vibe: 'grand',  url: BASE + 'the-britons.mp3' },
-        { title: 'Angevin',             mood: 'calm', vibe: 'grand',  url: BASE + 'kml-angevin.mp3' },
-        { title: 'Minstrel Guild',      mood: 'calm', vibe: 'grand',  url: BASE + 'kml-minstrel.mp3' },
+        { title: 'The Britons',         mood: 'calm', vibe: 'grand',  url: BASE + 'the-britons.m4a' },
+        { title: 'Angevin',             mood: 'calm', vibe: 'grand',  url: BASE + 'kml-angevin.m4a' },
+        { title: 'Minstrel Guild',      mood: 'calm', vibe: 'grand',  url: BASE + 'kml-minstrel.m4a' },
         // Epic — battle
-        { title: 'Beyond New Horizons', mood: 'epic', vibe: 'epicA',  url: BASE + 'epic-horizons.mp3' },
-        { title: 'Clash Defiant',       mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-clash.mp3' },
-        { title: 'Heroic Age',          mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-heroic.mp3' },
-        { title: 'Toward the Mountains',mood: 'epic', vibe: 'epicB',  url: BASE + 'mountains.mp3' },
-        { title: 'Rites',               mood: 'epic', vibe: 'epicB',  url: BASE + 'kml-rites.mp3' }
+        { title: 'Beyond New Horizons', mood: 'epic', vibe: 'epicA',  url: BASE + 'epic-horizons.m4a' },
+        { title: 'Clash Defiant',       mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-clash.m4a' },
+        { title: 'Heroic Age',          mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-heroic.m4a' },
+        { title: 'Toward the Mountains',mood: 'epic', vibe: 'epicB',  url: BASE + 'mountains.m4a' },
+        { title: 'Rites',               mood: 'epic', vibe: 'epicB',  url: BASE + 'kml-rites.m4a' }
     ];
     const CALM = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'calm');
     const EPIC = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'epic');
