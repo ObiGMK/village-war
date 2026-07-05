@@ -2553,7 +2553,24 @@ const ACHIEVEMENTS = [
     { id: 'army_50',      name: 'Big Army',         icon: svgIcon('hammer'), desc: 'Have 50 troop capacity',     goal: 50,  metric: 'troopCap',      reward: { coins: 2000 } },
     { id: 'rich',         name: 'Wealthy',          icon: svgIcon('coins'), desc: 'Hold 10,000 coins at once',  goal: 10000,metric: 'maxCoinsHeld', reward: { gold: 500 } },
     { id: 'trophy_500',   name: 'Champion',         icon: svgIcon('medal'), desc: 'Earn 500 trophies',          goal: 500, metric: 'trophiesPeak',  reward: { gold: 1500 } },
-    { id: 'club_war_win', name: 'Club Champion',    icon: svgIcon('shield'), desc: 'Win a club war (#1 place)', goal: 1,   metric: 'clubWarsWon',   reward: { coins: 10000, gold: 2000 } }
+    { id: 'club_war_win', name: 'Club Champion',    icon: svgIcon('shield'), desc: 'Win a club war (#1 place)', goal: 1,   metric: 'clubWarsWon',   reward: { coins: 10000, gold: 2000 } },
+    // ---- Extended milestones ----
+    { id: 'build_15',     name: 'Architect',        icon: svgIcon('hammer'), desc: 'Build 15 buildings',        goal: 15,  metric: 'totalBuilt',    reward: { coins: 4000, gold: 400 } },
+    { id: 'build_30',     name: 'City Planner',     icon: svgIcon('castle'), desc: 'Build 30 buildings',        goal: 30,  metric: 'totalBuilt',    reward: { coins: 12000, gold: 1200 } },
+    { id: 'raid_150',     name: 'Destroyer',        icon: svgIcon('fire'),   desc: 'Win 150 raids',             goal: 150, metric: 'totalRaidsWon', reward: { gold: 8000 } },
+    { id: 'raid_500',     name: 'Scourge of Kings', icon: svgIcon('skull'),  desc: 'Win 500 raids',             goal: 500, metric: 'totalRaidsWon', reward: { gold: 30000 } },
+    { id: 'level_30',     name: 'Grand Marshal',    icon: svgIcon('crown'),  desc: 'Reach player level 30',     goal: 30,  metric: 'levelReached',  reward: { coins: 50000, gold: 12000 } },
+    { id: 'level_50',     name: 'Ascendant',        icon: svgIcon('crown'),  desc: 'Reach player level 50',     goal: 50,  metric: 'levelReached',  reward: { coins: 150000, gold: 40000 } },
+    { id: 'army_150',     name: 'Great Host',       icon: svgIcon('swords'), desc: 'Have 150 troop capacity',   goal: 150, metric: 'troopCap',      reward: { coins: 8000, gold: 800 } },
+    { id: 'army_300',     name: 'Endless Legion',   icon: svgIcon('swords'), desc: 'Have 300 troop capacity',   goal: 300, metric: 'troopCap',      reward: { coins: 25000, gold: 3000 } },
+    { id: 'rich_100k',    name: 'Baron of Coin',    icon: svgIcon('coins'),  desc: 'Hold 100,000 coins at once',goal: 100000, metric: 'maxCoinsHeld',reward: { gold: 4000 } },
+    { id: 'rich_1m',      name: 'Kingdom Treasury', icon: svgIcon('bank'),   desc: 'Hold 1,000,000 coins',      goal: 1000000, metric: 'maxCoinsHeld',reward: { gold: 25000 } },
+    { id: 'trophy_1500',  name: 'Gladiator',        icon: svgIcon('medal'),  desc: 'Earn 1,500 trophies',       goal: 1500, metric: 'trophiesPeak', reward: { gold: 6000 } },
+    { id: 'trophy_3000',  name: 'Grand Champion',   icon: svgIcon('trophy'), desc: 'Earn 3,000 trophies',       goal: 3000, metric: 'trophiesPeak', reward: { gold: 20000 } },
+    { id: 'stars_15',     name: 'Campaigner',       icon: svgIcon('star'),   desc: 'Earn 15 campaign stars',    goal: 15,  metric: 'campaignStars', reward: { coins: 10000, gold: 1000 } },
+    { id: 'stars_45',     name: 'War Hero',         icon: svgIcon('medal'),  desc: 'Earn 45 campaign stars',    goal: 45,  metric: 'campaignStars', reward: { coins: 40000, gold: 8000 } },
+    { id: 'stars_all',    name: 'Liberator',        icon: svgIcon('crown'),  desc: 'Three-star every campaign mission', goal: 72, metric: 'campaignStars', reward: { coins: 200000, gold: 50000 } },
+    { id: 'hero_all',     name: 'Legendary Roster', icon: svgIcon('medal'),  desc: 'Unlock all 6 heroes',       goal: 6,   metric: 'heroesUnlocked',reward: { gold: 8000 } }
 ];
 
 function ensureQuestState() {
@@ -2586,22 +2603,49 @@ function track(metric, amount = 1) {
         }
     }
 
-    // Achievement check
+    // Achievement check (metric-specific fast path)
+    awardAchievements(metric);
+    updateNotificationBadges();
+    saveGame();
+}
+
+// Award any not-yet-earned achievement whose metric value has reached its goal.
+// Pass a metric to check only that one, or omit to check all.
+function awardAchievements(onlyMetric) {
+    if (!state.achievements) return;
     for (const a of ACHIEVEMENTS) {
         if (state.achievements.earned[a.id]) continue;
-        if (a.metric !== metric) continue;
-        const val = state.achievements.metrics[metric] || 0;
+        if (onlyMetric && a.metric !== onlyMetric) continue;
+        const val = state.achievements.metrics[a.metric] || 0;
         if (val >= a.goal) {
             state.achievements.earned[a.id] = Date.now();
             addResources(a.reward);
             if (typeof addGems === 'function') addGems(10);
             if (typeof Audio !== 'undefined') Audio.achievement();
             if (typeof confetti !== 'undefined') confetti(40, 1500);
-            toast(` Achievement: ${a.name}! (+10 )`, 'success');
+            toast(`Achievement unlocked: ${a.name}! (+10 gems)`, 'success');
         }
     }
+}
+
+// Recompute all derived (state-based) metrics and award anything newly earned.
+// Called periodically and after key events so milestones never get stuck.
+function syncAchievements() {
+    ensureQuestState();
+    const m = state.achievements.metrics;
+    m.levelReached  = Math.max(m.levelReached || 0, state.level || 0);
+    m.totalBuilt    = Math.max(m.totalBuilt || 0, (state.buildings || []).length);
+    m.maxCoinsHeld  = Math.max(m.maxCoinsHeld || 0, (state.resources && state.resources.coins) || 0);
+    m.trophiesPeak  = Math.max(m.trophiesPeak || 0, state.trophies || 0);
+    if (typeof getTroopCapacity === 'function') m.troopCap = Math.max(m.troopCap || 0, getTroopCapacity());
+    // Campaign stars (stars stored per mission index, array or object)
+    let stars = 0;
+    if (state.campaign && state.campaign.stars) {
+        for (const k in state.campaign.stars) stars += (state.campaign.stars[k] || 0);
+    }
+    m.campaignStars = stars;
+    awardAchievements();
     updateNotificationBadges();
-    saveGame();
 }
 
 function claimQuest(id) {
@@ -3611,6 +3655,7 @@ function initGame() {
     state.achievements.metrics.levelReached = Math.max(state.achievements.metrics.levelReached || 0, state.level);
     state.achievements.metrics.totalBuilt = Math.max(state.achievements.metrics.totalBuilt || 0, state.buildings.length);
     state.achievements.metrics.troopCap = getTroopCapacity();
+    syncAchievements();
     updateNotificationBadges();
 
     // Tutorial trigger — auto-opens ONLY the very first time this person opens the
@@ -3631,7 +3676,7 @@ function initGame() {
     // periodically, and whenever the tab is closed/hidden. (Writes to localStorage
     // always; the cloud too when signed in, via the saveGame wrapper.)
     if (!window._vwAutosave) {
-        window._vwAutosave = setInterval(() => { try { saveGame(); } catch (e) {} }, 20000);
+        window._vwAutosave = setInterval(() => { try { syncAchievements(); saveGame(); } catch (e) {} }, 20000);
         window.addEventListener('beforeunload', () => { try { saveGame(); } catch (e) {} });
         document.addEventListener('visibilitychange', () => { if (document.hidden) { try { saveGame(); } catch (e) {} } });
     }

@@ -109,7 +109,8 @@ const MORE_CARDS = [
     { id: 'friends',   icon: 'friends',    name: 'Friends',         desc: 'Gift & visit allies', cat: 'combat' },
 
     { id: 'online',    icon: 'cloud',      name: 'Online',          desc: 'Accounts, cloud saves & real clans', cat: 'system' },
-    { id: 'settings',  icon: 'gear',       name: 'Settings',        desc: 'Sound, saves & options', cat: 'system' }
+    { id: 'settings',  icon: 'gear',       name: 'Settings',        desc: 'Sound, saves & options', cat: 'system' },
+    { id: 'credits',   icon: 'book',       name: 'Credits',         desc: 'Music & art attributions', cat: 'system' }
 ];
 const MORE_SECTIONS = [
     { cat: 'rewards',     icon: 'gift',    title: 'Rewards & Loot',  blurb: 'Free prizes, crates & seasonal tracks' },
@@ -125,8 +126,32 @@ const MORE_OPENERS = {
     boss: 'openBossRaid', clanwar: 'openClanWar', tournament: 'openTournament',
     friends: 'openFriends', gemmine: 'openGemMine', decor: 'openDecor',
     collection: 'openCollection', profile: 'openProfile', settings: 'openSettings',
-    online: 'openOnline'
+    online: 'openOnline', credits: 'openCredits'
 };
+
+function openCredits() {
+    const kml = [
+        'Angevin', 'Fiddles McGinty', 'Minstrel Guild', 'Achaidh Cheide', 'Rites',
+        'Master of the Feast', 'Clash Defiant', 'Heroic Age', 'Teller of the Tales',
+        'Celtic Impulse', 'Skye Cuillin', 'Folk Round'
+    ];
+    expModal(`
+        <h3 class="exp-title">${svgIcon('book')} Credits</h3>
+        <div style="text-align:left;max-height:60vh;overflow:auto;font-size:0.85rem;line-height:1.5">
+            <p style="color:var(--gold);font-weight:700;margin-top:4px">Music</p>
+            <p>Several tracks by <b>Kevin MacLeod</b> (incompetech.com), licensed under
+               <b>Creative Commons: By Attribution 4.0</b> —
+               creativecommons.org/licenses/by/4.0/ :</p>
+            <p style="color:var(--text2);margin:4px 0 8px">${kml.join(' • ')}</p>
+            <p>Additional bundled tracks: Village Green, Dancing at the Inn, The Britons,
+               Rogue Meadow, Beyond New Horizons, Toward the Mountains.</p>
+            <p style="color:var(--gold);font-weight:700;margin-top:10px">Art &amp; Code</p>
+            <p>Custom SVG icon set, building &amp; troop sprites, isometric and 3D village
+               rendering, UI and all game systems built for <b>Village War</b>.</p>
+            <p style="color:var(--text2);font-size:0.78rem;margin-top:10px">Thank you for playing. ⚔</p>
+        </div>
+        <div class="exp-actions"><button class="btn btn-primary" onclick="closeExpModal()">Close</button></div>`);
+}
 
 function renderMoreView() {
     ensureExp();

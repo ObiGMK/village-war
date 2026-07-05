@@ -229,7 +229,21 @@ const CAMPAIGN_MISSIONS = [
     { name: 'Wolfsblood Pass',    level: 12, troops: { warrior: 32, archer: 17, cavalry: 6 },          loot: { coins: 6200, wood: 1800 } },
     { name: 'Citadel of Ash',     level: 15, troops: { warrior: 40, archer: 22, shieldbearer: 9, cavalry: 7 }, loot: { coins: 8500, gold: 1500 } },
     { name: 'The Black Gate',     level: 18, troops: { warrior: 52, archer: 28, shieldbearer: 12, cavalry: 9 }, loot: { coins: 12000, gold: 2400 } },
-    { name: "Tyrant's Throne",    level: 22, troops: { warrior: 70, archer: 38, shieldbearer: 16, cavalry: 12, siege: 4 }, loot: { coins: 18000, gold: 4000 } }
+    { name: "Tyrant's Throne",    level: 22, troops: { warrior: 70, archer: 38, shieldbearer: 16, cavalry: 12, siege: 4 }, loot: { coins: 18000, gold: 4000 } },
+    // ---- Act II: The Northern Campaign ----
+    { name: 'Frostgate Outpost',  level: 25, troops: { warrior: 84, archer: 46, shieldbearer: 20, cavalry: 14, siege: 5 },  loot: { coins: 24000, iron: 6000 } },
+    { name: 'The Frozen March',   level: 28, troops: { warrior: 100, archer: 56, shieldbearer: 24, cavalry: 18, siege: 6 }, loot: { coins: 31000, gold: 6500 } },
+    { name: 'Direwood Hollow',    level: 31, troops: { warrior: 120, archer: 68, shieldbearer: 30, cavalry: 22, siege: 8 }, loot: { coins: 40000, wood: 12000 } },
+    { name: 'Stormhold Bastion',  level: 34, troops: { warrior: 145, archer: 82, shieldbearer: 36, cavalry: 28, siege: 10 }, loot: { coins: 52000, gold: 11000 } },
+    { name: 'The Shattered Spire', level: 38, troops: { warrior: 175, archer: 100, shieldbearer: 44, cavalry: 34, siege: 12 }, loot: { coins: 68000, iron: 18000 } },
+    { name: 'Vale of the Fallen', level: 42, troops: { warrior: 210, archer: 122, shieldbearer: 54, cavalry: 42, siege: 15 }, loot: { coins: 88000, gold: 18000 } },
+    // ---- Act III: The Warlord's End ----
+    { name: 'Bloodmoon Fortress', level: 46, troops: { warrior: 255, archer: 148, shieldbearer: 66, cavalry: 52, siege: 18 }, loot: { coins: 115000, gold: 26000 } },
+    { name: 'The Obsidian Keep',  level: 50, troops: { warrior: 310, archer: 180, shieldbearer: 82, cavalry: 64, siege: 22 }, loot: { coins: 150000, iron: 40000 } },
+    { name: "Dragon's Roost",     level: 55, troops: { warrior: 380, archer: 220, shieldbearer: 100, cavalry: 80, siege: 28 }, loot: { coins: 200000, gold: 45000 } },
+    { name: 'Gates of the North', level: 60, troops: { warrior: 470, archer: 275, shieldbearer: 124, cavalry: 100, siege: 36 }, loot: { coins: 275000, gold: 65000 } },
+    { name: "The Usurper's Host", level: 66, troops: { warrior: 580, archer: 340, shieldbearer: 154, cavalry: 124, siege: 46 }, loot: { coins: 380000, iron: 90000 } },
+    { name: 'The Iron Throne',    level: 72, troops: { warrior: 720, archer: 430, shieldbearer: 190, cavalry: 156, siege: 60 }, loot: { coins: 520000, gold: 120000 } }
 ];
 
 // Town Hall gate: you may only complete 2 campaign missions per Town Hall level.

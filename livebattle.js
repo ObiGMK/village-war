@@ -95,6 +95,7 @@ function applyRaidOutcome(spec, r) {
                 addGems(gemGain);
                 toast(`Mission ${spec.missionIndex + 1}: ${r.stars}— +${gemGain} gems!`, 'success');
             }
+            if (typeof syncAchievements === 'function') syncAchievements();
         }
         if (spec.kind === 'cpu' || spec.kind === 'revenge') {
             // small trophy gain by stars

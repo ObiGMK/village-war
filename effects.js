@@ -67,12 +67,28 @@ const Audio = (() => {
     // `vibe` groups similar-sounding tracks so the queue never plays two of the
     // same vibe back-to-back (keeps the rotation feeling varied).
     const PLAYLIST = [
+        // Calm — village / exploration
         { title: 'Village Green',       mood: 'calm', vibe: 'soft',   url: BASE + 'village-green.mp3' },
-        { title: 'Dancing at the Inn',  mood: 'calm', vibe: 'lively', url: BASE + 'tavern-dance.mp3' },
-        { title: 'The Britons',         mood: 'calm', vibe: 'grand',  url: BASE + 'the-britons.mp3' },
         { title: 'Rogue Meadow',        mood: 'calm', vibe: 'soft',   url: BASE + 'rogue-meadow.mp3' },
+        { title: 'Teller of the Tales', mood: 'calm', vibe: 'soft',   url: BASE + 'kml-teller.mp3' },
+        { title: 'Skye Cuillin',        mood: 'calm', vibe: 'soft',   url: BASE + 'kml-skye.mp3' },
+        { title: 'Folk Round',          mood: 'calm', vibe: 'soft',   url: BASE + 'kml-folkround.mp3' },
+        // Calm — lively tavern / folk
+        { title: 'Dancing at the Inn',  mood: 'calm', vibe: 'lively', url: BASE + 'tavern-dance.mp3' },
+        { title: 'Fiddles McGinty',     mood: 'calm', vibe: 'lively', url: BASE + 'kml-fiddles.mp3' },
+        { title: 'Achaidh Cheide',      mood: 'calm', vibe: 'lively', url: BASE + 'kml-achaidh.mp3' },
+        { title: 'Master of the Feast', mood: 'calm', vibe: 'lively', url: BASE + 'kml-feast.mp3' },
+        { title: 'Celtic Impulse',      mood: 'calm', vibe: 'lively', url: BASE + 'kml-celtic.mp3' },
+        // Calm — grand / stately
+        { title: 'The Britons',         mood: 'calm', vibe: 'grand',  url: BASE + 'the-britons.mp3' },
+        { title: 'Angevin',             mood: 'calm', vibe: 'grand',  url: BASE + 'kml-angevin.mp3' },
+        { title: 'Minstrel Guild',      mood: 'calm', vibe: 'grand',  url: BASE + 'kml-minstrel.mp3' },
+        // Epic — battle
         { title: 'Beyond New Horizons', mood: 'epic', vibe: 'epicA',  url: BASE + 'epic-horizons.mp3' },
-        { title: 'Toward the Mountains',mood: 'epic', vibe: 'epicB',  url: BASE + 'mountains.mp3' }
+        { title: 'Clash Defiant',       mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-clash.mp3' },
+        { title: 'Heroic Age',          mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-heroic.mp3' },
+        { title: 'Toward the Mountains',mood: 'epic', vibe: 'epicB',  url: BASE + 'mountains.mp3' },
+        { title: 'Rites',               mood: 'epic', vibe: 'epicB',  url: BASE + 'kml-rites.mp3' }
     ];
     const CALM = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'calm');
     const EPIC = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'epic');
