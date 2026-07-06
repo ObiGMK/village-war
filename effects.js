@@ -100,6 +100,7 @@ const Audio = (() => {
     const CROSSFADE_SEC = 3.5;                 // overlap length between tracks
     const CROSSFADE_MS = CROSSFADE_SEC * 1000;
     let musicAudio = null;
+    let musicChainIn = null, musicChainBuilt = false;  // evolving-variety Web Audio graph
     let musicTrackIdx = 0;
     let onTrackChange = null;
     let musicMode = 'calm';
@@ -193,6 +194,71 @@ const Audio = (() => {
         setTimeout(() => { if (musicPlaying) playNext(); }, 700);
     }
 
+    // Synthetic hall impulse response (exponentially-decaying stereo noise) — a
+    // plausible reverb without shipping an IR file.
+    function makeIR(c, seconds, decay) {
+        const len = Math.floor(c.sampleRate * seconds);
+        const buf = c.createBuffer(2, len, c.sampleRate);
+        for (let ch = 0; ch < 2; ch++) {
+            const d = buf.getChannelData(ch);
+            for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+        }
+        return buf;
+    }
+
+    // Build a shared processing graph the music flows through, with slow, NON-
+    // repeating modulation so each track's texture drifts over its runtime — a
+    // filter that gently opens/closes and a reverb space that ebbs and flows.
+    // The LFO rates are incommensurate, so the movement never obviously loops.
+    // Returns the input node, or null if Web Audio isn't usable (music then plays
+    // straight through, unchanged).
+    function ensureMusicChain() {
+        if (musicChainBuilt) return musicChainIn;
+        const c = init(); if (!c) return null;
+        try {
+            if (c.state === 'suspended') c.resume();
+            const inGain = c.createGain(); inGain.gain.value = 1;
+            const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 13500; lp.Q.value = 0.4;
+            const dry = c.createGain(); dry.gain.value = 1;
+            const conv = c.createConvolver(); conv.buffer = makeIR(c, 2.6, 2.4);
+            const wet = c.createGain(); wet.gain.value = 0.10;
+            const master = c.createGain(); master.gain.value = 1;
+            // routing: in -> lowpass -> (dry + reverb) -> master -> out
+            inGain.connect(lp);
+            lp.connect(dry).connect(master);
+            lp.connect(conv).connect(wet).connect(master);
+            master.connect(c.destination);
+            // --- slow modulators (periods of ~30-75s, deliberately non-matching) ---
+            const mkLFO = (hz, depth, target, phaseType) => {
+                const osc = c.createOscillator(); osc.type = 'sine'; osc.frequency.value = hz;
+                const g = c.createGain(); g.gain.value = depth;
+                osc.connect(g).connect(target);
+                try { osc.start(); } catch (e) {}
+                return osc;
+            };
+            // filter cutoff drifts ~8.5k–18.5k via two incommensurate LFOs
+            mkLFO(0.021, 3000, lp.frequency);
+            mkLFO(0.034, 1900, lp.frequency);
+            // reverb amount breathes ~0.05–0.15
+            mkLFO(0.013, 0.05, wet.gain);
+            musicChainIn = inGain; musicChainBuilt = true;
+            return musicChainIn;
+        } catch (e) { musicChainBuilt = true; musicChainIn = null; return null; }
+    }
+
+    // Route an <audio> element's output into the processing graph. If the graph
+    // isn't available we leave the element alone so it plays normally.
+    function routeThroughChain(el) {
+        if (!el || el._routed) return;
+        const inNode = ensureMusicChain();
+        if (!inNode) return;
+        try {
+            el._srcNode = init().createMediaElementSource(el);
+            el._srcNode.connect(inNode);
+            el._routed = true;
+        } catch (e) { /* already routed or unsupported — play direct */ }
+    }
+
     function crossfadeTo(idx) {
         const old = musicAudio;
         let a;
@@ -200,11 +266,12 @@ const Audio = (() => {
         else { a = new window.Audio(); a.preload = 'auto'; a.src = PLAYLIST[idx].url; }
         a.volume = 0;
         attachHandlers(a);
+        routeThroughChain(a);
         musicAudio = a; musicTrackIdx = idx; lastPlayedIdx = idx;
         const pr = a.play();
         if (pr && pr.catch) pr.catch(() => retryOnGesture(a));
         fadeTo(a, MUSIC_VOL, CROSSFADE_MS);
-        if (old && old !== a) fadeTo(old, 0, CROSSFADE_MS, () => { try { old.pause(); old.src = ''; } catch (e) {} });
+        if (old && old !== a) fadeTo(old, 0, CROSSFADE_MS, () => { try { old.pause(); old.src = ''; if (old._srcNode) old._srcNode.disconnect(); } catch (e) {} });
         if (onTrackChange) onTrackChange(PLAYLIST[idx].title, idx);
     }
 
