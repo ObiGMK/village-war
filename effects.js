@@ -74,7 +74,7 @@ const Audio = (() => {
         { title: 'Rogue Meadow',        mood: 'calm', vibe: 'soft',   url: BASE + 'rogue-meadow.m4a' },
         { title: 'Teller of the Tales', mood: 'calm', vibe: 'soft',   url: BASE + 'kml-teller.m4a' },
         { title: 'Skye Cuillin',        mood: 'calm', vibe: 'soft',   url: BASE + 'kml-skye.m4a' },
-        { title: 'Folk Round',          mood: 'calm', vibe: 'soft',   url: BASE + 'kml-folkround.m4a' },
+        { title: 'Thatched Villagers',  mood: 'calm', vibe: 'soft',   url: BASE + 'kml-thatched.m4a' },
         // Calm — lively tavern / folk
         { title: 'Dancing at the Inn',  mood: 'calm', vibe: 'lively', url: BASE + 'tavern-dance.m4a' },
         { title: 'Fiddles McGinty',     mood: 'calm', vibe: 'lively', url: BASE + 'kml-fiddles.m4a' },
@@ -90,13 +90,15 @@ const Audio = (() => {
         { title: 'Clash Defiant',       mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-clash.m4a' },
         { title: 'Heroic Age',          mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-heroic.m4a' },
         { title: 'Toward the Mountains',mood: 'epic', vibe: 'epicB',  url: BASE + 'mountains.m4a' },
-        { title: 'Rites',               mood: 'epic', vibe: 'epicB',  url: BASE + 'kml-rites.m4a' }
+        { title: 'Crossing the Chasm',  mood: 'epic', vibe: 'epicB',  url: BASE + 'kml-chasm.m4a' }
     ];
     const CALM = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'calm');
     const EPIC = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'epic');
     let lastPlayedIdx = -1;
 
     const MUSIC_VOL = 0.55;
+    const CROSSFADE_SEC = 3.5;                 // overlap length between tracks
+    const CROSSFADE_MS = CROSSFADE_SEC * 1000;
     let musicAudio = null;
     let musicTrackIdx = 0;
     let onTrackChange = null;
@@ -125,14 +127,26 @@ const Audio = (() => {
         return order;
     }
 
-    function fadeTo(el, target, done) {
+    // Smooth volume ramp using an equal-power (sine/cosine) curve — keeps the
+    // combined loudness of a crossfade ~constant so there's no dip or bump in the
+    // middle, and sounds far smoother than a linear ramp.
+    function fadeTo(el, target, durMs, done) {
         if (!el) return;
-        const step = target > el.volume ? 0.05 : -0.06;
-        const iv = setInterval(() => {
-            let v = el.volume + step;
-            if ((step > 0 && v >= target) || (step < 0 && v <= target)) { v = target; clearInterval(iv); if (done) done(); }
-            try { el.volume = Math.max(0, Math.min(1, v)); } catch (e) { clearInterval(iv); }
-        }, 60);
+        if (typeof durMs === 'function') { done = durMs; durMs = undefined; }
+        durMs = durMs || 1200;
+        const start = el.volume;
+        const steps = Math.max(1, Math.round(durMs / 50));
+        let i = 0;
+        if (el._fadeIv) clearInterval(el._fadeIv);
+        el._fadeIv = setInterval(() => {
+            i++;
+            const p = Math.min(1, i / steps);
+            const k = start <= target ? Math.sin(p * Math.PI / 2) : Math.cos(p * Math.PI / 2);
+            let v = start <= target ? start + (target - start) * k
+                                    : target + (start - target) * k;
+            if (p >= 1) { v = target; clearInterval(el._fadeIv); el._fadeIv = null; if (done) done(); }
+            try { el.volume = Math.max(0, Math.min(1, v)); } catch (e) { clearInterval(el._fadeIv); el._fadeIv = null; }
+        }, 50);
     }
 
     // Preload the next likely track during the title/gate screen so entry is instant.
@@ -146,6 +160,17 @@ const Audio = (() => {
     }
 
     function attachHandlers(a) {
+        // Start the next track a few seconds BEFORE this one ends so they overlap
+        // and blend — a true crossfade, instead of a gap then a fade-in.
+        a.addEventListener('timeupdate', () => {
+            if (!musicPlaying || a !== musicAudio || a._xfStarted) return;
+            const dur = a.duration;
+            if (dur && isFinite(dur) && dur > CROSSFADE_SEC * 2 && dur - a.currentTime <= CROSSFADE_SEC) {
+                a._xfStarted = true;
+                playNext();
+            }
+        });
+        // Fallback if timeupdate never crosses the threshold (e.g. unknown duration).
         a.addEventListener('ended', () => { if (musicPlaying && a === musicAudio) playNext(); });
         a.addEventListener('error', () => { onTrackError(a); });
         a.addEventListener('playing', () => { failCount = 0; });
@@ -178,8 +203,8 @@ const Audio = (() => {
         musicAudio = a; musicTrackIdx = idx; lastPlayedIdx = idx;
         const pr = a.play();
         if (pr && pr.catch) pr.catch(() => retryOnGesture(a));
-        fadeTo(a, MUSIC_VOL);
-        if (old && old !== a) fadeTo(old, 0, () => { try { old.pause(); old.src = ''; } catch (e) {} });
+        fadeTo(a, MUSIC_VOL, CROSSFADE_MS);
+        if (old && old !== a) fadeTo(old, 0, CROSSFADE_MS, () => { try { old.pause(); old.src = ''; } catch (e) {} });
         if (onTrackChange) onTrackChange(PLAYLIST[idx].title, idx);
     }
 
