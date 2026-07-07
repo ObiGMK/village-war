@@ -25,13 +25,14 @@ const BUILDING_DEFS = {
     },
     ironmine: {
         name: 'Iron Mine', icon: svgIcon('hammer'), category: 'resource',
-        desc: 'Produces iron over time.',
+        desc: 'Produces iron over time. Unlocks at Town Hall Lv2.',
         maxLevel: 10, unique: false,
         baseCost: { coins: 100, wood: 50 },
         costMult: 1.8,
         baseHP: 200,
         production: { iron: 5 },
-        prodMult: 1.5
+        prodMult: 1.5,
+        reqTH: 2
     },
     lumbermill: {
         name: 'Lumber Mill', icon: svgIcon('pickaxe'), category: 'resource',
@@ -859,26 +860,32 @@ function renderGrid() {
     if (typeof startVillagerWander === 'function') startVillagerWander(grid);
 }
 
-// Camera: DRAG to orbit/tilt the angle, wheel to zoom
+// Camera: DRAG to orbit/tilt the angle, wheel to zoom.
+// Shared drag state at module scope so the window-level move/up listeners can be
+// attached exactly ONCE (renderGrid re-runs this on every rebuild; re-adding
+// window listeners each time leaked handlers and glitched dragging).
+const _cam = { svg: null, dragging: false, sx: 0, sy: 0, startSpin: 0, startTilt: 0, moved: false };
+function _camBegin(cx, cy) {
+    _cam.dragging = true; _cam.moved = false;
+    _cam.sx = cx; _cam.sy = cy; _cam.startSpin = VIEW.spin; _cam.startTilt = VIEW.tilt;
+    if (_cam.svg) _cam.svg.style.cursor = 'grabbing';
+}
+function _camMove(cx, cy) {
+    if (!_cam.dragging || !_cam.svg) return;
+    const dx = cx - _cam.sx, dy = cy - _cam.sy;
+    if (Math.abs(dx) + Math.abs(dy) > 4) _cam.moved = true;
+    VIEW.spin = Math.max(-62, Math.min(62, _cam.startSpin + dx * 0.30));
+    VIEW.tilt = Math.max(-8, Math.min(58, _cam.startTilt + dy * 0.28));
+    applyView(_cam.svg);
+}
+function _camEnd() { if (_cam.dragging) { _cam.dragging = false; if (_cam.svg) _cam.svg.style.cursor = 'grab'; } }
+
 function setupCameraControls(grid) {
     const svg = grid.querySelector('#iso-svg');
     if (!svg) return;
-    let dragging = false, sx = 0, sy = 0, startSpin = 0, startTilt = 0, moved = false;
-
-    const beginDrag = (cx, cy) => {
-        dragging = true; moved = false;
-        sx = cx; sy = cy; startSpin = VIEW.spin; startTilt = VIEW.tilt;
-        svg.style.cursor = 'grabbing';
-    };
-    const moveDrag = (cx, cy) => {
-        if (!dragging) return;
-        const dx = cx - sx, dy = cy - sy;
-        if (Math.abs(dx) + Math.abs(dy) > 4) moved = true;
-        VIEW.spin = Math.max(-62, Math.min(62, startSpin + dx * 0.30));   // orbit left/right
-        VIEW.tilt = Math.max(-8, Math.min(58, startTilt + dy * 0.28));    // lean back/forward
-        applyView(svg);
-    };
-    const endDrag = () => { if (dragging) { dragging = false; svg.style.cursor = 'grab'; } };
+    _cam.svg = svg;                 // always point at the current (freshly rebuilt) svg
+    _cam.dragging = false;
+    const beginDrag = _camBegin, moveDrag = _camMove, endDrag = _camEnd;
 
     svg.style.cursor = 'grab';
     svg.addEventListener('mousedown', (e) => {
@@ -887,8 +894,12 @@ function setupCameraControls(grid) {
         if (e.target.closest('.bld, .prod-indicator, .buy-tile, .buy-flag')) return;
         beginDrag(e.clientX, e.clientY);
     });
-    window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
-    window.addEventListener('mouseup', endDrag);
+    // Window-level move/up wired ONCE for the whole session (they read _cam).
+    if (!window._camWindowWired) {
+        window._camWindowWired = true;
+        window.addEventListener('mousemove', (e) => _camMove(e.clientX, e.clientY));
+        window.addEventListener('mouseup', _camEnd);
+    }
 
     svg.addEventListener('wheel', (e) => {
         e.preventDefault();
@@ -929,6 +940,23 @@ function setupCameraControls(grid) {
 
     applyView(svg);
     applyCamera(svg);
+}
+
+// Lightweight per-tick refresh of construction countdowns — updates just the
+// timer text nodes in place, avoiding a full grid rebuild.
+function updateBuildTimers() {
+    const svg = document.getElementById('iso-svg');
+    if (!svg) return;
+    svg.querySelectorAll('.build-timer').forEach(g => {
+        const pos = parseInt(g.dataset.pos);
+        const b = state.buildings.find(x => x.pos === pos);
+        if (!b) return;
+        const job = b.constructing ? b.endsAt : (b.upgrading ? b.upgrading.endsAt : 0);
+        if (!job) return;
+        const remain = Math.max(0, Math.ceil((job - Date.now()) / 1000));
+        const t = g.querySelector('.bt-remain');
+        if (t) t.textContent = remain + 's';
+    });
 }
 
 function applyView(svg) {
@@ -2490,8 +2518,10 @@ function gameTick() {
     updateDayNight();
     if (typeof tickBuilders === 'function') {
         tickBuilders();
-        // keep construction countdowns ticking on screen
-        if (state.buildings.some(b => b.constructing || b.upgrading) && document.querySelector('#view-village.active')) renderGrid();
+        // keep construction countdowns ticking on screen — update ONLY the timer
+        // text, never a full grid rebuild (rebuilding mid-drag/animation glitches
+        // the whole island). tickBuilders() does a full render on completion.
+        if (state.buildings.some(b => b.constructing || b.upgrading) && document.querySelector('#view-village.active')) updateBuildTimers();
     }
 
     if (++tickCount % 30 === 0) saveGame();
@@ -3240,6 +3270,54 @@ const TUTORIAL_STEPS = [
         autoSwitch: 'village',
         forceCollectables: true
     },
+    // 3c. Build a Gold Mine (gold)
+    {
+        action: "TAP",
+        label: "Build",
+        hint: "Every village needs gold. Let's build a Gold Mine.",
+        target: '.nav-btn[data-view="build"]',
+        position: 'right'
+    },
+    {
+        action: "TAP",
+        label: "the Gold Mine card",
+        hint: "Gold Mines produce gold — used for upgrades and better troops.",
+        target: '.build-card[data-type="goldmine"]',
+        position: 'bottom',
+        autoSwitch: 'build'
+    },
+    {
+        action: "TAP",
+        label: "any empty tile",
+        hint: "Place your Gold Mine anywhere on the island.",
+        target: '.tile-hit',
+        position: 'top',
+        autoSwitch: 'village'
+    },
+    // 3d. Build a Farm (food)
+    {
+        action: "TAP",
+        label: "Build",
+        hint: "Your army needs food. One more: a Farm.",
+        target: '.nav-btn[data-view="build"]',
+        position: 'right'
+    },
+    {
+        action: "TAP",
+        label: "the Farm card",
+        hint: "Farms produce food, which feeds the soldiers you'll train.",
+        target: '.build-card[data-type="farm"]',
+        position: 'bottom',
+        autoSwitch: 'build'
+    },
+    {
+        action: "TAP",
+        label: "any empty tile",
+        hint: "Place your Farm.",
+        target: '.tile-hit',
+        position: 'top',
+        autoSwitch: 'village'
+    },
     // 4. Build menu again
     {
         action: "TAP",
@@ -3579,11 +3657,10 @@ function initGame() {
     if (state.buildings.length === 0) {
         // Central positions (all within the starter owned block around (7,5)).
         const GW = 14;
-        state.buildings.push({ type: 'townhall',   level: 1, pos: 7 + 4 * GW, hp: 500 }); // (7,4) d1
-        state.buildings.push({ type: 'coinmint',   level: 1, pos: 8 + 3 * GW, hp: 200 }); // (8,3) — starter Coin Mint (basic)
-        state.buildings.push({ type: 'goldmine',   level: 1, pos: 9 + 5 * GW, hp: 200 }); // (9,5) d2
-        state.buildings.push({ type: 'lumbermill', level: 1, pos: 5 + 5 * GW, hp: 200 }); // (5,5) d2
-        state.buildings.push({ type: 'farm',       level: 1, pos: 7 + 7 * GW, hp: 150 }); // (7,7) d2
+        // Nothing starts pre-built EXCEPT the Town Hall (the heart of the island —
+        // everything anchors on it and it can't be built from the menu). Every
+        // resource & military building is built by the player during the tutorial.
+        state.buildings.push({ type: 'townhall',   level: 1, pos: 7 + 4 * GW, hp: 500 }); // (7,4)
         saveGame();
     }
 

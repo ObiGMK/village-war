@@ -351,10 +351,20 @@ function checkDailyReward() {
         <h3 class="shop-title"> Daily Reward — Day ${day + 1}</h3>
         <p class="shop-hint">Login streak: ${state.daily.streak} day${state.daily.streak > 1 ? 's' : ''}. Come back tomorrow for more!</p>
         <div class="daily-strip">
-            ${DAILY_REWARDS.map((r, i) => `<div class="daily-cell ${i === day ? 'today' : i < day ? 'past' : ''}">D${i + 1}</div>`).join('')}
+            ${DAILY_REWARDS.map((r, i) => {
+                const cls = i === day ? 'today' : i < day ? 'past' : '';
+                const rewards = Object.entries(r).map(([k, v]) =>
+                    `<div class="dc-reward"><span class="dc-ico">${k === 'gems' ? svgIcon('gem') : (RES_ICONS[k] || k)}</span><span class="dc-amt">${formatNum(v)}</span></div>`
+                ).join('');
+                return `<div class="daily-cell ${cls}">
+                    <div class="dc-day">Day ${i + 1}</div>
+                    <div class="dc-rewards">${rewards}</div>
+                </div>`;
+            }).join('')}
         </div>
-        <div class="loot-gained" style="margin:12px 0">
-            ${Object.entries(reward).map(([k, v]) => `<div class="loot-item">${k === 'gems' ? '' : (RES_ICONS[k] || k)} +${formatNum(v)}</div>`).join('')}
+        <p class="shop-hint" style="margin-top:10px">Today's reward:</p>
+        <div class="loot-gained" style="margin:6px 0 12px">
+            ${Object.entries(reward).map(([k, v]) => `<div class="loot-item">${k === 'gems' ? svgIcon('gem') : (RES_ICONS[k] || k)} +${formatNum(v)}</div>`).join('')}
         </div>
         <button class="btn btn-gold btn-glow" onclick="claimDaily()">Claim!</button>`;
     overlay.classList.remove('hidden');

@@ -175,16 +175,17 @@ body {
     padding: 0;
     border: 6px solid #20503a;
     box-shadow:
-        inset 0 0 70px rgba(0,25,55,0.22),
+        inset 0 0 40px rgba(0,25,55,0.10),
         0 14px 36px rgba(0,0,0,0.6);
     position: relative;
     overflow: hidden;
     perspective: 1500px;
     perspective-origin: 50% 42%;
-    /* One cohesive ocean blue — a soft sun glint over a single, near-uniform blue */
+    /* ONE flat ocean blue — just a soft sun glint over a single solid colour, so
+       there are no light-centre / dark-edge shades. */
     background:
-        radial-gradient(ellipse 70% 45% at 50% 12%, rgba(255,247,200,0.28), transparent 58%),
-        radial-gradient(ellipse 140% 120% at 50% 30%, #4191c9 0%, #3a84bd 55%, #347ab1 100%);
+        radial-gradient(ellipse 70% 45% at 50% 12%, rgba(255,247,200,0.20), transparent 60%),
+        #3a86bf;
 }
 #village-grid::after {
     content: '';
@@ -3102,11 +3103,19 @@ body { background: transparent; }
 .account-row { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* Daily reward strip */
-.daily-strip { display: flex; gap: 5px; justify-content: center; }
-.daily-cell { width: 34px; height: 34px; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:800;
+.daily-strip { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.daily-cell { width: 62px; min-height: 64px; border-radius: 10px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:3px; padding:5px 3px;
     background: rgba(255,255,255,0.05); border: 1.5px solid var(--border); color: var(--text2); }
-.daily-cell.past { background: rgba(34,197,94,0.2); border-color: #22c55e; color: #4ade80; }
-.daily-cell.today { background: rgba(251,191,36,0.25); border-color: #fbbf24; color: #fde047; transform: scale(1.15); }
+.daily-cell.past { background: rgba(34,197,94,0.15); border-color: #22c55e; }
+.daily-cell.today { background: rgba(251,191,36,0.22); border-color: #fbbf24; transform: scale(1.06); box-shadow: 0 0 10px rgba(251,191,36,0.4); }
+.dc-day { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text2); }
+.daily-cell.past .dc-day { color: #4ade80; }
+.daily-cell.today .dc-day { color: #fde047; }
+.dc-rewards { display:flex; flex-direction:column; gap:2px; align-items:center; }
+.dc-reward { display:flex; align-items:center; gap:3px; }
+.dc-ico { width:14px; height:14px; display:inline-flex; align-items:center; }
+.dc-ico svg { width:14px; height:14px; }
+.dc-amt { font-size:0.66rem; font-weight:800; color: var(--text); }
 
 /* Scout */
 .scout-map { position: relative; width: 100%; aspect-ratio: 2/1; background: linear-gradient(180deg,#4f9a36,#3d7a28); border-radius: 10px; border: 2px solid #2a4218; margin: 8px 0; }

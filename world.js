@@ -763,7 +763,7 @@ function renderIsoWorld() {
         wavesSVG += `<ellipse class="ocean-wave" cx="${c0.x}" cy="${c0.y + 26}" rx="${wrx}" ry="${wry}" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="2" style="animation-delay:${i * 1.7}s"/>`;
     }
     tilesSVG += wavesSVG;
-    tilesSVG += `<ellipse cx="${c0.x}" cy="${c0.y + 70}" rx="${(ISO.GW) * TW * 0.62}" ry="${(ISO.GH) * TH * 0.62}" fill="rgba(0,0,0,0.28)" filter="url(#islandShadow)"/>`;
+    tilesSVG += `<ellipse cx="${c0.x}" cy="${c0.y + 70}" rx="${(ISO.GW) * TW * 0.62}" ry="${(ISO.GH) * TH * 0.62}" fill="rgba(0,0,0,0.16)" filter="url(#islandShadow)"/>`;
 
     // Edge detection for beaches: an owned tile touching non-owned land = shoreline
     const _own = (gx, gy) => (gx >= 0 && gx < ISO.GW && gy >= 0 && gy < ISO.GH) && (!ownedTiles || ownedTiles.has(gx + gy * ISO.GW));
@@ -896,7 +896,7 @@ function renderIsoWorld() {
                 const gems = (typeof finishCostGems === 'function') ? finishCostGems(job) : 1;
                 entSVG += `<g class="build-timer" data-pos="${e.pos}" style="cursor:pointer" transform="translate(${bx},${by - 56})">
                     <rect x="-34" y="-11" width="68" height="22" rx="10" fill="#0e1726" stroke="#fbbf24" stroke-width="1.4"/>
-                    <text x="-12" y="4" text-anchor="middle" font-size="10" fill="#fde68a" font-weight="800">${remain}s</text>
+                    <text class="bt-remain" x="-12" y="4" text-anchor="middle" font-size="10" fill="#fde68a" font-weight="800">${remain}s</text>
                     <path d="M14 -4 L18 0 L14 4 L10 0 Z" fill="#7dd3fc"/>
                     <text x="26" y="4" text-anchor="middle" font-size="9" fill="#7dd3fc" font-weight="800">${gems}</text>
                 </g>`;
