@@ -70,7 +70,7 @@ const Audio = (() => {
     // same vibe back-to-back (keeps the rotation feeling varied).
     const PLAYLIST = [
         // Calm — village / exploration
-        { title: 'Village Green',       mood: 'calm', vibe: 'soft',   url: BASE + 'village-green.m4a' },
+        { title: 'Enchanted Journey',   mood: 'calm', vibe: 'soft',   url: BASE + 'kml-enchanted.m4a' },
         { title: 'Rogue Meadow',        mood: 'calm', vibe: 'soft',   url: BASE + 'rogue-meadow.m4a' },
         { title: 'Teller of the Tales', mood: 'calm', vibe: 'soft',   url: BASE + 'kml-teller.m4a' },
         { title: 'Skye Cuillin',        mood: 'calm', vibe: 'soft',   url: BASE + 'kml-skye.m4a' },
@@ -78,9 +78,9 @@ const Audio = (() => {
         // Calm — lively tavern / folk
         { title: 'Dancing at the Inn',  mood: 'calm', vibe: 'lively', url: BASE + 'tavern-dance.m4a' },
         { title: 'Fiddles McGinty',     mood: 'calm', vibe: 'lively', url: BASE + 'kml-fiddles.m4a' },
-        { title: 'Achaidh Cheide',      mood: 'calm', vibe: 'lively', url: BASE + 'kml-achaidh.m4a' },
+        { title: 'The Path of the Goblin King', mood: 'calm', vibe: 'lively', url: BASE + 'kml-goblinking.m4a' },
         { title: 'Master of the Feast', mood: 'calm', vibe: 'lively', url: BASE + 'kml-feast.m4a' },
-        { title: 'Celtic Impulse',      mood: 'calm', vibe: 'lively', url: BASE + 'kml-celtic.m4a' },
+        { title: 'Wizardtorium',        mood: 'calm', vibe: 'lively', url: BASE + 'kml-wizardtorium.m4a' },
         // Calm — grand / stately
         { title: 'The Britons',         mood: 'calm', vibe: 'grand',  url: BASE + 'the-britons.m4a' },
         { title: 'Angevin',             mood: 'calm', vibe: 'grand',  url: BASE + 'kml-angevin.m4a' },
@@ -90,7 +90,7 @@ const Audio = (() => {
         { title: 'Clash Defiant',       mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-clash.m4a' },
         { title: 'Heroic Age',          mood: 'epic', vibe: 'epicA',  url: BASE + 'kml-heroic.m4a' },
         { title: 'Toward the Mountains',mood: 'epic', vibe: 'epicB',  url: BASE + 'mountains.m4a' },
-        { title: 'Crossing the Chasm',  mood: 'epic', vibe: 'epicB',  url: BASE + 'kml-chasm.m4a' }
+        { title: 'Anguish',             mood: 'epic', vibe: 'epicB',  url: BASE + 'kml-anguish.m4a' }
     ];
     const CALM = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'calm');
     const EPIC = PLAYLIST.map((t, i) => i).filter(i => PLAYLIST[i].mood === 'epic');

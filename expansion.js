@@ -131,9 +131,9 @@ const MORE_OPENERS = {
 
 function openCredits() {
     const kml = [
-        'Angevin', 'Fiddles McGinty', 'Minstrel Guild', 'Achaidh Cheide', 'Thatched Villagers',
+        'Angevin', 'Fiddles McGinty', 'Minstrel Guild', 'Enchanted Journey', 'Thatched Villagers',
         'Master of the Feast', 'Clash Defiant', 'Heroic Age', 'Teller of the Tales',
-        'Celtic Impulse', 'Skye Cuillin', 'Crossing the Chasm'
+        'Wizardtorium', 'The Path of the Goblin King', 'Anguish', 'Skye Cuillin'
     ];
     expModal(`
         <h3 class="exp-title">${svgIcon('book')} Credits</h3>
